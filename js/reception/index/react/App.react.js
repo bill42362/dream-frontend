@@ -3,6 +3,7 @@
 import React from 'react';
 import ClassNames from 'classnames';
 import Header from '../../../common/react/Header.react.js';
+import Slide from './Slide.react.js';
 
 class App extends React.Component {
     constructor(props) {
@@ -14,6 +15,7 @@ class App extends React.Component {
         let state = this.state;
         return <div id='wrapper'>
             <Header />
+            <Slide />
         </div>;
     }
 }

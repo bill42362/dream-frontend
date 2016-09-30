@@ -39,13 +39,13 @@ html {
     min-height: 100%;
 }
 body {
-    background-color: rgb(251, 207, 153);
     & > div#app-root div#wrapper {
         & > header#header > nav.navbar {
             display: flex;
-            background-color: rgba(0, 0, 0, 0.2);
+            background-color: rgba(0, 0, 0, 0.1);
             height: 60px;
             div#navbar-menu {
+                flex: 1;
                 display: inline-block;
                 color: white;
                 span.menu-icon {
@@ -55,8 +55,82 @@ body {
                 }
                 span.menu-display { font-size: 1.5em; }
             }
+            div#brand-icon-container {
+                flex: auto;
+                text-align: center;
+                img.brand-icon {
+                    margin-top: 10px;
+                    height: 3em;
+                }
+            }
+            div#navbar-buttons {
+                flex: 1;
+                text-align: right;
+                span.navbar-icon {
+                    margin: 0px 20px 0px 10px;
+                    color: white;
+                    font-size: 2em;
+                    line-height: 60px;
+                }
+                img.user-icon {
+                    margin: 0px 20px 0px 10px;
+                    height: 2em;
+                    vertical-align: baseline;
+                    border-radius: 1em;
+                }
+            }
         }
-        & > div.container-fluid {
+        & > div#slide {
+            display: flex;
+            height: 607px;
+            background-color: rgb(251, 207, 153);
+            img.slide-image {
+                position: absolute;
+                width: 100%;
+                min-height: 607px;
+            }
+            div.slide-swipe-zone {
+                flex: 0.1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                span.slide-swipe-icon {
+                    background-color: rgba(255, 255, 255, 0.2);
+                    border-radius: 1em;
+                    margin: 0em 1em;
+                    width: 1.4em; height: 1.4em;
+                    color: rgba(255, 255, 255, 0.8);
+                    font-size: 2em;
+                    line-height: 1.4em;
+                    text-align: center;
+                }
+            }
+            div.slide-content-zone {
+                flex: auto;
+                div.slide-texts {
+                    top: 50%;
+                    padding-left: 15%;
+                    color: rgba(255, 255, 255, 0.8);
+                    text-shadow: rgba(0, 0, 0, 0.8) 1px 1px 10px; 
+                    h1 { margin: 0em 0em 1em; }
+                    h3 { margin: 0em 0em 3em; }
+                }
+                div.project-button-container {
+                    top: 60%;
+                    span.project-button {
+                        background-color: rgba(255, 255, 255, 0.2);
+                        border-radius: 0.5em;
+                        padding: 1em 2em;
+                        color: rgba(255, 255, 255, 0.8);
+                        font-weight: 200;
+                        &:hover {
+                            background-color: rgba(255, 255, 255, 0.8);
+                            cursor: pointer;
+                            color: rgba(250, 130, 160, 0.8);
+                        }
+                    }
+                }
+            }
         }
         & > footer#footer {
         }

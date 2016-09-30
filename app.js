@@ -19,6 +19,7 @@ App.prototype.routes = [
     { method: 'get', path: '/js/{param*}', handler: { directory: { path: 'dist/js', } } },
     { method: 'get', path: '/css/{param*}', handler: { directory: { path: 'dist/css', } } },
     { method: 'get', path: '/fonts/{param*}', handler: { directory: { path: 'dist/fonts', } } },
+    { method: 'get', path: '/img/{param*}', handler: { directory: { path: 'dist/img', } } },
     { method: 'get', path: '/data/{param*}', handler: { directory: { path: 'data/', } } },
 ];
 App.prototype.run = function() {
