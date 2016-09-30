@@ -1,4 +1,4 @@
-@themeBackground: #f5f5f5;
+@themeBackground: rgb(250, 130, 160);
 @headerHeight: 60px;
 @footerHeight: 4em;
 .transparent(@ratio) {
@@ -81,13 +81,14 @@ body {
             }
         }
         & > div#slide {
+            position: relative;
             display: flex;
             height: 607px;
-            background-color: rgb(251, 207, 153);
+            overflow: hidden;
             img.slide-image {
                 position: absolute;
                 width: 100%;
-                min-height: 607px;
+                min-height: 100%;
             }
             div.slide-swipe-zone {
                 flex: 0.1;
@@ -129,6 +130,39 @@ body {
                             color: rgba(250, 130, 160, 0.8);
                         }
                     }
+                }
+            }
+        }
+        & > div#carousel {
+            position: relative;
+            background-color: @themeBackground;
+            height: 4.5em;
+            white-space: nowrap;
+            overflow: hidden;
+            div.carousel-item {
+                position: relative;
+                display: inline-block;
+                border-radius: 1.7em;
+                margin: 0.5em 0em 0.5em 1em;
+                padding: 0.3em;
+                height: 3.6em;
+                background-color: darken(@themeBackground, 10%);
+                max-width: 3.6em;
+                white-space: nowrap;
+                transition: all .5s ease;
+                overflow: hidden;
+                img.carousel-item-image {
+                    border-radius: 1.5em;
+                    margin-right: 0.5em;
+                    width: 3em; height: 3em;
+                }
+                span.carousel-item-text {
+                    display: inline-block;
+                    color: white;
+                }
+                &:hover {
+                    padding-right: 1em;
+                    max-width: 20em;
                 }
             }
         }
