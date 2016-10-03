@@ -166,6 +166,72 @@ body {
                 }
             }
         }
+        & > div.project-cards {
+            margin-right: 0;
+            padding: 15px 15px 15px 30px;
+            div.project-card {
+                border: 1px solid gray;
+                border-radius: 5px;
+                margin: 15px 0px;
+                width: 100%;
+                overflow: hidden;
+                div.ratio-fixer {
+                    width: 100%;
+                    position: relative;
+                    height: 0;
+                    padding: 100% 0 0 0;
+                    overflow: hidden;
+                    img.project-banner {
+                        display: inline-block;
+                        position: absolute;
+                        margin: auto;
+                        height: 100%;
+                        top: 0; right: 0; bottom: 0; left: 0;
+                    }
+                    &:hover {
+                        div.project-content {
+                            max-height: 50%;
+                            background-color: rgba(255, 255, 255, 0.9);
+                            color: rgba(0, 0, 0, 0.9);
+                            text-shadow: rgba(255, 255, 255, 0.9) 1px 1px 10px; 
+                            div.project-content-hover-texts {
+                                max-height: 100px;
+                            }
+                        }
+                    }
+                    div.project-content {
+                        position: absolute;
+                        display: flex;
+                        flex-direction: column;
+                        max-height: 50%;
+                        bottom: 0;
+                        padding: 10px;
+                        background-color: rgba(255, 255, 255, 0.15);
+                        color: rgba(255, 255, 255, 0.9);
+                        text-shadow: rgba(0, 0, 0, 0.8) 1px 1px 10px; 
+                        transition: all .5s ease;
+                        h4.project-title { flex: 1; margin-bottom: 4px; }
+                        div.project-content-hover-texts {
+                            flex: 1;
+                            max-height: 0px;
+                            color: rgba(0, 0, 0, 0.9);
+                            text-shadow: rgba(255, 255, 255, 0.9) 1px 1px 10px; 
+                            overflow: hidden;
+                            transition: all .5s ease;
+                        }
+                        div.project-content-footer {
+                            flex: 1;
+                            div.project-content-footer-texts {
+                                display: flex;
+                                span.project-proposer { flex: 0.33; }
+                                span.project-follower { flex: 0.33; text-align: center; }
+                                span.project-day-countdown { flex: 0.33; text-align: right; }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         & > footer#footer {
         }
     }
