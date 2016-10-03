@@ -1,4 +1,5 @@
 @themeBackground: rgb(250, 130, 160);
+@themeForeground: rgb(190, 136, 247);
 @headerHeight: 60px;
 @footerHeight: 4em;
 .transparent(@ratio) {
@@ -39,6 +40,11 @@ html {
     min-height: 100%;
 }
 body {
+    a {
+        text-decoration: none;
+        &:hover { text-decoration: none; }
+        &:focus { text-decoration: none; }
+    }
     & > div#app-root div#wrapper {
         & > header#header > nav.navbar {
             display: flex;
@@ -233,7 +239,64 @@ body {
             }
         }
         & > footer#footer {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: rgba(255, 255, 255, 0.6);
+            padding: 50px 0;
+            text-align: center;
+            div#footer-content {
+                display: inline-block;
+                max-width: 992px;
+                width: 100%;
+                padding: 0 15px;
+                text-align: left;
+                div.site-map {
+                    margin-bottom: 15px;
+                    div.site-map-column {
+                        &:hover {
+                            h5.site-map-column-title {
+                                color: darken(@themeBackground, 10%);
+                            }
+                        }
+                        h5.site-map-column-title {
+                            color: rgba(255, 255, 255, 0.8);
+                            transition: all .5s ease;
+                        }
+                        ul.site-map-column-list {
+                            list-style-type: none;
+                            padding: 0;
+                            li.site-map-column-item {
+                                a {
+                                    color: inherit;
+                                    transition: all .5s ease;
+                                    &:hover { color: lighten(@themeForeground, 0%); }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
 
+@media (max-width: 767px) {
+    body {
+        & > div#app-root div#wrapper {
+            & > footer#footer {
+                div#footer-content {
+                    div.site-map {
+                        div.site-map-column {
+                            margin-bottom: 20px;
+                            ul.site-map-column-list {
+                                li.site-map-column-item {
+                                    display: inline-block;
+                                    padding-right: 15px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
