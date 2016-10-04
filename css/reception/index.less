@@ -48,7 +48,6 @@ body {
     & > div#app-root div#wrapper {
         & > header#header > nav.navbar {
             display: flex;
-            background-color: rgba(0, 0, 0, 0.1);
             height: 60px;
             div#navbar-menu {
                 flex: 1;
@@ -89,7 +88,7 @@ body {
         & > div#slide {
             position: relative;
             display: flex;
-            height: 607px;
+            height: 100vh;
             overflow: hidden;
             img.slide-image {
                 position: absolute;
@@ -97,19 +96,29 @@ body {
                 min-height: 100%;
             }
             div.slide-swipe-zone {
-                flex: 0.1;
+                flex: auto;
+                width: 10%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                z-index: 1;
+                &:hover {
+                    cursor: pointer;
+                    span.slide-swipe-icon {
+                        background-color: rgba(255, 255, 255, 0.2);
+                        color: rgba(255, 255, 255, 0.8);
+                    }
+                }
                 span.slide-swipe-icon {
-                    background-color: rgba(255, 255, 255, 0.2);
                     border-radius: 1em;
                     margin: 0em 1em;
                     width: 1.4em; height: 1.4em;
-                    color: rgba(255, 255, 255, 0.8);
                     font-size: 2em;
                     line-height: 1.4em;
                     text-align: center;
+                    background-color: rgba(255, 255, 255, 0.0);
+                    color: rgba(255, 255, 255, 0.0);
+                    transition: all .5s ease;
                 }
             }
             div.slide-content-zone {
@@ -130,6 +139,7 @@ body {
                         padding: 1em 2em;
                         color: rgba(255, 255, 255, 0.8);
                         font-weight: 200;
+                        transition: all .5s ease;
                         &:hover {
                             background-color: rgba(255, 255, 255, 0.8);
                             cursor: pointer;
@@ -141,7 +151,6 @@ body {
         }
         & > div#carousel {
             position: relative;
-            background-color: @themeBackground;
             height: 4.5em;
             white-space: nowrap;
             overflow: hidden;
@@ -152,7 +161,6 @@ body {
                 margin: 0.5em 0em 0.5em 1em;
                 padding: 0.3em;
                 height: 3.6em;
-                background-color: darken(@themeBackground, 10%);
                 max-width: 3.6em;
                 white-space: nowrap;
                 transition: all .5s ease;
@@ -167,6 +175,7 @@ body {
                     color: white;
                 }
                 &:hover {
+                    background-color: darken(@themeBackground, 10%);
                     padding-right: 1em;
                     max-width: 20em;
                 }
@@ -176,11 +185,13 @@ body {
             margin-right: 0;
             padding: 15px 15px 15px 30px;
             div.project-card {
-                border: 1px solid gray;
+                border: 1px solid rgba(255, 255, 255, 0);
                 border-radius: 5px;
                 margin: 15px 0px;
                 width: 100%;
                 overflow: hidden;
+                transition: all .5s ease;
+                &:hover { border: 1px solid rgba(250, 130, 160, 1); }
                 div.ratio-fixer {
                     width: 100%;
                     position: relative;
