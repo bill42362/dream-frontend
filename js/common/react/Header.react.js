@@ -10,7 +10,7 @@ class Header extends React.Component {
     render() {
         let navbarMenuItems = [];
         return <header id="header">
-            <nav className="navbar navbar-fixed-top">
+            <nav className={ClassNames('navbar', {'navbar-fixed-top': this.props.fixed})}>
                 <NavbarMenu currentItemKey={'home'} items={navbarMenuItems} />
                 <div id="brand-icon-container">
                     <img className="brand-icon" src="/img/brand_icon_white.png" />

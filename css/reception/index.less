@@ -48,7 +48,7 @@ body {
     & > div#app-root div#wrapper {
         & > header#header > nav.navbar {
             display: flex;
-            height: 60px;
+            height: @headerHeight;
             div#navbar-menu {
                 flex: 1;
                 display: inline-block;
@@ -56,7 +56,7 @@ body {
                 span.menu-icon {
                     font-size: 2em;
                     margin: 0px 10px 0px 30px;
-                    line-height: 60px;
+                    line-height: @headerHeight;
                 }
                 span.menu-display { font-size: 1.5em; }
             }
@@ -75,7 +75,7 @@ body {
                     margin: 0px 20px 0px 10px;
                     color: white;
                     font-size: 2em;
-                    line-height: 60px;
+                    line-height: @headerHeight;
                 }
                 img.user-icon {
                     margin: 0px 20px 0px 10px;

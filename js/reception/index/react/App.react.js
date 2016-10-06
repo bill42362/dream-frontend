@@ -17,7 +17,7 @@ class App extends React.Component {
     render() {
         let state = this.state;
         return <div id='wrapper'>
-            <Header />
+            <Header fixed={true} />
             <Slide />
             <Carousel />
             <div className='project-cards row'>
