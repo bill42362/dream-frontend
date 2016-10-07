@@ -54,9 +54,7 @@ class ProjectHeader extends React.Component {
             {imageSrc: '/img/mock_user_icon.jpg', type: 'facebook-like', text: 'CCC 對 DDD 計畫按讚', },
         ];
         eventItems = eventItems.concat(
-            eventItems, eventItems, eventItems, eventItems,
-            eventItems, eventItems, eventItems, eventItems,
-            eventItems, eventItems, eventItems, eventItems
+            eventItems, eventItems, eventItems
         );
         return <div className='project-header'>
             <div className='title-section'>
