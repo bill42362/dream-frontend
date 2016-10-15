@@ -23,7 +23,7 @@ class ProjectHeader extends React.Component {
         let banner = this.props.banner;
         let data = {
             title: '世界十二強的愛 傳送溫暖至偏鄉',
-            subtitle: 'pb+圓夢加舉辦了世界12強紀念套票拍賣活動，活動所得將全數捐給新城國小',
+            subtitle: 'pb+圓夢加舉辦了世界12強紀念套票拍賣活動 活動所得將全數捐給新城國小',
             description: '專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述',
             foundTarget: 500000, currentFound: 300000, founderCount: 50,
             startTimestamp: 1472869212136, dueTimestamp: 1478139612136,

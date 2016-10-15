@@ -4,6 +4,7 @@ import React from 'react';
 import ClassNames from 'classnames';
 import Header from '../../../common/react/Header.react.js';
 import ProjectHeader from './ProjectHeader.react.js';
+import ProjectStory from './ProjectStory.react.js';
 import Footer from '../../../common/react/Footer.react.js';
 
 class App extends React.Component {
@@ -20,7 +21,7 @@ class App extends React.Component {
         };
         let projectFullData = {
             title: '世界十二強的愛 傳送溫暖至偏鄉',
-            subtitle: 'pb+圓夢加舉辦了世界12強紀念套票拍賣活動，活動所得將全數捐給新城國小',
+            subtitle: 'pb+圓夢加舉辦了世界12強紀念套票拍賣活動 活動所得將全數捐給新城國小',
             description: '專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述',
             foundTarget: 500000, currentFound: 300000,
             startTimestamp: 1472869212136, dueTimestamp: 1478139612136,
@@ -31,6 +32,13 @@ class App extends React.Component {
             <ProjectHeader
                 projectData={projectFullData} proposer={proposer} banner={banner}
             />
+            <div className='project-content-container'>
+                <div className='project-content row'>
+                    <div className='col-md-8'>
+                        <ProjectStory />
+                    </div>
+                </div>
+            </div>
             <Footer />
         </div>;
     }
