@@ -26,13 +26,11 @@ class ProjectItem extends React.Component {
         return <div ref='base' className='project-item' >
             <div className='project-item-header'>
                 <h3 className='project-item-price'>${Core.addNumberComma(item.price)}</h3>
-                <h4 className='project-item-status'>{itemStatus}</h4>
+                <h5 className='project-item-status'>{itemStatus}</h5>
             </div>
-            <div className='project-item-labels'>{item.labels.map((label, index) =>
-                <span className='project-item-label' key={index}>
-                    {label}
-                </span>
-            )}</div>
+            {0 < item.labels.length && <div className='project-item-labels'>{item.labels.map((label, index) =>
+                <span className='project-item-label' key={index}>{label}</span>
+            )}</div>}
             <h4 className='project-item-title'>{item.title}</h4>
             <p className='project-item-content' dangerouslySetInnerHTML={{__html: item.content}}></p>
         </div>;

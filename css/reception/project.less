@@ -213,7 +213,7 @@ body {
                         transform: rotate(45deg);
                         &:hover {
                             cursor: pointer;
-                            color: @themeForeground;
+                            color: @themeBackground;
                         }
                     }
                     div.project-story {
@@ -236,10 +236,15 @@ body {
                     border-top: none;
                 }
                 div.project-item {
-                    border: 2px solid rgba(0, 0, 0, 0.05);
                     border-radius: 5px;
                     padding: 10px;
                     margin-bottom: 15px;
+                    background-color: lighten(rgb(242, 243, 226), 3%);
+                    transition: background-color .5s ease;
+                    &:hover {
+                        background-color: lighten(@themeBackground, 20%);
+                        cursor: pointer;
+                    }
                     div.project-item-header {
                         display: flex;
                         h3.project-item-price {
@@ -247,23 +252,21 @@ body {
                             margin-top: 0;
                             margin-bottom: 2px;
                         }
-                        h4.project-item-status {
+                        h5.project-item-status {
                             flex: none;
                             margin: 0;
                             color: @themeForeground;
                         }
                     }
                     div.project-item-labels {
-                        margin-bottom: 1em;
                         span.project-item-label {
-                            border-radius: 0 0.5em;
                             margin-right: 0.5em;
                             padding: 0.1em 0.5em;
-                            background-color: @themeBackground;
-                            color: white;
+                            font-size: x-small;
+                            background-color: white;
                         }
                     }
-                    h4.project-item-title { margin-top: 0; }
+                    h4.project-item-title { margin-top: 0.5em; }
                     p.project-item-content {
                         margin-bottom: 0;
                     }
