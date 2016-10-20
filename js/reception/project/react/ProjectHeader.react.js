@@ -9,15 +9,6 @@ class ProjectHeader extends React.Component {
         this.staticStrings = { };
         this.state = { };
     }
-    reverseDigitString(string) { return string.split('').reverse().join(''); }
-    addNumberComma(number) {
-        let intString = Math.floor(number) + '';
-        let reversedWithComma = this.reverseDigitString(intString).split(/(\d{3})/).filter(n => n).join(',');
-        let result = this.reverseDigitString(reversedWithComma);
-        let floatPart = (number + '').replace(/\d*\.?/, '');
-        if(floatPart) { result += '.' + floatPart; }
-        return result;
-    }
     render() {
         let proposer = this.props.proposer;
         let banner = this.props.banner;
@@ -75,8 +66,8 @@ class ProjectHeader extends React.Component {
                 <div className='col-md-4 absolute-height-100'>
                     <div className='main-content'>
                         <div className='current-state'>
-                            <div className='found'>${this.addNumberComma(data.currentFound)}</div>
-                            <div className='footnote'>目標 ${this.addNumberComma(data.foundTarget)}</div>
+                            <div className='found'>${Core.addNumberComma(data.currentFound)}</div>
+                            <div className='footnote'>目標 ${Core.addNumberComma(data.foundTarget)}</div>
                             <div className='founder-count'>{data.founderCount}</div>
                             <div className='footnote'>人贊助</div>
                             <div className='left-days'>{leftDays}</div>

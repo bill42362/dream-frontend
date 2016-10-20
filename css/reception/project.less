@@ -197,12 +197,20 @@ body {
                     transition: all .5s ease;
                     &.expended {
                         border: 2px solid rgba(0, 0, 0, 0.05);
+                        border-top-color: rgba(255, 255, 255, 0);
+                        &:first-of-type { border-top-color: rgba(0, 0, 0, 0.05); }
+                        span.project-story-expending-button {
+                            color: rgba(0, 0, 0, 0.05);
+                            transform: rotate(0deg);
+                        }
                     }
                     span.project-story-expending-button {
                         position: absolute;
                         top: 10px; right: 10px;
                         font-size: 2em;
                         transition: all .5s ease;
+                        color: rgba(0, 0, 0, 0.25);
+                        transform: rotate(45deg);
                         &:hover {
                             cursor: pointer;
                             color: @themeForeground;
@@ -216,6 +224,48 @@ body {
                         img {
                             max-width: 100%;
                         }
+                    }
+                }
+                div.project-story-container + div.project-story-container {
+                    border-top: none;
+                }
+                div.project-story-container.expended + div.project-story-container {
+                    border-top-color: @themeForeground;
+                }
+                div.project-story-container + div.project-story-container.expended {
+                    border-top: none;
+                }
+                div.project-item {
+                    border: 2px solid rgba(0, 0, 0, 0.05);
+                    border-radius: 5px;
+                    padding: 10px;
+                    margin-bottom: 15px;
+                    div.project-item-header {
+                        display: flex;
+                        h3.project-item-price {
+                            flex: auto;
+                            margin-top: 0;
+                            margin-bottom: 2px;
+                        }
+                        h4.project-item-status {
+                            flex: none;
+                            margin: 0;
+                            color: @themeForeground;
+                        }
+                    }
+                    div.project-item-labels {
+                        margin-bottom: 1em;
+                        span.project-item-label {
+                            border-radius: 0 0.5em;
+                            margin-right: 0.5em;
+                            padding: 0.1em 0.5em;
+                            background-color: @themeBackground;
+                            color: white;
+                        }
+                    }
+                    h4.project-item-title { margin-top: 0; }
+                    p.project-item-content {
+                        margin-bottom: 0;
                     }
                 }
             }

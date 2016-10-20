@@ -5,6 +5,7 @@ import ClassNames from 'classnames';
 import Header from '../../../common/react/Header.react.js';
 import ProjectHeader from './ProjectHeader.react.js';
 import ProjectStory from './ProjectStory.react.js';
+import ProjectItem from './ProjectItem.react.js';
 import Footer from '../../../common/react/Footer.react.js';
 
 class App extends React.Component {
@@ -36,6 +37,13 @@ class App extends React.Component {
                 <div className='project-content row'>
                     <div className='col-md-8'>
                         <ProjectStory />
+                        <ProjectStory />
+                        <ProjectStory />
+                    </div>
+                    <div className='col-md-4'>
+                        <ProjectItem />
+                        <ProjectItem />
+                        <ProjectItem />
                     </div>
                 </div>
             </div>

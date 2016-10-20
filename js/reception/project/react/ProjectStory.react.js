@@ -38,19 +38,23 @@ class ProjectStory extends React.Component {
                 src: "http://dream.pbplus.me/wp-content/uploads/2016/03/DSCN8334.jpg",
             },
         };
+        let description = story.description;
+        for(let i = 0; i < 4; ++i) { description += description; }
         return <div
             ref='base'
             className={ClassNames('project-story-container', {'expended': this.state.expended})}
             style={{maxHeight: this.state.maxHeight}}
         >
             <span
-                className='project-story-expending-button glyphicon glyphicon-remove'
+                className='project-story-expending-button glyphicon glyphicon-remove-circle'
                 aria-hidden='true' onClick={this.switchExpending}
             ></span>
             <div ref='body' className='project-story'>
                 <h2 ref='title' className='project-story-title'>{story.title}</h2>
-                <p>{story.description}</p>
-                <img src={story.media.src} title={story.media.title} onLoad={this.onImageLoad} />
+                <div className='project-story-content'>
+                    <p>{description}</p>
+                    <img src={story.media.src} title={story.media.title} onLoad={this.onImageLoad} />
+                </div>
             </div>
         </div>;
     }
