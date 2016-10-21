@@ -4,6 +4,7 @@ import React from 'react';
 import ClassNames from 'classnames';
 import Header from '../../../common/react/Header.react.js';
 import ProjectHeader from './ProjectHeader.react.js';
+import ProjectTabbar from './ProjectTabbar.react.js';
 import ProjectStory from './ProjectStory.react.js';
 import ProjectItem from './ProjectItem.react.js';
 import Footer from '../../../common/react/Footer.react.js';
@@ -12,8 +13,20 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.staticStrings = { };
-        this.state = { };
+        this.state = {isTabbarAboveScreen: false};
+        this.onWindowScroll = this.onWindowScroll.bind(this);
     }
+    isAboveScreenTop(element, offset) {
+        var clientRect = element.getBoundingClientRect();
+        return 0 > clientRect.top + offset;
+    }
+    onWindowScroll(e) {
+        var isTabbarAboveScreen = this.state.isTabbarAboveScreen;
+        var newValue = this.isAboveScreenTop(this.refs.projectTabbarContainerAnchor, 0);
+        if(isTabbarAboveScreen != newValue) { this.setState({isTabbarAboveScreen: newValue}); }
+    }
+    componentDidMount() { document.addEventListener('scroll', this.onWindowScroll, false); }
+    componentWillUnmount() { document.removeEventListener('scroll', this.onWindowScroll, false); }
     render() {
         let proposer = {title: 'pb+寶悍運動平台', href: '//www.pbplus.me/'};
         let banner = {
@@ -33,6 +46,17 @@ class App extends React.Component {
             <ProjectHeader
                 projectData={projectFullData} proposer={proposer} banner={banner}
             />
+            <div
+                ref='projectTabbarContainerAnchor'
+                className={ClassNames(
+                    'project-tabbar-container-anchor',
+                    {'above-screen': this.state.isTabbarAboveScreen}
+                )}
+            >
+                <div className='project-tabbar-container' >
+                    <ProjectTabbar />
+                </div>
+            </div>
             <div className='project-content-container'>
                 <div className='project-content row'>
                     <div className='col-md-8'>
