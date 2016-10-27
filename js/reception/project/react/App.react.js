@@ -7,6 +7,7 @@ import ProjectHeader from './ProjectHeader.react.js';
 import ProjectTabbar from './ProjectTabbar.react.js';
 import ProjectStory from './ProjectStory.react.js';
 import ProjectItem from './ProjectItem.react.js';
+import ProjectTimelineItem from './ProjectTimelineItem.react.js';
 import Footer from '../../../common/react/Footer.react.js';
 
 class App extends React.Component {
@@ -70,6 +71,10 @@ class App extends React.Component {
                         <ProjectItem />
                     </div>
                 </div>
+            </div>
+            <div className='project-timeline-container'>
+                <ProjectTimelineItem />
+                <ProjectTimelineItem />
             </div>
             <Footer />
         </div>;
