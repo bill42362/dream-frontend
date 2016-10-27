@@ -121,29 +121,33 @@ body {
                     transition: all .5s ease;
                 }
             }
-            div.slide-content-zone {
+            div.slide-content-zone-container {
                 flex: auto;
-                div.slide-texts {
+                div.slide-content-zone {
+                    position: relative;
                     top: 50%;
-                    padding-left: 15%;
-                    color: rgba(255, 255, 255, 0.8);
-                    text-shadow: rgba(0, 0, 0, 0.8) 1px 1px 10px; 
-                    h1 { margin: 0em 0em 1em; }
-                    h3 { margin: 0em 0em 3em; }
-                }
-                div.project-button-container {
-                    top: 60%;
-                    span.project-button {
-                        background-color: rgba(255, 255, 255, 0.2);
-                        border-radius: 0.5em;
-                        padding: 1em 2em;
+                    padding-bottom: 2em;
+                    div.slide-texts {
+                        padding-left: 15%;
                         color: rgba(255, 255, 255, 0.8);
-                        font-weight: 200;
-                        transition: all .5s ease;
-                        &:hover {
-                            background-color: rgba(255, 255, 255, 0.8);
-                            cursor: pointer;
-                            color: rgba(250, 130, 160, 0.8);
+                        text-shadow: rgba(0, 0, 0, 0.8) 1px 1px 10px; 
+                        h1 { margin: 0em 0em 1em; }
+                        h3 { margin: 0em 0em 3em; }
+                    }
+                    div.project-button-container {
+                        top: 60%;
+                        span.project-button {
+                            background-color: rgba(255, 255, 255, 0.2);
+                            border-radius: 0.5em;
+                            padding: 1em 2em;
+                            color: rgba(255, 255, 255, 0.8);
+                            font-weight: 200;
+                            transition: all .5s ease;
+                            &:hover {
+                                background-color: rgba(255, 255, 255, 0.8);
+                                cursor: pointer;
+                                color: rgba(250, 130, 160, 0.8);
+                            }
                         }
                     }
                 }
