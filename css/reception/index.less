@@ -46,42 +46,51 @@ body {
         &:focus { text-decoration: none; }
     }
     & > div#app-root div#wrapper {
-        & > header#header > nav.navbar {
-            display: flex;
-            height: @headerHeight;
-            div#navbar-menu {
-                flex: 1;
-                display: inline-block;
-                color: white;
-                span.menu-icon {
-                    font-size: 2em;
-                    margin: 0px 10px 0px 30px;
-                    line-height: @headerHeight;
-                }
-                span.menu-display { font-size: 1.5em; }
-            }
-            div#brand-icon-container {
-                flex: auto;
-                text-align: center;
-                img.brand-icon {
-                    margin-top: 10px;
-                    height: 3em;
+        & > header#header {
+            &.on-top {
+                nav.navbar.navbar-fixed-top {
+                    background-color: rgba(255, 255, 255, 0);
                 }
             }
-            div#navbar-buttons {
-                flex: 1;
-                text-align: right;
-                span.navbar-icon {
-                    margin: 0px 20px 0px 10px;
+            nav.navbar {
+                display: flex;
+                height: @headerHeight;
+                background-color: @themeBackground;
+                transition: background-color .5s ease;
+                div#navbar-menu {
+                    flex: 1;
+                    display: inline-block;
                     color: white;
-                    font-size: 2em;
-                    line-height: @headerHeight;
+                    span.menu-icon {
+                        font-size: 2em;
+                        margin: 0px 10px 0px 30px;
+                        line-height: @headerHeight;
+                    }
+                    span.menu-display { font-size: 1.5em; }
                 }
-                img.user-icon {
-                    margin: 0px 20px 0px 10px;
-                    height: 2em;
-                    vertical-align: baseline;
-                    border-radius: 1em;
+                div#brand-icon-container {
+                    flex: auto;
+                    text-align: center;
+                    img.brand-icon {
+                        margin-top: 10px;
+                        height: 3em;
+                    }
+                }
+                div#navbar-buttons {
+                    flex: 1;
+                    text-align: right;
+                    span.navbar-icon {
+                        margin: 0px 20px 0px 10px;
+                        color: white;
+                        font-size: 2em;
+                        line-height: @headerHeight;
+                    }
+                    img.user-icon {
+                        margin: 0px 20px 0px 10px;
+                        height: 2em;
+                        vertical-align: baseline;
+                        border-radius: 1em;
+                    }
                 }
             }
         }

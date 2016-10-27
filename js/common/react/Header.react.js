@@ -9,7 +9,7 @@ class Header extends React.Component {
     }
     render() {
         let navbarMenuItems = [];
-        return <header id="header">
+        return <header id="header" className={ClassNames({'on-top': this.props.isOnTop})}>
             <nav className={ClassNames('navbar', {'navbar-fixed-top': this.props.fixed})}>
                 <NavbarMenu currentItemKey={'home'} items={navbarMenuItems} />
                 <div id="brand-icon-container">
