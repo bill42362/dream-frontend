@@ -8,17 +8,24 @@ class Slide extends React.Component {
         this.state = {
             initialContentZoneTop: undefined,
             contentZoneTop: undefined,
+            imageTop: 0,
         };
         this.onWindowScroll = this.onWindowScroll.bind(this);
     }
     onWindowScroll(e) {
         let baseTop = this.refs.base.getBoundingClientRect().top;
+
         let initialContentZoneTop = this.state.initialContentZoneTop;
         let contentZoneHeight = this.refs.contentZone.clientHeight;
         let baseHeight = this.refs.base.clientHeight;
         let maxContentZoneTop = baseHeight - contentZoneHeight;
-        let newZoneTop = Math.min(initialContentZoneTop - 0.5*baseTop, maxContentZoneTop);
-        this.setState({contentZoneTop: newZoneTop});
+        let newZoneTop = Math.min(initialContentZoneTop - 0.25*baseTop, maxContentZoneTop);
+
+        let baseViewportPercent = 1 + (1 + baseTop)/baseHeight;
+        let imageHeight = this.refs.image.clientHeight;
+        let imageBottomOffset = imageHeight - baseHeight;
+        let newImageTop = -imageBottomOffset*(1 - baseViewportPercent);
+        this.setState({contentZoneTop: newZoneTop, imageTop: newImageTop});
     }
     componentDidMount() {
         document.addEventListener('scroll', this.onWindowScroll, false);
@@ -28,7 +35,10 @@ class Slide extends React.Component {
     componentWillUnmount() { document.removeEventListener('scroll', this.onWindowScroll, false); }
     render() {
         return <div id="slide" ref='base'>
-            <img className="slide-image" src="http://dream.pbplus.me/wp-content/uploads/2016/03/DSCN8334.jpg"/>
+            <img
+                className="slide-image" ref='image' style={{top: this.state.imageTop}}
+                src="http://dream.pbplus.me/wp-content/uploads/2016/03/DSCN8334.jpg"
+            />
             <div className="slide-swipe-zone">
                 <span
                     className="slide-swipe-icon swipe-left glyphicon glyphicon-menu-left"

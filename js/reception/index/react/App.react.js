@@ -18,7 +18,6 @@ class App extends React.Component {
     onWindowScroll(e) {
         let baseTop = this.refs.base.getBoundingClientRect().top;
         let headerOnTop = -5 < baseTop;
-        console.log(headerOnTop);
         this.setState({headerOnTop: headerOnTop});
     }
     componentDidMount() { document.addEventListener('scroll', this.onWindowScroll, false); }
