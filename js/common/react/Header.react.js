@@ -13,7 +13,9 @@ class Header extends React.Component {
             <nav className={ClassNames('navbar', {'navbar-fixed-top': this.props.fixed})}>
                 <NavbarMenu currentItemKey={'home'} items={navbarMenuItems} />
                 <div id="brand-icon-container">
-                    <img className="brand-icon" src="/img/brand_icon_white.png" />
+                    <a href='/'>
+                        <img className="brand-icon" src="/img/brand_icon_white.png" />
+                    </a>
                 </div>
                 <div id="navbar-buttons">
                     <span className="navbar-icon glyphicon glyphicon-search" aria-label="search"></span>
