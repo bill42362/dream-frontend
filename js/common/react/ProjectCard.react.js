@@ -19,7 +19,7 @@ class ProjectCard extends React.Component {
             proposerId: 'proposerId', banner: 'bannerId',
         };
         let leftDays = (projectData.dueTimestamp - projectData.startTimestamp)/86400000;
-        return <div className="project-card">
+        return <a className="project-card" href='/project.html' >
             <div className='ratio-fixer'>
                 <img className='project-banner' {...banner} />
                 <div className='project-content'>
@@ -38,7 +38,7 @@ class ProjectCard extends React.Component {
                     </div>
                 </div>
             </div>
-        </div>;
+        </a>;
     }
 }
 module.exports = ProjectCard;

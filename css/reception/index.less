@@ -55,7 +55,7 @@ body {
             nav.navbar {
                 display: flex;
                 height: @headerHeight;
-                background-color: @themeBackground;
+                background-color: @themeForeground;
                 transition: background-color .5s ease;
                 div#navbar-menu {
                     flex: 1;
@@ -198,7 +198,8 @@ body {
         & > div.project-cards {
             margin-right: 0;
             padding: 15px 15px 15px 30px;
-            div.project-card {
+            a.project-card {
+                display: inline-block;
                 border: 1px solid rgba(255, 255, 255, 0);
                 border-radius: 5px;
                 margin: 15px 0px;
