@@ -21,24 +21,6 @@ class ProjectHeader extends React.Component {
             proposerId: 'proposerId', banner: 'bannerId',
         };
         let leftDays = (data.dueTimestamp - data.startTimestamp)/86400000;
-        let sharingIcons = [
-            {
-                key: 'facebook', spanClassName: 'facebook',
-                imgTitle: 'share to facebook', src: '/img/facebook_share_icon.png'
-            },
-            {
-                key: 'googlePlus', spanClassName: 'google-plus',
-                imgTitle: 'share to google+', src: '/img/google_plus_share_icon.png'
-            },
-            {
-                key: 'twitter', spanClassName: 'twitter',
-                imgTitle: 'tweet it', src: '/img/twitter_share_icon.png'
-            },
-            {
-                key: 'tumblr', spanClassName: 'tumblr',
-                imgTitle: 'share to tumblr', src: '/img/tumblr_share_icon.png'
-            },
-        ];
         let eventItems = [
             {imageSrc: '/img/mock_user_icon.jpg', type: 'donation', text: 'AAA 捐了 $1000 給 BBB 計畫', },
             {imageSrc: '/img/mock_user_icon.jpg', type: 'comment', text: 'CCC 對 DDD 計畫說：加油喔！', },
@@ -68,24 +50,10 @@ class ProjectHeader extends React.Component {
                         <div className='current-state'>
                             <div className='found'>${Core.addNumberComma(data.currentFound)}</div>
                             <div className='footnote'>目標 ${Core.addNumberComma(data.foundTarget)}</div>
-                            <div className='founder-count'>{data.founderCount}</div>
-                            <div className='footnote'>人贊助</div>
                             <div className='left-days'>{leftDays}</div>
                             <div className='footnote'>剩餘天數</div>
-                        </div>
-                        <div className='share'>
-                            {sharingIcons.map(icon =>
-                                <span
-                                    className={ClassNames('share-icon', icon.spanClassName)}
-                                    key={icon.key}
-                                >
-                                    <img
-                                        className='share-icon-image'
-                                        title={icon.imgTitle} src={icon.src}
-                                    ></img>
-                                </span>
-                            )}
-                            <div className='footnote'>分享</div>
+                            <div className='founder-count'>{data.founderCount}</div>
+                            <div className='footnote'>人贊助</div>
                         </div>
                         <div className='recent-events'>
                             {eventItems.map((item, index) =>

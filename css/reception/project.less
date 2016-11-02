@@ -108,55 +108,6 @@ body {
                                 color: gray;
                             }
                         }
-                        div.share {
-                            flex: auto;
-                            margin-top: 1em;
-                            span.share-icon {
-                                display: inline-block;
-                                border: 2px solid black;
-                                margin-right: 0.5em;
-                                width: 3em; height: 3em;
-                                background-color: black;
-                                border-radius: 1.5em;
-                                overflow: hidden;
-                                transition: all .5s ease;
-                                &:hover { cursor: pointer; }
-                                img.share-icon-image { width: 100%; height: 100%; }
-                            }
-                            span.share-icon.facebook:hover {
-                                border: 2px solid rgb(59, 89, 152);
-                                background-color: rgb(59, 89, 152);
-                            }
-                            span.share-icon.google-plus {
-                                &:hover {
-                                    border: 2px solid rgb(219, 68, 55);
-                                    background-color: rgb(219, 68, 55);
-                                }
-                                img.share-icon-image {
-                                    margin: -15% 0 0 -15%;
-                                    width: 130%; height: 130%;
-                                }
-                            }
-                            span.share-icon.twitter {
-                                &:hover {
-                                    border: 2px solid rgb(29, 161, 242);
-                                    background-color: rgb(29, 161, 242);
-                                }
-                                img.share-icon-image {
-                                    margin: -15% 0 0 -15%;
-                                    width: 130%; height: 130%;
-                                }
-                            }
-                            span.share-icon.tumblr:hover {
-                                border: 2px solid rgb(54, 70, 93);
-                                background-color: rgb(54, 70, 93);
-                            }
-                            div.footnote {
-                                margin-top: -0.2em;
-                                font-weight: 400;
-                                color: gray;
-                            }
-                        }
                         div.recent-events {
                             flex: auto;
                             margin-top: 1em;
@@ -191,13 +142,13 @@ body {
             }
             div.project-tabbar-container {
                 position: relative;
-                background-color: rgba(248, 248, 248, 98%);
                 border-top: 1px solid #e7e7e7;
                 border-bottom: 1px solid #e7e7e7;
                 margin-bottom: 1em;
                 width: 100%;
                 height: 55px;
                 text-align: center;
+                overflow: hidden;
                 div.project-tabbar {
                     display: inline-block;
                     width: 100%;
@@ -230,6 +181,43 @@ body {
                                 margin-left: 0.5em;
                                 padding: 0.1em 0.5em;
                                 color: white;
+                            }
+                        }
+                    }
+                    div.project-tabbar-aside {
+                        ul.share-icons {
+                            list-style-type: none;
+                            border-left: 1px solid #e7e7e7;
+                            margin: 0;
+                            padding: 0 0 0 2em;
+                            li.share-icon {
+                                display: inline-block;
+                                border-radius: 1em;
+                                margin: 0.7em;
+                                width: 2em; height: 2em;
+                                background-color: #b8b8b8;
+                                text-align: center;
+                                line-height: 2em;
+                                font-size: medium;
+                                color: white;
+                                overflow: hidden;
+                                transition: all .5s ease;
+                            }
+                            li.share-icon:hover {
+                                cursor: pointer;
+                                transform: scale(1.2, 1.2);
+                            }
+                            li.share-icon.facebook {
+                                background-color: rgb(59, 89, 152);
+                            }
+                            li.share-icon.google-plus {
+                                background-color: rgb(219, 68, 55);
+                            }
+                            li.share-icon.twitter {
+                                background-color: rgb(29, 161, 242);
+                            }
+                            li.share-icon.tumblr {
+                                background-color: rgb(54, 70, 93);
                             }
                         }
                     }
