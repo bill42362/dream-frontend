@@ -57,7 +57,7 @@ body {
         }
         & > div.project-header {
             text-align: center;
-            padding-bottom: 1em;
+            padding-bottom: 3em;
             background-color: #f8f8f8;
             div.title-section {
                 display: inline-block;
@@ -69,55 +69,58 @@ body {
                 h2.project-title { margin-top: 1.5em; }
                 h5.project-subtitle { font-weight: 200; }
             }
-            div.content-section {
-                position: relative;
+            div.content-section-container {
                 display: inline-block;
                 width: 100%;
                 max-width: 1200px;
                 text-align: left;
-                div.banner {
-                    div.project-banner-image-container {
-                        position: relative;
-                        width: 100%;
-                        padding-bottom: 56.25%;
-                        overflow: hidden;
-                        img.project-banner-image {
-                            position: absolute;
+                div.content-section {
+                    display: flex;
+                    div.banner {
+                        div.project-banner-image-container {
+                            position: relative;
                             width: 100%;
-                            top: 0; left: 0;
+                            padding-bottom: 56.25%;
+                            overflow: hidden;
+                            img.project-banner-image {
+                                position: absolute;
+                                width: 100%;
+                                top: 0; left: 0;
+                            }
                         }
                     }
-                }
-                div.absolute-height-100 {
-                    position: absolute;
-                    height: 100%;
-                    right: 0;
                     div.main-content {
-                        position: relative;
-                        height: 100%;
                         display: flex;
                         flex-direction: column;
+                        height: 100%;
                         div.current-state {
                             flex: auto;
-                            div.found { font-size: 3em; font-weight: 500; }
-                            div.founder-count { font-size: 3em; font-weight: 500; }
-                            div.left-days { font-size: 3em; font-weight: 500; }
-                            div.footnote {
-                                margin-top: -0.6em;
-                                font-weight: 400;
-                                color: gray;
+                            display: flex;
+                            flex-direction: column;
+                            div.current-state-item {
+                                flex: auto;
+                                color: rgb(238, 22, 106);
+                                div.found { font-size: 3em; }
+                                div.founder-count { font-size: 3em; }
+                                div.left-days { font-size: 3em; }
+                                div.footnote {
+                                    margin-top: -0.6em;
+                                    font-weight: 400;
+                                    color: gray;
+                                }
                             }
                         }
                         div.recent-events {
-                            flex: auto;
+                            flex: none;
                             margin-top: 1em;
+                            height: 3.5em;
                             overflow: hidden;
                             div.event-item {
                                 display: inline-block;
-                                border-radius: 1.5em;
+                                border-radius: 1.75em;
                                 margin-right: 0.5em;
-                                height: 3em;
-                                max-width: 3em;
+                                height: 3.5em;
+                                max-width: 3.5em;
                                 white-space: nowrap;
                                 transition: all .5s ease;
                                 overflow: hidden;
@@ -129,6 +132,13 @@ body {
                                     color: white;
                                 }
                             }
+                        }
+                        div.awares {
+                            flex: none;
+                            border-left: 4px solid rgb(204, 204, 204);
+                            margin-top: 2em;
+                            padding-left: 1em;
+                            color: rgb(104, 104, 104);
                         }
                     }
                 }
@@ -360,9 +370,12 @@ body {
     body {
         & > div#app-root div#wrapper {
             & > div.project-header {
-                div.content-section {
-                    div.main-content {
-                        padding: 0 15px;
+                div.content-section-container {
+                    div.content-section {
+                        display: block;
+                        div.main-content {
+                            padding: 0 15px;
+                        }
                     }
                 }
             }
