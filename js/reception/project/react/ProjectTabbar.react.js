@@ -11,9 +11,9 @@ class ProjectTabbar extends React.Component {
     }
     render() {
         let tabs = [
-            {key: 'story', display: 'Story', count: 0},
-            {key: 'timeline', display: 'Timeline', count: 2},
-            {key: 'comment', display: 'Comment', count: 3},
+            {key: 'story', display: '專案故事', count: 0},
+            {key: 'timeline', display: '專案進度', count: 2},
+            {key: 'comment', display: '訊息回應', count: 3},
         ];
         let sharingIcons = [
             {
@@ -45,7 +45,7 @@ class ProjectTabbar extends React.Component {
                         key={index}
                     >
                         {tab.display}
-                        {!!tab.count && <span className='project-tabbar-tab-count'>{tab.count}</span>}
+                        {!!tab.count && <div className='project-tabbar-tab-count'>{tab.count}</div>}
                     </li>
                 )}
             </ul>

@@ -1,4 +1,4 @@
-@themeBackground: rgb(250, 130, 160);
+@themeBackground: rgb(238, 22, 106);
 @themeForeground: rgb(190, 136, 247);
 @headerHeight: 60px;
 @footerHeight: 4em;
@@ -99,7 +99,7 @@ body {
                             flex-direction: column;
                             div.current-state-item {
                                 flex: auto;
-                                color: rgb(238, 22, 106);
+                                color: @themeBackground;
                                 div.found { font-size: 3em; }
                                 div.founder-count { font-size: 3em; }
                                 div.left-days { font-size: 3em; }
@@ -145,7 +145,7 @@ body {
             }
         }
         & > div.project-tabbar-container-anchor { 
-            margin-bottom: 1em;
+            margin-bottom: 2em;
             height: 55px;
             &.above-screen div.project-tabbar-container {
                 position: fixed; top: 0; z-index: 1;
@@ -161,36 +161,38 @@ body {
                 overflow: hidden;
                 div.project-tabbar {
                     display: inline-block;
-                    width: 100%;
+                    width: 100%; height: 100%;
                     max-width: 1200px;
                     text-align: left;
                     ul.project-tabbar-tabs {
                         list-style-type: none;
-                        margin: 0;
+                        margin: 0; height: 100%;
                         li.project-tabbar-tab {
                             display: inline-block;
-                            padding: 1em;
-                            font-size: medium;
-                            color: darken(@themeForeground, 5%);
+                            border-bottom: 2px solid rgba(255, 255, 255, 0);
+                            margin: 0 2em;
+                            padding: 1.4em 0.5em;
+                            height: 100%;
+                            font-size: small;
+                            color: rgb(104, 104, 104);
                             transition: background-color .5s ease, color .5s ease;
                             &.active {
-                                background-color: darken(#f8f8f8, 6%);
-                                color: darken(@themeForeground, 10%);
+                                color: @themeBackground;
+                                border-bottom: 2px solid @themeBackground;
                             }
                             &:hover {
-                                background-color: darken(#f8f8f8, 4%); cursor: pointer;
-                                color: darken(@themeForeground, 15%);
+                                cursor: pointer;
+                                color: @themeBackground;
                             }
-                            &.active:hover {
-                                background-color: darken(#f8f8f8, 10%);
-                                color: darken(@themeForeground, 20%);
-                            }
-                            span.project-tabbar-tab-count {
-                                border-radius: 0.5em;
+                            div.project-tabbar-tab-count {
+                                display: inline-block;
+                                border-radius: 1em;
                                 background-color: @themeBackground;
-                                margin-left: 0.5em;
+                                margin-left: 0.1em;
                                 padding: 0.1em 0.5em;
+                                font-size: x-small;
                                 color: white;
+                                transform: translateY(-0.5em);
                             }
                         }
                     }
@@ -239,7 +241,7 @@ body {
             div.project-content {
                 display: inline-block;
                 width: 100%;
-                max-width: 1200px;
+                max-width: 1230px;
                 text-align: left;
                 div.project-story-container {
                     position: relative;
