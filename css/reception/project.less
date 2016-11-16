@@ -270,7 +270,7 @@ body {
                         transform: rotate(45deg);
                         &:hover {
                             cursor: pointer;
-                            color: @themeBackground;
+                            color: @themeForeground;
                         }
                     }
                     div.project-story {
@@ -294,14 +294,19 @@ body {
                     border-top: none;
                 }
                 div.project-item {
+                    border: 1px solid @themeBackground;
                     border-radius: 5px;
                     padding: 10px;
                     margin-bottom: 15px;
-                    background-color: lighten(rgb(242, 243, 226), 3%);
+                    background-color: lighten(@themeBackground, 45%);
                     transition: background-color .5s ease;
                     &:hover {
                         background-color: lighten(@themeBackground, 20%);
                         cursor: pointer;
+                        div.project-item-header {
+                            h3.project-item-price { color: white; }
+                            h5.project-item-status { color: lighten(rgb(70, 200, 250), 20%); }
+                        }
                     }
                     div.project-item-header {
                         display: flex;
@@ -309,11 +314,14 @@ body {
                             flex: auto;
                             margin-top: 0;
                             margin-bottom: 2px;
+                            color: @themeBackground;
+                            transition: color .5s ease;
                         }
                         h5.project-item-status {
                             flex: none;
                             margin: 0;
-                            color: @themeForeground;
+                            color: rgb(70, 200, 250);
+                            transition: color .5s ease;
                         }
                     }
                     div.project-item-labels {
@@ -325,8 +333,17 @@ body {
                         }
                     }
                     h4.project-item-title { margin-top: 0.5em; }
-                    p.project-item-content {
-                        margin-bottom: 0;
+                    p.project-item-content { }
+                    div.project-item-fake-button {
+                        border-radius: 0.2em;
+                        padding: 0.8em;
+                        background-color: @themeBackground;
+                        color: white;
+                        text-align: center;
+                        span.glyphicon {
+                            margin-right: 1em;
+                            font-weight: 500;
+                        }
                     }
                 }
             }
