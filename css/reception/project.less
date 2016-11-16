@@ -76,6 +76,7 @@ body {
                 text-align: left;
                 div.content-section {
                     display: flex;
+                    margin-right: 0px;
                     div.banner {
                         div.project-banner-image-container {
                             position: relative;
@@ -250,6 +251,7 @@ body {
                     padding: 10px;
                     overflow: hidden;
                     transition: all .5s ease;
+                    &:last-of-type { margin-bottom: 15px; }
                     &.expended {
                         border: 2px solid rgba(0, 0, 0, 0.05);
                         border-top-color: rgba(255, 255, 255, 0);
@@ -377,6 +379,7 @@ body {
                 div.content-section-container {
                     div.content-section {
                         display: block;
+                        & > div { padding-right: 0px; }
                         div.main-content {
                             padding: 0 15px;
                         }
