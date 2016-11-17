@@ -19,26 +19,9 @@ class ProjectHeader extends React.Component {
             foundTarget: 500000, currentFound: 300000, founderCount: 50,
             startTimestamp: 1472869212136, dueTimestamp: 1478139612136,
             proposerId: 'proposerId', banner: 'bannerId',
+            awares: ['專案正在募資中!', '在 2016/11/11 20:00 募資結束前，', '至少募得 $200,000 便募資成功。'],
         };
         let leftDays = (data.dueTimestamp - data.startTimestamp)/86400000;
-        let sharingIcons = [
-            {
-                key: 'facebook', spanClassName: 'facebook',
-                imgTitle: 'share to facebook', src: '/img/facebook_share_icon.png'
-            },
-            {
-                key: 'googlePlus', spanClassName: 'google-plus',
-                imgTitle: 'share to google+', src: '/img/google_plus_share_icon.png'
-            },
-            {
-                key: 'twitter', spanClassName: 'twitter',
-                imgTitle: 'tweet it', src: '/img/twitter_share_icon.png'
-            },
-            {
-                key: 'tumblr', spanClassName: 'tumblr',
-                imgTitle: 'share to tumblr', src: '/img/tumblr_share_icon.png'
-            },
-        ];
         let eventItems = [
             {imageSrc: '/img/mock_user_icon.jpg', type: 'donation', text: 'AAA 捐了 $1000 給 BBB 計畫', },
             {imageSrc: '/img/mock_user_icon.jpg', type: 'comment', text: 'CCC 對 DDD 計畫說：加油喔！', },
@@ -52,48 +35,47 @@ class ProjectHeader extends React.Component {
                 <h2 className='project-title'>{data.title}</h2>
                 <h5 className='project-subtitle'>{data.subtitle}</h5>
             </div>
-            <div className='content-section row'>
-                <div className='col-md-8'>
-                    <div className='banner'>
-                        <div className='project-banner-image-container'>
-                            <img
-                                className='project-banner-image'
-                                src={banner.src} title={banner.title}
-                            />
+            <div className='content-section-container'>
+                <div className='content-section row'>
+                    <div className='col-md-8'>
+                        <div className='banner'>
+                            <div className='project-banner-image-container'>
+                                <img
+                                    className='project-banner-image'
+                                    src={banner.src} title={banner.title}
+                                />
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div className='col-md-4 absolute-height-100'>
-                    <div className='main-content'>
-                        <div className='current-state'>
-                            <div className='found'>${Core.addNumberComma(data.currentFound)}</div>
-                            <div className='footnote'>目標 ${Core.addNumberComma(data.foundTarget)}</div>
-                            <div className='founder-count'>{data.founderCount}</div>
-                            <div className='footnote'>人贊助</div>
-                            <div className='left-days'>{leftDays}</div>
-                            <div className='footnote'>剩餘天數</div>
-                        </div>
-                        <div className='share'>
-                            {sharingIcons.map(icon =>
-                                <span
-                                    className={ClassNames('share-icon', icon.spanClassName)}
-                                    key={icon.key}
-                                >
-                                    <img
-                                        className='share-icon-image'
-                                        title={icon.imgTitle} src={icon.src}
-                                    ></img>
-                                </span>
-                            )}
-                            <div className='footnote'>分享</div>
-                        </div>
-                        <div className='recent-events'>
-                            {eventItems.map((item, index) =>
-                                <div className='event-item' key={index}>
-                                   <img className='event-item-image' src={item.imageSrc} />
-                                   <span className='event-item-text'>{item.text}</span>
+                    <div className='col-md-4'>
+                        <div className='main-content'>
+                            <div className='current-state'>
+                                <div className='current-state-item'>
+                                    <div className='found'>${Core.addNumberComma(data.currentFound)}</div>
+                                    <div className='footnote'>目標金額 ${Core.addNumberComma(data.foundTarget)}</div>
                                 </div>
-                            )}
+                                <div className='current-state-item'>
+                                    <div className='left-days'>{leftDays}</div>
+                                    <div className='footnote'>剩餘天數</div>
+                                </div>
+                                <div className='current-state-item'>
+                                    <div className='founder-count'>{data.founderCount}</div>
+                                    <div className='footnote'>贊助人數</div>
+                                </div>
+                            </div>
+                            <div className='recent-events'>
+                                {eventItems.map((item, index) =>
+                                    <div className='event-item' key={index}>
+                                       <img className='event-item-image' src={item.imageSrc} />
+                                       <span className='event-item-text'>{item.text}</span>
+                                    </div>
+                                )}
+                            </div>
+                            <div className='awares'>
+                                {data.awares.map((aware, index) =>
+                                    <div className='aware' key={index}>{aware}</div>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>

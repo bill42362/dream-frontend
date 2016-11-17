@@ -1,4 +1,4 @@
-@themeBackground: rgb(250, 130, 160);
+@themeBackground: rgb(238, 22, 106);
 @themeForeground: rgb(190, 136, 247);
 @headerHeight: 60px;
 @footerHeight: 4em;
@@ -57,7 +57,7 @@ body {
         }
         & > div.project-header {
             text-align: center;
-            padding-bottom: 1em;
+            padding-bottom: 3em;
             background-color: #f8f8f8;
             div.title-section {
                 display: inline-block;
@@ -69,104 +69,59 @@ body {
                 h2.project-title { margin-top: 1.5em; }
                 h5.project-subtitle { font-weight: 200; }
             }
-            div.content-section {
-                position: relative;
+            div.content-section-container {
                 display: inline-block;
                 width: 100%;
                 max-width: 1200px;
                 text-align: left;
-                div.banner {
-                    div.project-banner-image-container {
-                        position: relative;
-                        width: 100%;
-                        padding-bottom: 56.25%;
-                        overflow: hidden;
-                        img.project-banner-image {
-                            position: absolute;
+                div.content-section {
+                    display: flex;
+                    margin-right: 0px;
+                    div.banner {
+                        div.project-banner-image-container {
+                            position: relative;
                             width: 100%;
-                            top: 0; left: 0;
+                            padding-bottom: 56.25%;
+                            overflow: hidden;
+                            img.project-banner-image {
+                                position: absolute;
+                                width: 100%;
+                                top: 0; left: 0;
+                            }
                         }
                     }
-                }
-                div.absolute-height-100 {
-                    position: absolute;
-                    height: 100%;
-                    right: 0;
                     div.main-content {
-                        position: relative;
-                        height: 100%;
                         display: flex;
                         flex-direction: column;
+                        height: 100%;
                         div.current-state {
                             flex: auto;
-                            div.found { font-size: 3em; font-weight: 500; }
-                            div.founder-count { font-size: 3em; font-weight: 500; }
-                            div.left-days { font-size: 3em; font-weight: 500; }
-                            div.footnote {
-                                margin-top: -0.6em;
-                                font-weight: 400;
-                                color: gray;
-                            }
-                        }
-                        div.share {
-                            flex: auto;
-                            margin-top: 1em;
-                            span.share-icon {
-                                display: inline-block;
-                                border: 2px solid black;
-                                margin-right: 0.5em;
-                                width: 3em; height: 3em;
-                                background-color: black;
-                                border-radius: 1.5em;
-                                overflow: hidden;
-                                transition: all .5s ease;
-                                &:hover { cursor: pointer; }
-                                img.share-icon-image { width: 100%; height: 100%; }
-                            }
-                            span.share-icon.facebook:hover {
-                                border: 2px solid rgb(59, 89, 152);
-                                background-color: rgb(59, 89, 152);
-                            }
-                            span.share-icon.google-plus {
-                                &:hover {
-                                    border: 2px solid rgb(219, 68, 55);
-                                    background-color: rgb(219, 68, 55);
+                            display: flex;
+                            flex-direction: column;
+                            div.current-state-item {
+                                flex: auto;
+                                color: @themeBackground;
+                                div.found { font-size: 3em; }
+                                div.founder-count { font-size: 3em; }
+                                div.left-days { font-size: 3em; }
+                                div.footnote {
+                                    margin-top: -0.6em;
+                                    font-weight: 400;
+                                    color: gray;
                                 }
-                                img.share-icon-image {
-                                    margin: -15% 0 0 -15%;
-                                    width: 130%; height: 130%;
-                                }
-                            }
-                            span.share-icon.twitter {
-                                &:hover {
-                                    border: 2px solid rgb(29, 161, 242);
-                                    background-color: rgb(29, 161, 242);
-                                }
-                                img.share-icon-image {
-                                    margin: -15% 0 0 -15%;
-                                    width: 130%; height: 130%;
-                                }
-                            }
-                            span.share-icon.tumblr:hover {
-                                border: 2px solid rgb(54, 70, 93);
-                                background-color: rgb(54, 70, 93);
-                            }
-                            div.footnote {
-                                margin-top: -0.2em;
-                                font-weight: 400;
-                                color: gray;
                             }
                         }
                         div.recent-events {
-                            flex: auto;
+                            flex: none;
                             margin-top: 1em;
+                            height: 3.5em;
                             overflow: hidden;
                             div.event-item {
                                 display: inline-block;
-                                border-radius: 1.5em;
+                                border-radius: 1.75em;
                                 margin-right: 0.5em;
-                                height: 3em;
-                                max-width: 3em;
+                                height: 3.5em;
+                                max-width: 3.5em;
                                 white-space: nowrap;
                                 transition: all .5s ease;
                                 overflow: hidden;
@@ -179,57 +134,104 @@ body {
                                 }
                             }
                         }
+                        div.awares {
+                            flex: none;
+                            border-left: 4px solid rgb(204, 204, 204);
+                            margin-top: 2em;
+                            padding-left: 1em;
+                            color: rgb(104, 104, 104);
+                        }
                     }
                 }
             }
         }
         & > div.project-tabbar-container-anchor { 
-            margin-bottom: 1em;
+            margin-bottom: 2em;
             height: 55px;
             &.above-screen div.project-tabbar-container {
                 position: fixed; top: 0; z-index: 1;
             }
             div.project-tabbar-container {
                 position: relative;
-                background-color: rgba(248, 248, 248, 98%);
                 border-top: 1px solid #e7e7e7;
                 border-bottom: 1px solid #e7e7e7;
                 margin-bottom: 1em;
                 width: 100%;
                 height: 55px;
+                background-color: rgba(255, 255, 255, 0.98);
                 text-align: center;
+                overflow: hidden;
                 div.project-tabbar {
                     display: inline-block;
-                    width: 100%;
+                    width: 100%; height: 100%;
                     max-width: 1200px;
                     text-align: left;
                     ul.project-tabbar-tabs {
                         list-style-type: none;
-                        margin: 0;
+                        margin: 0; height: 100%;
                         li.project-tabbar-tab {
                             display: inline-block;
-                            padding: 1em;
-                            font-size: medium;
-                            color: darken(@themeForeground, 5%);
+                            border-bottom: 2px solid rgba(255, 255, 255, 0);
+                            margin: 0 2em;
+                            padding: 1.4em 0.5em;
+                            height: 100%;
+                            font-size: small;
+                            color: rgb(104, 104, 104);
                             transition: background-color .5s ease, color .5s ease;
                             &.active {
-                                background-color: darken(#f8f8f8, 6%);
-                                color: darken(@themeForeground, 10%);
+                                color: @themeBackground;
+                                border-bottom: 2px solid @themeBackground;
                             }
                             &:hover {
-                                background-color: darken(#f8f8f8, 4%); cursor: pointer;
-                                color: darken(@themeForeground, 15%);
+                                cursor: pointer;
+                                color: @themeBackground;
                             }
-                            &.active:hover {
-                                background-color: darken(#f8f8f8, 10%);
-                                color: darken(@themeForeground, 20%);
-                            }
-                            span.project-tabbar-tab-count {
-                                border-radius: 0.5em;
+                            div.project-tabbar-tab-count {
+                                display: inline-block;
+                                border-radius: 1em;
                                 background-color: @themeBackground;
-                                margin-left: 0.5em;
+                                margin-left: 0.1em;
                                 padding: 0.1em 0.5em;
+                                font-size: x-small;
                                 color: white;
+                                transform: translateY(-0.5em);
+                            }
+                        }
+                    }
+                    div.project-tabbar-aside {
+                        ul.share-icons {
+                            list-style-type: none;
+                            border-left: 1px solid #e7e7e7;
+                            margin: 0;
+                            padding: 0 0 0 2em;
+                            li.share-icon {
+                                display: inline-block;
+                                border-radius: 1em;
+                                margin: 0.7em;
+                                width: 2em; height: 2em;
+                                background-color: #b8b8b8;
+                                text-align: center;
+                                line-height: 2em;
+                                font-size: medium;
+                                color: white;
+                                overflow: hidden;
+                                transition: all .5s ease;
+                            }
+                            li.share-icon:hover {
+                                cursor: pointer;
+                                transform: scale(1.2, 1.2);
+                            }
+                            li.share-icon.facebook {
+                                background-color: rgb(59, 89, 152);
+                            }
+                            li.share-icon.google-plus {
+                                background-color: rgb(219, 68, 55);
+                            }
+                            li.share-icon.twitter {
+                                background-color: rgb(29, 161, 242);
+                            }
+                            li.share-icon.tumblr {
+                                background-color: rgb(54, 70, 93);
                             }
                         }
                     }
@@ -241,7 +243,7 @@ body {
             div.project-content {
                 display: inline-block;
                 width: 100%;
-                max-width: 1200px;
+                max-width: 1230px;
                 text-align: left;
                 div.project-story-container {
                     position: relative;
@@ -249,6 +251,7 @@ body {
                     padding: 10px;
                     overflow: hidden;
                     transition: all .5s ease;
+                    &:last-of-type { margin-bottom: 15px; }
                     &.expended {
                         border: 2px solid rgba(0, 0, 0, 0.05);
                         border-top-color: rgba(255, 255, 255, 0);
@@ -267,12 +270,13 @@ body {
                         transform: rotate(45deg);
                         &:hover {
                             cursor: pointer;
-                            color: @themeBackground;
+                            color: @themeForeground;
                         }
                     }
                     div.project-story {
                         h2.project-story-title {
                             margin-top: 0;
+                            padding-right: 20px;
                             font-size: 2em;
                         }
                         img {
@@ -290,14 +294,19 @@ body {
                     border-top: none;
                 }
                 div.project-item {
+                    border: 1px solid @themeBackground;
                     border-radius: 5px;
                     padding: 10px;
                     margin-bottom: 15px;
-                    background-color: lighten(rgb(242, 243, 226), 3%);
+                    background-color: lighten(@themeBackground, 45%);
                     transition: background-color .5s ease;
                     &:hover {
                         background-color: lighten(@themeBackground, 20%);
                         cursor: pointer;
+                        div.project-item-header {
+                            h3.project-item-price { color: white; }
+                            h5.project-item-status { color: lighten(rgb(70, 200, 250), 20%); }
+                        }
                     }
                     div.project-item-header {
                         display: flex;
@@ -305,11 +314,14 @@ body {
                             flex: auto;
                             margin-top: 0;
                             margin-bottom: 2px;
+                            color: @themeBackground;
+                            transition: color .5s ease;
                         }
                         h5.project-item-status {
                             flex: none;
                             margin: 0;
-                            color: @themeForeground;
+                            color: rgb(70, 200, 250);
+                            transition: color .5s ease;
                         }
                     }
                     div.project-item-labels {
@@ -321,8 +333,17 @@ body {
                         }
                     }
                     h4.project-item-title { margin-top: 0.5em; }
-                    p.project-item-content {
-                        margin-bottom: 0;
+                    p.project-item-content { }
+                    div.project-item-fake-button {
+                        border-radius: 0.2em;
+                        padding: 0.8em;
+                        background-color: @themeBackground;
+                        color: white;
+                        text-align: center;
+                        span.glyphicon {
+                            margin-right: 1em;
+                            font-weight: 500;
+                        }
                     }
                 }
             }
@@ -372,9 +393,13 @@ body {
     body {
         & > div#app-root div#wrapper {
             & > div.project-header {
-                div.content-section {
-                    div.main-content {
-                        padding: 0 15px;
+                div.content-section-container {
+                    div.content-section {
+                        display: block;
+                        & > div { padding-right: 0px; }
+                        div.main-content {
+                            padding: 0 15px;
+                        }
                     }
                 }
             }
@@ -388,6 +413,17 @@ body {
                 div.content-section {
                     div.main-content {
                         padding: 0 15px;
+                    }
+                }
+            }
+            & > div.project-tabbar-container-anchor { 
+                div.project-tabbar-container {
+                    div.project-tabbar {
+                        ul.project-tabbar-tabs {
+                            li.project-tabbar-tab {
+                                margin: 0 0.5em;
+                            }
+                        }
                     }
                 }
             }
