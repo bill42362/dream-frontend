@@ -3,10 +3,10 @@
 import React from 'react';
 import ClassNames from 'classnames';
 import Header from '../../../common/react/Header.react.js';
-import ProjectHeader from './ProjectHeader.react.js';
-import ProjectTabbar from './ProjectTabbar.react.js';
+import ProjectHeader from '../../../common/react/ProjectHeader.react.js';
+import ProjectTabbar from '../../../common/react/ProjectTabbar.react.js';
 import ProjectStory from './ProjectStory.react.js';
-import ProjectItem from './ProjectItem.react.js';
+import ProjectItem from '../../../common/react/ProjectItem.react.js';
 import Footer from '../../../common/react/Footer.react.js';
 
 class App extends React.Component {
