@@ -24,12 +24,12 @@ var BootstrapInput = React.createClass({
         var status = this.props.status || 'default';
         var hasFeedback = this.props.hasFeedback || false;
         var errorMessage = this.props.errorMessage || '';
-        var inputUuid = PBPlus.newUuid();
+        var inputUuid = Core.newUuid();
         var dataList = this.props.dataList;
         var dataListUuid = undefined;
         var dataListElement = undefined;
         if(dataList && !!dataList.length) {
-            dataListUuid = PBPlus.newUuid();
+            dataListUuid = Core.newUuid();
             dataListElement = <datalist id={dataListUuid}>
                 {dataList.map(function(data, index) {
                     return <option value={data} key={index} />
@@ -44,7 +44,7 @@ var BootstrapInput = React.createClass({
         var labelClassName = ClassNames('control-label', {'sr-only': labelHidden});
         var helper = undefined, helpUuid = undefined;
         if((('error' === status) || ('warning' === status)) && !!errorMessage) {
-            helpUuid = PBPlus.newUuid();
+            helpUuid = Core.newUuid();
             helper = <span id={helpUuid} className='help-block'>{errorMessage}</span>;
         }
         var input = <input
@@ -87,6 +87,3 @@ var BootstrapInput = React.createClass({
 });
 
 module.exports = BootstrapInput;
-
-//* vim: filetype=php.javascript.jsx
-//* vim: dictionary=~/.vim/dict/javascript.dict
