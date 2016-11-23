@@ -26,12 +26,12 @@ class ProjectTimelineItem extends React.Component {
     componentDidUpdate() { }
     render() {
         let item = this.props.item;
-        let image = this.props.image;
+        let image = item.image;
         return <div ref='base' className='project-timeline-item' >
-            <img
+            {image && <img
                 className='project-timeline-item-image'
                 src={image.src} title={image.title}
-            ></img>
+            ></img>}
             <h4 className='project-timeline-item-title'>{item.title}</h4>
             <div
                 className='project-timeline-item-content' ref='content'

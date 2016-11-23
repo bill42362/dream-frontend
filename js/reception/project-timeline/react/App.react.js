@@ -5,7 +5,7 @@ import ClassNames from 'classnames';
 import Header from '../../../common/react/Header.react.js';
 import ProjectHeader from '../../../common/react/ProjectHeader.react.js';
 import ProjectTabbar from '../../../common/react/ProjectTabbar.react.js';
-import ProjectTimelineItem from './ProjectTimelineItem.react.js';
+import ProjectTimeline from './ProjectTimeline.react.js';
 import Footer from '../../../common/react/Footer.react.js';
 
 class App extends React.Component {
@@ -47,7 +47,26 @@ class App extends React.Component {
         let timelineItem = {
             timestamp: 1479367134309,
             title: title,
-            content: content + content + content + content,
+            content: content + content + content + content + content + content + content + content
+                + content + content + content + content + content + content + content + content
+                + content + content + content + content + content + content + content + content
+                + content + content + content + content + content + content + content + content
+                + content + content + content + content + content + content + content + content
+                + content + content + content + content + content + content + content + content
+                + content + content + content + content + content + content + content + content,
+            image: banner,
+        };
+        let timelineItemNoImage = {
+            timestamp: 1479367134309,
+            title: title,
+            content: content + content + content + content + content + content + content + content
+                + content + content + content + content + content + content + content + content
+                + content + content + content + content + content + content + content + content
+                + content + content + content + content + content + content + content + content
+                + content + content + content + content + content + content + content + content
+                + content + content + content + content + content + content + content + content
+                + content + content + content + content + content + content + content + content,
+            image: undefined,
         };
         return <div id='wrapper'>
             <Header fixed={false} />
@@ -66,10 +85,8 @@ class App extends React.Component {
                 </div>
             </div>
             <div className='project-content-container'>
-                <div className='project-content row'>
-                    <ProjectTimelineItem item={timelineItem} image={banner} />
-                    <ProjectTimelineItem item={timelineItem} image={banner} />
-                    <ProjectTimelineItem item={timelineItem} image={banner} />
+                <div className='project-content'>
+                    <ProjectTimeline timelineItems={[timelineItemNoImage, timelineItemNoImage, timelineItem]} />
                 </div>
             </div>
             <Footer />

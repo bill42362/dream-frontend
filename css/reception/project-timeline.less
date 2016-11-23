@@ -243,39 +243,70 @@ body {
             div.project-content {
                 display: inline-block;
                 width: 100%;
-                max-width: 1230px;
+                max-width: 1200px;
                 text-align: left;
-                div.project-timeline-item {
-                    max-width: 30em;
-                    width: 100%;
-                    img.project-timeline-item-image {
-                        width: 100%;
-                    }
-                    h4.project-timeline-item-title {
-                        margin-top: 1em;
-                        font-weight: 400;
-                    }
-                    div.project-timeline-item-content {
-                        font-size: small;
-                        font-weight: 200;
-                        overflow: hidden;
-                        transition: height .5s ease;
-                    }
-                    div.project-timeline-item-expend-button {
-                        border: 1px solid @themeBackground;
-                        border-radius: 0.2em;
-                        margin: 1.5em 20%;
-                        padding: 0.5em;
-                        width: 60%;
-                        text-align: center;
-                        color: @themeBackground;
-                        transition: background-color .5s ease, color .5s ease;
-                        &:hover {
-                            cursor: pointer;
-                            background-color: @themeBackground;
-                            color: white;
+                div.project-timeline {
+                    div.project-timeline-pair {
+                        display: flex;
+                        div.project-timeline-item-container {
+                            flex: 0.5;
+                            margin-bottom: 5em;
+                            &.second { position: relative; top: 15em; }
+                            div.project-timeline-item-wrapper {
+                                display: flex;
+                                div.project-timeline-timelabel {
+                                    flex: 0.2;
+                                    color: @themeBackground;
+                                    text-align: center;
+                                    div.project-timeline-timelabel-placeholder {
+                                        height: 40%;
+                                        max-height: 15em;
+                                    }
+                                    div.project-timeline-timelabel-date {
+                                        span.glyphicon { margin-right: 0.5em; }
+                                    }
+                                    div.project-timeline-timelabel-time {
+                                    }
+                                }
+                                div.project-timeline-item {
+                                    flex: 0.8;
+                                    img.project-timeline-item-image {
+                                        width: 100%;
+                                    }
+                                    h4.project-timeline-item-title {
+                                        margin-top: 1em;
+                                        font-weight: 400;
+                                    }
+                                    div.project-timeline-item-content {
+                                        font-size: small;
+                                        font-weight: 200;
+                                        overflow: hidden;
+                                        transition: height .5s ease;
+                                    }
+                                    div.project-timeline-item-expend-button {
+                                        border: 1px solid @themeBackground;
+                                        border-radius: 0.2em;
+                                        margin: 1.5em 20%;
+                                        padding: 0.5em;
+                                        width: 60%;
+                                        text-align: center;
+                                        color: @themeBackground;
+                                        transition: background-color .5s ease, color .5s ease;
+                                        &:hover {
+                                            cursor: pointer;
+                                            background-color: @themeBackground;
+                                            color: white;
+                                        }
+                                        span.glyphicon { margin-right: 0.5em; }
+                                    }
+                                }
+                            }
                         }
-                        span.glyphicon { margin-right: 0.5em; }
+                        div.project-timeline-middle-line {
+                            flex: none;
+                            width: 1px;
+                            background-color: @themeBackground;
+                        }
                     }
                 }
             }
