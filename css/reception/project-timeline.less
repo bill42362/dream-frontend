@@ -245,6 +245,39 @@ body {
                 width: 100%;
                 max-width: 1230px;
                 text-align: left;
+                div.project-timeline-item {
+                    max-width: 30em;
+                    width: 100%;
+                    img.project-timeline-item-image {
+                        width: 100%;
+                    }
+                    h4.project-timeline-item-title {
+                        margin-top: 1em;
+                        font-weight: 400;
+                    }
+                    div.project-timeline-item-content {
+                        font-size: small;
+                        font-weight: 200;
+                        overflow: hidden;
+                        transition: height .5s ease;
+                    }
+                    div.project-timeline-item-expend-button {
+                        border: 1px solid @themeBackground;
+                        border-radius: 0.2em;
+                        margin: 1.5em 20%;
+                        padding: 0.5em;
+                        width: 60%;
+                        text-align: center;
+                        color: @themeBackground;
+                        transition: background-color .5s ease, color .5s ease;
+                        &:hover {
+                            cursor: pointer;
+                            background-color: @themeBackground;
+                            color: white;
+                        }
+                        span.glyphicon { margin-right: 0.5em; }
+                    }
+                }
             }
         }
         & > footer#footer {

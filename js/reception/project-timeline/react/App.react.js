@@ -5,6 +5,7 @@ import ClassNames from 'classnames';
 import Header from '../../../common/react/Header.react.js';
 import ProjectHeader from '../../../common/react/ProjectHeader.react.js';
 import ProjectTabbar from '../../../common/react/ProjectTabbar.react.js';
+import ProjectTimelineItem from './ProjectTimelineItem.react.js';
 import Footer from '../../../common/react/Footer.react.js';
 
 class App extends React.Component {
@@ -41,10 +42,12 @@ class App extends React.Component {
             startTimestamp: 1472869212136, dueTimestamp: 1478139612136,
             proposerId: 'proposerId', banner: 'bannerId',
         };
+        let title = '留言標題留言標題留言標題留言標題留言標題留言標題留言標題留言標題留言標題留言標題';
         let content = '留言內容留言內容留言內容留言內容留言內容留言內容留言內容留言內容留言內容留言內容';
-        let message = {
+        let timelineItem = {
             timestamp: 1479367134309,
-            content: content + content + content,
+            title: title,
+            content: content + content + content + content,
         };
         return <div id='wrapper'>
             <Header fixed={false} />
@@ -64,6 +67,9 @@ class App extends React.Component {
             </div>
             <div className='project-content-container'>
                 <div className='project-content row'>
+                    <ProjectTimelineItem item={timelineItem} image={banner} />
+                    <ProjectTimelineItem item={timelineItem} image={banner} />
+                    <ProjectTimelineItem item={timelineItem} image={banner} />
                 </div>
             </div>
             <Footer />
