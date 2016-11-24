@@ -2,6 +2,7 @@
 'use strict'
 import React from 'react';
 import ClassNames from 'classnames';
+import ProjectTimelineTimelabel from './ProjectTimelineTimelabel.react.js';
 import ProjectTimelineItem from './ProjectTimelineItem.react.js';
 
 class ProjectTimeline extends React.Component {
@@ -20,6 +21,12 @@ class ProjectTimeline extends React.Component {
             pairedItems.push(tempItems.slice(i, i+chunk));
         }
         return <div ref='base' className='project-timeline' >
+            <div className='project-timeline-header'>
+                <div className='project-timeline-header-start-time'>
+                    {Core.getDateStringWithFormat(this.props.startTimestamp, 'YYYY-MM-DD hh:mm:ss')}
+                </div>
+                專案開始
+            </div>
             {pairedItems.map((pairedItem, index) =>
                 <div
                     className='project-timeline-pair'
@@ -28,27 +35,13 @@ class ProjectTimeline extends React.Component {
                     <div className='project-timeline-item-container'>
                         <div className='project-timeline-item-wrapper'>
                             <ProjectTimelineItem item={pairedItem[0]} />
-                            <div className='project-timeline-timelabel'>
-                                <div className='project-timeline-timelabel-placeholder'></div>
-                                <div className='project-timeline-timelabel-date'>
-                                    <span className='glyphicon glyphicon-time'></span>
-                                    date
-                                </div>
-                                <div className='project-timeline-timelabel-time'>time</div>
-                            </div>
+                            <ProjectTimelineTimelabel item={pairedItem[0]} />
                         </div>
                     </div>
                     <div className='project-timeline-middle-line'></div>
                     <div className='project-timeline-item-container second'>
                         {pairedItem[1] && <div className='project-timeline-item-wrapper'>
-                            <div className='project-timeline-timelabel'>
-                                <div className='project-timeline-timelabel-placeholder'></div>
-                                <div className='project-timeline-timelabel-date'>
-                                    <span className='glyphicon glyphicon-time'></span>
-                                    date
-                                </div>
-                                <div className='project-timeline-timelabel-time'>time</div>
-                            </div>
+                            <ProjectTimelineTimelabel item={pairedItem[1]} />
                             <ProjectTimelineItem item={pairedItem[1]} />
                         </div>}
                     </div>

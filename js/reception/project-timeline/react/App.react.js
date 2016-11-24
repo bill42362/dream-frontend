@@ -86,7 +86,15 @@ class App extends React.Component {
             </div>
             <div className='project-content-container'>
                 <div className='project-content'>
-                    <ProjectTimeline timelineItems={[timelineItemNoImage, timelineItemNoImage, timelineItem]} />
+                    <ProjectTimeline
+                        startTimestamp={projectFullData.startTimestamp}
+                        timelineItems={[
+                            timelineItemNoImage, timelineItemNoImage,
+                            timelineItem, timelineItem,
+                            timelineItem, timelineItemNoImage,
+                            timelineItemNoImage, timelineItem,
+                        ]}
+                    />
                 </div>
             </div>
             <Footer />
