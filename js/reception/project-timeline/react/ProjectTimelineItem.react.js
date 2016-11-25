@@ -8,22 +8,36 @@ class ProjectTimelineItem extends React.Component {
         super(props);
         this.staticStrings = { };
         this.state = {
-            expended: false,
+            expended: false, shouldUpdateContentHeight: false,
             contentHeight: undefined, maxContentHeight: undefined,
         };
         this.switchExpending = this.switchExpending.bind(this);
     }
+    updateContentHeight() {
+        let contentHeight = '4em';
+        if(this.state.expended) { contentHeight = this.state.maxContentHeight; }
+        this.setState({contentHeight: contentHeight});
+    }
     switchExpending() {
         let expended = !this.state.expended;
-        let contentHeight = '3em';
-        if(expended) { contentHeight = this.state.maxContentHeight; }
-        this.setState({expended: expended, contentHeight: contentHeight});
+        this.setState({expended: expended, shouldUpdateContentHeight: true});
     }
     componentDidMount() {
         let maxContentHeight = this.refs.content.clientHeight + 'px';
-        this.setState({contentHeight: '3em', maxContentHeight: maxContentHeight});
+        this.setState({maxContentHeight: maxContentHeight});
     }
-    componentDidUpdate() { }
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            expended: nextProps.shouldExpend,
+            shouldUpdateContentHeight: true
+        });
+    }
+    componentDidUpdate() {
+        if(this.state.shouldUpdateContentHeight) {
+            this.updateContentHeight();
+            this.setState({shouldUpdateContentHeight: false});
+        }
+    }
     render() {
         let item = this.props.item;
         let image = item.image;

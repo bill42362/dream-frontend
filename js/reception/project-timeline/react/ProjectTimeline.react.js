@@ -9,7 +9,18 @@ class ProjectTimeline extends React.Component {
     constructor(props) {
         super(props);
         this.staticStrings = { };
-        this.state = { };
+        this.state = { expendedItemIds: [], };
+        this.switchExpend = this.switchExpend.bind(this);
+    }
+    switchExpend(itemId) {
+        let expendedItemIds = this.state.expendedItemIds;
+        let indexOfExpendItemIds = expendedItemIds.indexOf(itemId);
+        if(-1 === indexOfExpendItemIds) {
+            expendedItemIds.push(itemId);
+        } else {
+            expendedItemIds.splice(indexOfExpendItemIds, 1);
+        }
+        this.setState({expendedItemIds: expendedItemIds});
     }
     componentDidMount() { }
     componentDidUpdate() { }
@@ -27,26 +38,39 @@ class ProjectTimeline extends React.Component {
                 </div>
                 專案開始
             </div>
-            {pairedItems.map((pairedItem, index) =>
-                <div
-                    className='project-timeline-pair'
-                    key={index}
-                >
+            {pairedItems.map((pairedItem, index) => {
+                let firstItemId = 'timelineItem-' + index + '-0';
+                let shouldFirstItemExpend = -1 != this.state.expendedItemIds.indexOf(firstItemId);
+                let secondItemId = 'timelineItem-' + index + '-1';
+                let shouldSecondItemExpend = -1 != this.state.expendedItemIds.indexOf(secondItemId);
+                return <div className='project-timeline-pair' key={index} >
                     <div className='project-timeline-item-container'>
                         <div className='project-timeline-item-wrapper'>
-                            <ProjectTimelineItem item={pairedItem[0]} />
-                            <ProjectTimelineTimelabel item={pairedItem[0]} />
+                            <ProjectTimelineItem
+                                item={pairedItem[0]}
+                                shouldExpend={shouldFirstItemExpend}
+                            />
+                            <ProjectTimelineTimelabel
+                                item={pairedItem[0]} itemComponentId={firstItemId}
+                                onSwitchExpend={this.switchExpend}
+                            />
                         </div>
                     </div>
                     <div className='project-timeline-middle-line'></div>
                     <div className='project-timeline-item-container second'>
                         {pairedItem[1] && <div className='project-timeline-item-wrapper'>
-                            <ProjectTimelineTimelabel item={pairedItem[1]} />
-                            <ProjectTimelineItem item={pairedItem[1]} />
+                            <ProjectTimelineTimelabel
+                                item={pairedItem[1]} itemComponentId={secondItemId}
+                                onSwitchExpend={this.switchExpend}
+                            />
+                            <ProjectTimelineItem
+                                item={pairedItem[1]} itemComponentId={secondItemId}
+                                shouldExpend={shouldSecondItemExpend}
+                            />
                         </div>}
                     </div>
                 </div>
-            )}
+            })}
         </div>;
     }
 }
