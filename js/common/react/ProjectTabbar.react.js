@@ -12,7 +12,7 @@ class ProjectTabbar extends React.Component {
     render() {
         let tabs = [
             {key: 'story', display: '專案故事', count: 0, href: '/project.html'},
-            {key: 'timeline', display: '專案進度', count: 2, href: '#'},
+            {key: 'timeline', display: '專案進度', count: 2, href: '/project-timeline.html'},
             {key: 'comment', display: '訊息回應', count: 3, href: '/project-message.html'},
         ];
         let sharingIcons = [

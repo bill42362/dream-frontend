@@ -21,10 +21,10 @@ require('events').EventEmitter.defaultMaxListeners = Infinity;
 
 var distRoute = './dist';
 var distTargets = {
-    reception: ['index', 'project', 'project-message'],
+    reception: ['index', 'project', 'project-message', 'project-timeline'],
 };
 var cssDistTargets = {
-    reception: ['index', 'project', 'project-message'],
+    reception: ['index', 'project', 'project-message', 'project-timeline'],
 };
 
 var runServer = function() {
