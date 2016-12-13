@@ -3,7 +3,7 @@ const Debug = require('debug');
 const Fs = require('fs');
 const Hapi = require('hapi');
 const Http2 = require('http2');
-const Inert = require('inert');
+const Inert = require('inert'); // Static file server plugin for hapi.
 
 const App = function() {};
 App.prototype.server = new Hapi.Server();
@@ -16,6 +16,21 @@ App.prototype.routes = [
     { method: 'get', path: '/{param*}', handler: { directory: {
         path: 'dist/html/reception', redirectToSlash: true, index: ['index.html'],
     } } },
+    { method: 'get', path: '/{projectId}', handler: {
+        file: { path: 'dist/html/reception/project.html', },
+    } },
+    { method: 'get', path: '/message/{projectId}', handler: {
+        file: { path: 'dist/html/reception/project-message.html', },
+    } },
+    { method: 'get', path: '/message', handler: {
+        file: { path: 'dist/html/reception/project-message.html', },
+    } },
+    { method: 'get', path: '/timeline/{projectId}', handler: {
+        file: { path: 'dist/html/reception/project-timeline.html', },
+    } },
+    { method: 'get', path: '/timeline', handler: {
+        file: { path: 'dist/html/reception/project-timeline.html', },
+    } },
     { method: 'get', path: '/js/{param*}', handler: { directory: { path: 'dist/js', } } },
     { method: 'get', path: '/css/{param*}', handler: { directory: { path: 'dist/css', } } },
     { method: 'get', path: '/fonts/{param*}', handler: { directory: { path: 'dist/fonts', } } },
