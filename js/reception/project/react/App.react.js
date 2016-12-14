@@ -13,7 +13,10 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.staticStrings = { };
-        this.state = {project: {}, stories: [], options: [], pictures: {}, isTabbarAboveScreen: false};
+        this.state = {
+            project: {}, stories: [], items: [], timelineItems: [], comments: [],
+            pictures: {}, isTabbarAboveScreen: false
+        };
         this.onWindowScroll = this.onWindowScroll.bind(this);
         this.onGetProjectSuccess = this.onGetProjectSuccess.bind(this);
         let searches = Core.getUrlSearches();
@@ -37,13 +40,17 @@ class App extends React.Component {
             response.stories.forEach(function(story) {
                 this.cachePicture(story.pictureData);
             }.bind(this));
-            response.options.forEach(function(option) {
-                this.cachePicture(option.pictureData);
+            response.items.forEach(function(item) {
+                this.cachePicture(item.pictureData);
+            }.bind(this));
+            response.timelineItems.forEach(function(timelineItem) {
+                this.cachePicture(timelineItem.pictureData);
             }.bind(this));
             this.setState({
                 project: project,
                 stories: response.stories,
-                options: response.options,
+                items: response.items,
+                timelineItems: response.timelineItems,
             });
         } else {
             this.onAjaxError(response);
@@ -70,19 +77,23 @@ class App extends React.Component {
     componentDidMount() { document.addEventListener('scroll', this.onWindowScroll, false); }
     componentWillUnmount() { document.removeEventListener('scroll', this.onWindowScroll, false); }
     render() {
-        let proposer = {title: 'pb+寶悍運動平台', href: '//www.pbplus.me/'};
-        let banner = {
-            type: 'image', title: '新城國小',
-            src: "http://dream.pbplus.me/wp-content/uploads/2016/03/DSCN8334.jpg",
-        };
-        let projectFullData = {
-            title: '世界十二強的愛 傳送溫暖至偏鄉',
-            subtitle: 'pb+圓夢加舉辦了世界12強紀念套票拍賣活動 活動所得將全數捐給新城國小',
-            description: '專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述',
-            foundTarget: 500000, currentFound: 300000,
-            startTimestamp: 1472869212136, dueTimestamp: 1478139612136,
-            proposerId: 'proposerId', banner: 'bannerId',
-        };
+        const state = this.state;
+        let tabs = [];
+        tabs.push(
+            {key: 'story', display: '專案故事', count: 0, href: '/project?p=' + state.project.id}
+        );
+        if(state.timelineItems.length) {
+            tabs.push({
+                key: 'timeline', display: '專案進度',
+                count: state.timelineItems.length, href: '/timeline?p=' + state.project.id
+            });
+        }
+        if(state.comments.length) {
+            tabs.push({
+                key: 'comment', display: '訊息回應',
+                count: state.comments.length, href: '/message?p=' + state.project.id
+            });
+        }
         return <div id='wrapper'>
             <Header fixed={false} />
             <ProjectHeader
@@ -96,20 +107,22 @@ class App extends React.Component {
                 )}
             >
                 <div className='project-tabbar-container' >
-                    <ProjectTabbar />
+                    <ProjectTabbar tabs={tabs} />
                 </div>
             </div>
             <div className='project-content-container'>
                 <div className='project-content row'>
                     <div className='col-md-8'>
-                        <ProjectStory />
-                        <ProjectStory />
-                        <ProjectStory />
+                        {this.state.stories.map((story, index) => <ProjectStory
+                            key={index}
+                            story={story} picture={this.state.pictures[story.pictureId]}
+                        />)}
                     </div>
                     <div className='col-md-4'>
-                        <ProjectItem />
-                        <ProjectItem />
-                        <ProjectItem />
+                        {this.state.items.map((item, index) => <ProjectItem
+                            key={index}
+                            item={item} picture={this.state.pictures[item.pictureId]}
+                        />)}
                     </div>
                 </div>
             </div>

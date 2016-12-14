@@ -61,6 +61,7 @@ PBPlus.Dream.prototype.reformOption = (option) => {
         title: option.title,
         description: option.content,
         price: option.amount,
+        sponsorCount: option.num,
         paymentMethods: option.payment.split(','),
         limitedTimestamp: option.timestamp,
         limitedQuantity: option.sets,
@@ -96,7 +97,7 @@ PBPlus.Dream.prototype.getProject = function(projectId, errorCallback, successCa
                 response.stories = (response.progress || [])
                     .filter(progress => 'story' === progress.type)
                     .map(this.reformStory);
-                response.options = response.options
+                response.items = response.options
                     .map(this.reformOption);
                 response.timelineItems = (response.progress || [])
                     .filter(progress => 'timeline' === progress.type)

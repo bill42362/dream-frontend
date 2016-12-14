@@ -10,11 +10,7 @@ class ProjectTabbar extends React.Component {
         this.state = {};
     }
     render() {
-        let tabs = [
-            {key: 'story', display: '專案故事', count: 0, href: '/project.html'},
-            {key: 'timeline', display: '專案進度', count: 2, href: '/project-timeline.html'},
-            {key: 'comment', display: '訊息回應', count: 3, href: '/project-message.html'},
-        ];
+        const tabs = this.props.tabs;
         let sharingIcons = [
             {
                 key: 'facebook', liClassname: 'facebook',
