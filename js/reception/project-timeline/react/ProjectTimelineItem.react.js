@@ -40,17 +40,18 @@ class ProjectTimelineItem extends React.Component {
     }
     render() {
         let item = this.props.item;
-        let image = item.image;
+        let media = { type: '', title: '', src: '', };
+        media = Object.assign(media, this.props.picture, this.props.video);
         return <div ref='base' className='project-timeline-item' >
-            {image && <img
+            {media.src && <img
                 className='project-timeline-item-image'
-                src={image.src} title={image.title}
+                src={media.src} title={media.title}
             ></img>}
             <h4 className='project-timeline-item-title'>{item.title}</h4>
             <div
                 className='project-timeline-item-content' ref='content'
                 style={{height: this.state.contentHeight}}
-            >{item.content}</div>
+            >{item.description}</div>
             <div className='project-timeline-item-expend-button' onClick={this.switchExpending}>
                 <span className='glyphicon glyphicon-plus'></span>
                 看更多
