@@ -30,16 +30,13 @@ class ProjectStory extends React.Component {
     }
     render() {
         let expended = this.state.expended;
-        let story = {
-            title: '世界十二強的愛 傳送溫暖至偏鄉',
-            description: '專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述',
-            media: {
-                type: 'image', title: '新城國小',
-                src: "http://dream.pbplus.me/wp-content/uploads/2016/03/DSCN8334.jpg",
-            },
+        let story = { title: '...', description: '...', };
+        story = Object.assign(story, this.props.story);
+        let media = {
+            type: 'image', title: '新城國小',
+            src: "http://dream.pbplus.me/wp-content/uploads/2016/03/DSCN8334.jpg",
         };
-        let description = story.description;
-        for(let i = 0; i < 4; ++i) { description += description; }
+        media = Object.assign(media, this.props.picture, this.props.video);
         return <div
             ref='base'
             className={ClassNames('project-story-container', {'expended': this.state.expended})}
@@ -52,8 +49,8 @@ class ProjectStory extends React.Component {
             <div ref='body' className='project-story'>
                 <h2 ref='title' className='project-story-title'>{story.title}</h2>
                 <div className='project-story-content'>
-                    <p>{description}</p>
-                    <img src={story.media.src} title={story.media.title} onLoad={this.onImageLoad} />
+                    <p>{story.description}</p>
+                    <img src={media.src} title={media.title} onLoad={this.onImageLoad} />
                 </div>
             </div>
         </div>;
