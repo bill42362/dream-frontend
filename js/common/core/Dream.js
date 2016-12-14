@@ -81,7 +81,7 @@ PBPlus.Dream.prototype.reformTimelineItem = (timelineItem) => {
         id: timelineItem.id,
         title: timelineItem.title,
         description: timelineItem.content,
-        timestamp: timelineItem.timestamp,
+        timestamp: timelineItem.timestamp*1000,
         visible: timelineItem.visible,
         type: 'timeline',
     };

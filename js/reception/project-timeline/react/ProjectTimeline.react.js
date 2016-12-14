@@ -48,6 +48,7 @@ class ProjectTimeline extends React.Component {
                         <div className='project-timeline-item-wrapper'>
                             <ProjectTimelineItem
                                 item={pairedItem[0]}
+                                picture={this.props.pictures[pairedItem[0].pictureId]}
                                 shouldExpend={shouldFirstItemExpend}
                             />
                             <ProjectTimelineTimelabel
@@ -64,7 +65,8 @@ class ProjectTimeline extends React.Component {
                                 onSwitchExpend={this.switchExpend}
                             />
                             <ProjectTimelineItem
-                                item={pairedItem[1]} itemComponentId={secondItemId}
+                                item={pairedItem[1]}
+                                picture={this.props.pictures[pairedItem[1].pictureId]}
                                 shouldExpend={shouldSecondItemExpend}
                             />
                         </div>}
