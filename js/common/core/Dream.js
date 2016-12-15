@@ -10,6 +10,40 @@ PBPlus.Dream = function() {
 	return this;
 }
 
+PBPlus.Dream.prototype.postMessage = function(message, errorCallback, successCallback) {
+    let url = this.apiBase + this.apiStage + 'createMessage';
+    let payload = Object.assign(message, {token: this.adminToken});
+    Request.post(
+        {url: url, json: payload,},
+        (err, httpResponse, body) => {
+            if(err) { errorCallback(err); }; successCallback(body);
+        }
+    );
+}
+
+PBPlus.Dream.prototype.createMessage = function(message, projectId, errorCallback, successCallback) {
+    let payload = {
+        id: projectId,
+        message: [{ timestamp: Date.now(), content: message, authorId: NODE.USER_ID, }],
+    };
+    this.postMessage(payload, errorCallback, successCallback);
+}
+
+PBPlus.Dream.prototype.replyMessage = function(message, messageUuid, projectId, errorCallback, successCallback) {
+    this.getProject(projectId, errorCallback, (response) => {
+        let replyingMessage = response.messages.filter(message => {
+            return message.uuid === messageUuid;
+        })[0];
+        if(replyingMessage) {
+            let payload = this.conformMessage(replyingMessage);
+            payload.message.push({timestamp: Date.now(), content: message, authorId: NODE.USER_ID});
+            this.postMessage(payload, errorCallback, successCallback);
+        } else {
+            errorCallback({status: 500, message: '內部錯誤'});
+        }
+    });
+}
+
 PBPlus.Dream.prototype.reformProject = (project) => {
     return {
         bannerId: project.cover_img,
@@ -87,6 +121,27 @@ PBPlus.Dream.prototype.reformTimelineItem = (timelineItem) => {
     };
 };
 
+PBPlus.Dream.prototype.conformMessage = (message) => {
+    return {
+        id: message.projectId, uuid: message.uuid, time: message.timestamp,
+        message: [{
+            timestamp: message.body.timestamp,
+            content: message.body.content,
+            authorId: message.body.authorId,
+        }].concat(message.body.replies),
+    };
+};
+
+PBPlus.Dream.prototype.reformMessage = (message) => {
+    return {
+        projectId: message.pid, uuid: message.uuid, timestamp: message.time,
+        body: Object.assign(
+            message.message[0],
+            {replies: message.message.slice(1)}
+        ),
+    };
+};
+
 PBPlus.Dream.prototype.getProject = function(projectId, errorCallback, successCallback) {
 	$.ajax({
         url: this.apiBase + this.apiStage + 'read/' + projectId,
@@ -102,6 +157,10 @@ PBPlus.Dream.prototype.getProject = function(projectId, errorCallback, successCa
                 response.timelineItems = (response.progress || [])
                     .filter(progress => 'timeline' === progress.type)
                     .map(this.reformTimelineItem);
+                response.messages = (response.comment || {Items: []}).Items
+                    .map(this.reformMessage).sort((a, b) => {
+                        if(a.timestamp < b.timestamp) { return 1; } else { return -1; }
+                    });
             }
             successCallback(response);
         }.bind(this),

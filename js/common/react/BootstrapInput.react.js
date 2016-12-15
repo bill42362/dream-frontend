@@ -10,6 +10,12 @@ var BootstrapInput = React.createClass({
         info: {formGroup: 'has-info', feedback: ''},
         default: {formGroup: '', feedback: ''},
     },
+    componentWillReceiveProps: function(nextProps) {
+        if(nextProps.autoFocus && !this.props.autoFocus) { this.refs.input.focus(); }
+    },
+    componentDidMount: function() {
+        if(this.props.autoFocus) { this.refs.input.focus(); }
+    },
     render: function() {
         var gridWidth = this.props.gridWidth || '12';
         var labelHidden = this.props.labelHidden || false;
