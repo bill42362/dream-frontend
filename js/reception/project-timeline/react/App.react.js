@@ -50,6 +50,7 @@ class App extends React.Component {
                 stories: response.stories,
                 items: response.items,
                 timelineItems: response.timelineItems,
+                comments: response.messages,
             });
         } else {
             this.onAjaxError(response);
