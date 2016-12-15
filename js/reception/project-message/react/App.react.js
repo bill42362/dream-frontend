@@ -16,12 +16,16 @@ class App extends React.Component {
         this.staticStrings = { };
         this.state = {
             project: {}, stories: [], items: [], timelineItems: [], comments: [],
-            message: '', replyMessages: [],
+            message: '', replyMessage: '', replyMessageIndex: -1,
             pictures: {}, isTabbarAboveScreen: false,
         };
+        this.createMessage = this.createMessage.bind(this);
+        this.replyMessage = this.replyMessage.bind(this);
         this.onWindowScroll = this.onWindowScroll.bind(this);
-        this.onMessagesChange = this.onMessagesChange.bind(this);
+        this.onMessageChange = this.onMessageChange.bind(this);
+        this.onReplyMessageChange = this.onReplyMessageChange.bind(this);
         this.onGetProjectSuccess = this.onGetProjectSuccess.bind(this);
+        this.onPostMessageSuccess = this.onPostMessageSuccess.bind(this);
         let searches = Core.getUrlSearches();
         if(!!searches.p && window.PBPlusDream) {
             PBPlusDream.getProject(searches.p, this.onAjaxError, this.onGetProjectSuccess);
@@ -64,7 +68,6 @@ class App extends React.Component {
         let networkError = '網路錯誤，請檢查您的網路，或稍候再試一次。<br />'
             + 'Network error, please check your network, or try again later.';
         let systemError = '系統錯誤，請稍候再試一次。<br />System error, please try again later.';
-        var errorStrings = this.staticStrings.errors;
         if(!xhr.message) {
             Toastr['error'](networkError);
         } else if(/[45]\d\d/.test(xhr.status)) {
@@ -78,15 +81,33 @@ class App extends React.Component {
         var newValue = this.isAboveScreenTop(this.refs.projectTabbarContainerAnchor, 0);
         if(isTabbarAboveScreen != newValue) { this.setState({isTabbarAboveScreen: newValue}); }
     }
-    onMessagesChange() {
-        let replyMessages = [];
-        for(let key in this.refs) {
-            if(0 === key.indexOf('projectMessage-')) {
-                let index = +key.replace('projectMessage-', '');
-                replyMessages[index] = this.refs[key].getReplyMessage();
-            }
+    onMessageChange() { this.setState({message: this.refs.messageBox.getValue()}); }
+    onReplyMessageChange(message, index) {
+        this.setState({replyMessage: message, replyMessageIndex: index});
+    }
+    createMessage(message) {
+        if(window.PBPlusDream) {
+            PBPlusDream.createMessage(
+                message, this.state.project.id,
+                this.onAjaxError, this.onPostMessageSuccess
+            );
         }
-        this.setState({message: this.refs.messageBox.getValue(), replyMessages: replyMessages});
+    }
+    replyMessage(replyMessage, messageUuid) {
+        if(window.PBPlusDream) {
+            PBPlusDream.replyMessage(
+                replyMessage, messageUuid, this.state.project.id,
+                this.onAjaxError, this.onPostMessageSuccess
+            );
+        }
+    }
+    onPostMessageSuccess(response) {
+        if(200 === response.status) {
+            Toastr['success']('留言成功');
+            PBPlusDream.getProject(this.state.project.id, this.onAjaxError, this.onGetProjectSuccess);
+        } else {
+            this.onAjaxError(response);
+        }
     }
     componentDidMount() { document.addEventListener('scroll', this.onWindowScroll, false); }
     componentWillUnmount() { document.removeEventListener('scroll', this.onWindowScroll, false); }
@@ -130,13 +151,14 @@ class App extends React.Component {
                         <ProjectMessageBox
                             ref='messageBox'
                             author={'使用者名稱'} authorImageSrc={undefined}
-                            message={this.state.message} onChange={this.onMessagesChange}
+                            message={this.state.message} onChange={this.onMessageChange}
+                            onSubmit={this.createMessage}
                         />
                         {state.comments.map((comment, index) => <ProjectMessage
-                            ref={'projectMessage-' + index} key={index}
-                            message={comment.body}
-                            replyMessage={this.state.replyMessages[index]}
-                            onReplyChange={this.onMessagesChange}
+                            message={comment.body} index={index} key={index} uuid={comment.uuid}
+                            shouldHideReplyBox={index !== state.replyMessageIndex}
+                            replyMessage={index === state.replyMessageIndex ? state.replyMessage : ''}
+                            onReplyChange={this.onReplyMessageChange} onSubmit={this.replyMessage}
                         />)}
                     </div>
                     <div className='col-md-4'>
