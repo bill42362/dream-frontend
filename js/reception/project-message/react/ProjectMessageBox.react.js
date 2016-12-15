@@ -40,7 +40,11 @@ class ProjectMessageBox extends React.Component {
         let message = this.state.message;
         return <div className='project-message-box' ref='base' >
             <div className='project-message-box-author-image-container'>
-                <img className='project-message-box-author-image' src={authorImageSrc} title={author} />
+                <img
+                    className='project-message-box-author-image'
+                    src={authorImageSrc || '/img/mock_user_icon.jpg'}
+                    title={author}
+                />
             </div>
             <div className='project-message-box-textarea row'>
                 <BootstrapInput

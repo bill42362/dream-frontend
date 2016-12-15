@@ -16,10 +16,16 @@ class ProjectMessage extends React.Component {
     render() {
         let message = this.props.message;
         return <div className='project-message' ref='base' >
-            <img className='project-message-author-image' src={message.authorImageSrc} title={message.author} />
+            <img
+                className='project-message-author-image'
+                src={message.authorImageSrc || 'img/mock_user_icon.jpg'}
+                title={message.author}
+            />
             <div className='project-message-texts' >
                 <h5 className='project-message-author'>{message.author}</h5>
-                <span className='project-message-date-string'>{message.timestamp}</span>
+                <span className='project-message-date-string'>
+                    {Core.getDateStringWithFormat(message.timestamp, 'YYYY-MM-DD hh:mm:ss')}
+                </span>
                 <span className='project-message-reply-button'>回覆</span>
                 <div className='project-message-content'>{message.content}</div>
                 {message.replies.map((reply, index) => <ProjectMessage key={index} message={reply} />)}

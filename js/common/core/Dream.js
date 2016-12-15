@@ -102,6 +102,22 @@ PBPlus.Dream.prototype.getProject = function(projectId, errorCallback, successCa
                 response.timelineItems = (response.progress || [])
                     .filter(progress => 'timeline' === progress.type)
                     .map(this.reformTimelineItem);
+                response.messages = (response.comment || {Items: []}).Items
+                    .map(message => {
+                        return {
+                            projectId: message.pid,
+                            uuis: message.uuid,
+                            timestamp: message.time*1000,
+                            body: Object.assign(
+                                message.message[0],
+                                {timestamp: message.message[0].time*1000},
+                                {replies: message.message.slice(1).map(m => {
+                                    m.timestamp = m.time*1000;
+                                    return m;
+                                })}
+                            ),
+                        };
+                    });
             }
             successCallback(response);
         }.bind(this),
