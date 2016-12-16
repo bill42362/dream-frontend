@@ -1,16 +1,20 @@
+#!/usr/bin/env node
 'use strict'
 const Debug = require('debug');
 const Fs = require('fs');
 const Hapi = require('hapi');
-const Http2 = require('http2');
+const Http = require('http');
 const Inert = require('inert'); // Static file server plugin for hapi.
 
 const App = function() {};
 App.prototype.server = new Hapi.Server();
-App.prototype.listener = Http2.createServer({
+/*
+App.prototype.listener = Http.createServer({
     key: Fs.readFileSync('./ssl/localhost.key'),
     cert: Fs.readFileSync('./ssl/localhost.crt')
 });
+ */
+App.prototype.listener = Http.createServer();
 //App.prototype.listener.prototype.address = function() { return this._server.address() }
 App.prototype.routes = [
     { method: 'get', path: '/{param*}', handler: { directory: {

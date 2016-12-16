@@ -22,7 +22,7 @@ class ProjectHeader extends React.Component {
             awares: [],
         };
         data = Object.assign(data, this.props.project);
-        let leftDays = (data.dueTimestamp - data.startTimestamp)/86400;
+        let leftDays = Math.floor((data.dueTimestamp - data.startTimestamp)/86400);
         let eventItems = [
             {imageSrc: '/img/mock_user_icon.jpg', type: 'donation', text: 'AAA 捐了 $1000 給 BBB 計畫', },
             {imageSrc: '/img/mock_user_icon.jpg', type: 'comment', text: 'CCC 對 DDD 計畫說：加油喔！', },
