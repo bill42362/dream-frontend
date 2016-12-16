@@ -19,6 +19,12 @@ App.prototype.routes = [
     { method: 'get', path: '/{projectId}', handler: {
         file: { path: 'dist/html/reception/project.html', },
     } },
+    { method: 'get', path: '/project', handler: {
+        file: { path: 'dist/html/reception/project.html', },
+    } },
+    { method: 'get', path: '/project/{projectId}', handler: {
+        file: { path: 'dist/html/reception/project.html', },
+    } },
     { method: 'get', path: '/message/{projectId}', handler: {
         file: { path: 'dist/html/reception/project-message.html', },
     } },

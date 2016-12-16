@@ -10,6 +10,16 @@ PBPlus.Dream = function() {
 	return this;
 }
 
+PBPlus.Dream.prototype.getProjectIdFromUrl = function() {
+    let searches = Core.getUrlSearches();
+    let pathname = location.pathname;
+    let projectId = searches.p
+        || location.pathname.match('(?:/project)*/([a-zA-Z0-9-]{1,36})')[1]
+        || location.pathname.match('(?:/message)*/([a-zA-Z0-9-]{1,36})')[1]
+        || location.pathname.match('(?:/timeline)*/([a-zA-Z0-9-]{1,36})')[1];
+    return projectId;
+}
+
 PBPlus.Dream.prototype.postMessage = function(message, errorCallback, successCallback) {
     let url = this.apiBase + this.apiStage + 'createMessage';
     let payload = Object.assign(message, {token: this.adminToken});

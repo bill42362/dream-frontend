@@ -18,9 +18,9 @@ class App extends React.Component {
         };
         this.onWindowScroll = this.onWindowScroll.bind(this);
         this.onGetProjectSuccess = this.onGetProjectSuccess.bind(this);
-        let searches = Core.getUrlSearches();
-        if(!!searches.p && window.PBPlusDream) {
-            PBPlusDream.getProject(searches.p, this.onAjaxError, this.onGetProjectSuccess);
+        if(window.PBPlusDream) {
+            let projectId = PBPlusDream.getProjectIdFromUrl();
+            PBPlusDream.getProject(projectId, this.onAjaxError, this.onGetProjectSuccess);
         }
     }
     isAboveScreenTop(element, offset) {
