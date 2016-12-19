@@ -7,16 +7,10 @@ const Http = require('http');
 const Inert = require('inert'); // Static file server plugin for hapi.
 
 const App = function() {};
-App.prototype.server = new Hapi.Server();
-/*
-App.prototype.listener = Http.createServer({
-    key: Fs.readFileSync('./ssl/localhost.key'),
-    cert: Fs.readFileSync('./ssl/localhost.crt')
-});
- */
-App.prototype.listener = Http.createServer();
-//App.prototype.listener.prototype.address = function() { return this._server.address() }
-App.prototype.routes = [
+App.login = function(request, reply) {
+    reply(JSON.stringify(request.payload));
+}
+App.staticRoutes = [
     { method: 'get', path: '/{param*}', handler: { directory: {
         path: 'dist/html/reception', redirectToSlash: true, index: ['index.html'],
     } } },
@@ -47,6 +41,20 @@ App.prototype.routes = [
     { method: 'get', path: '/img/{param*}', handler: { directory: { path: 'dist/img', } } },
     { method: 'get', path: '/data/{param*}', handler: { directory: { path: 'data/', } } },
 ];
+App.prototype.server = new Hapi.Server();
+/*
+App.prototype.listener = Http.createServer({
+    key: Fs.readFileSync('./ssl/localhost.key'),
+    cert: Fs.readFileSync('./ssl/localhost.crt')
+});
+ */
+App.prototype.listener = Http.createServer();
+//App.prototype.listener.prototype.address = function() { return this._server.address() }
+App.prototype.routes = App.staticRoutes.concat([
+    { method: ['get', 'post'], path: '/login', config: {
+        handler: App.login, plugins: { 'hapi-auth-cookie': { redirectTo: false } }
+    } },
+]);
 App.prototype.run = function() {
     const server = this.server;
     server.connection({listener: this.listener, port: '3000', tls: true});
