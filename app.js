@@ -16,14 +16,15 @@ App.login = function(request, response, next) {
             {url: url, json: payload,},
             (err, httpResponse, body) => {
                 if('s' === body.code) {
-                    response.session = Object.assign(request.session, request.body);
-                    return response.json(request.session);
+                    request.session.token = request.body.token;
+                    return response.redirect('/');
                 }
             }
         );
     }
 }
 App.session = function(request, response, next) { response.json(request.session); }
+App.token = function(request, response, next) { response.json(request.session.token); }
 App.logout = function(request, response) {
     request.session.destroy();
     return response.redirect('/');
@@ -58,6 +59,7 @@ App.prototype.run = function() {
         server.get('/session', App.session)
     }
     server.post('/login', App.login);
+    server.get('/token', App.token);
     server.get('/logout', App.logout)
     App.expressStaticRoutes.forEach(function(route) {
         server.use(route.path, Express.static(__dirname + route.serverPath));
