@@ -2,68 +2,67 @@
 'use strict'
 const Debug = require('debug');
 const Fs = require('fs');
-const Hapi = require('hapi');
-const Http = require('http');
-const Inert = require('inert'); // Static file server plugin for hapi.
+const Express = require('express');
+const BodyParser = require('body-parser');
+const Session = require('express-session');
+const Request = require('request');
 
 const App = function() {};
-App.login = function(request, reply) {
-    reply(JSON.stringify(request.payload));
+App.login = function(request, response, next) {
+    if(request.body && request.body.token) {
+        let url = 'https://api.pbplus.me/api/verification';
+        let payload = { token: request.body.token, };
+        Request.post(
+            {url: url, json: payload,},
+            (err, httpResponse, body) => {
+                if('s' === body.code) {
+                    response.session = Object.assign(request.session, request.body);
+                    return response.json(request.session);
+                }
+            }
+        );
+    }
 }
-App.staticRoutes = [
-    { method: 'get', path: '/{param*}', handler: { directory: {
-        path: 'dist/html/reception', redirectToSlash: true, index: ['index.html'],
-    } } },
-    { method: 'get', path: '/{projectId}', handler: {
-        file: { path: 'dist/html/reception/project.html', },
-    } },
-    { method: 'get', path: '/project', handler: {
-        file: { path: 'dist/html/reception/project.html', },
-    } },
-    { method: 'get', path: '/project/{projectId}', handler: {
-        file: { path: 'dist/html/reception/project.html', },
-    } },
-    { method: 'get', path: '/message/{projectId}', handler: {
-        file: { path: 'dist/html/reception/project-message.html', },
-    } },
-    { method: 'get', path: '/message', handler: {
-        file: { path: 'dist/html/reception/project-message.html', },
-    } },
-    { method: 'get', path: '/timeline/{projectId}', handler: {
-        file: { path: 'dist/html/reception/project-timeline.html', },
-    } },
-    { method: 'get', path: '/timeline', handler: {
-        file: { path: 'dist/html/reception/project-timeline.html', },
-    } },
-    { method: 'get', path: '/js/{param*}', handler: { directory: { path: 'dist/js', } } },
-    { method: 'get', path: '/css/{param*}', handler: { directory: { path: 'dist/css', } } },
-    { method: 'get', path: '/fonts/{param*}', handler: { directory: { path: 'dist/fonts', } } },
-    { method: 'get', path: '/img/{param*}', handler: { directory: { path: 'dist/img', } } },
-    { method: 'get', path: '/data/{param*}', handler: { directory: { path: 'data/', } } },
+App.session = function(request, response, next) { response.json(request.session); }
+App.logout = function(request, response) {
+    request.session.destroy();
+    return response.redirect('/');
+}
+App.expressStaticRoutes = [
+    {path: '/js/', serverPath: '/dist/js'},
+    {path: '/css/', serverPath: '/dist/css'},
+    {path: '/fonts/', serverPath: '/dist/fonts'},
+    {path: '/img/', serverPath: '/dist/img'},
+    {path: '/project(/:id)?', serverPath: '/dist/html/reception/project.html'},
+    {path: '/message(/:id)?', serverPath: '/dist/html/reception/project-message.html'},
+    {path: '/timeline(/:id)?', serverPath: '/dist/html/reception/project-timeline.html'},
+    {path: '/:id', serverPath: '/dist/html/reception/project.html'},
+    {path: '/', serverPath: '/dist/html/reception'},
 ];
-App.prototype.server = new Hapi.Server();
-/*
-App.prototype.listener = Http.createServer({
-    key: Fs.readFileSync('./ssl/localhost.key'),
-    cert: Fs.readFileSync('./ssl/localhost.crt')
-});
- */
-App.prototype.listener = Http.createServer();
-//App.prototype.listener.prototype.address = function() { return this._server.address() }
-App.prototype.routes = App.staticRoutes.concat([
-    { method: ['get', 'post'], path: '/login', config: {
-        handler: App.login, plugins: { 'hapi-auth-cookie': { redirectTo: false } }
-    } },
-]);
+App.prototype.server = Express();
 App.prototype.run = function() {
     const server = this.server;
-    server.connection({listener: this.listener, port: '3000', tls: true});
-    server.register(Inert, () => {});
-    server.route(this.routes);
-    server.start(err => {
-        err && Debug('http2:error')(err);
-        Debug('http2')(`Started ${server.connections.length} connections`);
+    let sessionConfig = {
+        secret: 'keyboard cat',
+        resave: false,
+        saveUninitialized: true,
+        cookie: {}
+    };
+    server.use(Session(sessionConfig))
+    server.use(BodyParser.json());
+    server.use(BodyParser.urlencoded({extended: true})); 
+    if(server.get('env') === 'production') {
+        server.set('trust proxy', 1) // trust first proxy 
+        sessionConfig.cookie.secure = true // serve secure cookies 
+    } else {
+        server.get('/session', App.session)
+    }
+    server.post('/login', App.login);
+    server.get('/logout', App.logout)
+    App.expressStaticRoutes.forEach(function(route) {
+        server.use(route.path, Express.static(__dirname + route.serverPath));
     });
+    server.listen(3000);
 };
 module.exports = App;
 
