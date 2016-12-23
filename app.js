@@ -7,7 +7,14 @@ const BodyParser = require('body-parser');
 const Session = require('express-session');
 const Request = require('request');
 
+const config = JSON.parse(Fs.readFileSync('./config.json', 'utf8'));
 const App = function() {};
+App.goLoginPage = function(request, response, next) {
+    return response.redirect(
+        config.LOGIN_URL
+        || 'http://52.192.199.179:8000/page/auth?client_id=850479850ad111e6b5c10a138ae18a98'
+    );
+}
 App.login = function(request, response, next) {
     if(request.body && request.body.token) {
         let url = 'https://api.pbplus.me/api/verification';
@@ -16,6 +23,7 @@ App.login = function(request, response, next) {
             {url: url, json: payload,},
             (err, httpResponse, body) => {
                 if('s' === body.code) {
+                    request.session.sapId = request.body.user_pk;
                     request.session.token = request.body.token;
                     return response.redirect('/');
                 }
@@ -24,7 +32,9 @@ App.login = function(request, response, next) {
     }
 }
 App.session = function(request, response, next) { response.json(request.session); }
-App.token = function(request, response, next) { response.json(request.session.token); }
+App.token = function(request, response, next) {
+    response.json({token: request.session.token, sapId: request.session.sapId});
+}
 App.logout = function(request, response) {
     request.session.destroy();
     return response.redirect('/');
@@ -59,6 +69,7 @@ App.prototype.run = function() {
         server.get('/session', App.session)
     }
     server.post('/login', App.login);
+    server.get('/login', App.goLoginPage);
     server.get('/token', App.token);
     server.get('/logout', App.logout)
     App.expressStaticRoutes.forEach(function(route) {

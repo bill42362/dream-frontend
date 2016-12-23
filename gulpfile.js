@@ -6,7 +6,9 @@ var util = require('gulp-util');
 var less = require('gulp-less');
 var cssnano = require('gulp-cssnano');
 
+var fs = require('fs');
 var browserify = require('browserify');
+var customEnvify = require('envify/custom');
 var shimify = require('browserify-shim');
 var babelify = require('babelify');
 var watchify = require('watchify');
@@ -61,8 +63,11 @@ var jsBundleProcesser = function(bundle, out, dest) {
 }
 
 var browserifyFromPath = function(target, path, opt_debug) {
+    var config = JSON.parse(fs.readFileSync('./config.json', 'utf8'));
+    var envify = customEnvify(config);
+    for(var attrname in config) { process.env[attrname] = config[attrname]; }
     var browserifiedJs = browserify({
-        entries: [path.entryPoint], transform: [babelify, shimify],
+        entries: [path.entryPoint], transform: [babelify, shimify, envify],
         cache: {}, packageCache: {}, fullPaths: false, // Requirement of watchify
         debug: opt_debug || false
     });

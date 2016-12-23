@@ -7,7 +7,8 @@ PBPlus.Dream = function() {
     this.apiBase = 'https://g46grc5kd1.execute-api.ap-southeast-2.amazonaws.com/';
     this.apiStage = 'testing/';
     this.userToken = '';
-    this.getUserToken(undefined, token => { this.userToken = token; });
+    this.userSapId = '';
+    this.getUserSapId();
 	return this;
 }
 
@@ -19,6 +20,23 @@ PBPlus.Dream.prototype.getProjectIdFromUrl = function() {
         || location.pathname.match('(?:/message)*/([a-zA-Z0-9-]{1,36})')[1]
         || location.pathname.match('(?:/timeline)*/([a-zA-Z0-9-]{1,36})')[1];
     return projectId;
+}
+
+PBPlus.Dream.prototype.readProfiles = function(sapIds, errorCallback, successCallback) {
+    let url = this.apiBase + this.apiStage + 'readProfile';
+    let payload = {token: this.userToken, uid: sapIds};
+    Request.post(
+        {url: url, json: payload,},
+        (err, httpResponse, body) => {
+            if(err) { errorCallback && errorCallback(err); }
+            else {
+                let response = JSON.parse(body.errorMessage);
+                if(200 === response.status) {
+                    successCallback && successCallback(response.message);
+                } else { errorCallback && errorCallback('Not found.'); }
+            }
+        }
+    );
 }
 
 PBPlus.Dream.prototype.postMessage = function(message, errorCallback, successCallback) {
@@ -180,11 +198,16 @@ PBPlus.Dream.prototype.getProject = function(projectId, errorCallback, successCa
 	});
 }
 
-PBPlus.Dream.prototype.getUserToken = function(errorCallback, successCallback) {
+PBPlus.Dream.prototype.getUserSapId = function(errorCallback, successCallback) {
     let url = location.protocol + '//' + location.host + '/token';
     Request.get({url: url}, (err, httpResponse, body) => {
         if(err) { errorCallback && errorCallback(err); }
-        else { body && successCallback && successCallback(JSON.parse(body)); }
+        else if(body) {
+            let response = JSON.parse(body);
+            this.userToken = response.token;
+            this.userSapId = response.sapId;
+            successCallback && successCallback(response.sapId);
+        }
     });
 }
 
