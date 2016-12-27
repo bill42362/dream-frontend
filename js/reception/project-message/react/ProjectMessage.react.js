@@ -43,10 +43,11 @@ class ProjectMessage extends React.Component {
                 <div className='project-message-content'>{message.content}</div>
                 {message.replies && message.replies.map((reply, index) => <ProjectMessage
                     key={index} message={reply} onReplyClick={this.onReplyChange}
+                    author={this.props.author} authorImageSrc={this.props.authorImageSrc}
                 />)}
                 <ProjectMessageBox
                     ref='messageBox' shouldHide={this.props.shouldHideReplyBox}
-                    author={message.author} authorImageSrc={message.authorImageSrc}
+                    author={this.props.author} authorImageSrc={this.props.authorImageSrc}
                     message={this.props.replyMessage} onChange={this.onReplyChange}
                     onSubmit={this.onSubmit}
                 />

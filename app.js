@@ -25,8 +25,8 @@ App.login = function(request, response, next) {
                 if('s' === body.code) {
                     request.session.sapId = request.body.user_pk;
                     request.session.token = request.body.token;
-                    return response.redirect('/');
                 }
+                return response.redirect('/');
             }
         );
     }

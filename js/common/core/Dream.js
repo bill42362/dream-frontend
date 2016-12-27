@@ -54,7 +54,7 @@ PBPlus.Dream.prototype.postMessage = function(message, errorCallback, successCal
 PBPlus.Dream.prototype.createMessage = function(message, projectId, errorCallback, successCallback) {
     let payload = {
         id: projectId,
-        message: [{ timestamp: Date.now(), content: message, authorId: NODE.USER_ID, }],
+        message: [{ timestamp: Date.now(), content: message, authorId: this.userSapId, }],
     };
     this.postMessage(payload, errorCallback, successCallback);
 }
@@ -66,7 +66,7 @@ PBPlus.Dream.prototype.replyMessage = function(message, messageUuid, projectId, 
         })[0];
         if(replyingMessage) {
             let payload = this.conformMessage(replyingMessage);
-            payload.message.push({timestamp: Date.now(), content: message, authorId: NODE.USER_ID});
+            payload.message.push({timestamp: Date.now(), content: message, authorId: this.userSapId});
             this.postMessage(payload, errorCallback, successCallback);
         } else {
             errorCallback({status: 500, message: '內部錯誤'});

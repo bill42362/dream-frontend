@@ -17,7 +17,7 @@ class App extends React.Component {
         this.state = {
             project: {}, stories: [], items: [], timelineItems: [], comments: [],
             message: '', replyMessage: '', replyMessageIndex: -1,
-            pictures: {}, isTabbarAboveScreen: false,
+            userSapId: '', userProfiles: {}, pictures: {}, isTabbarAboveScreen: false,
         };
         this.createMessage = this.createMessage.bind(this);
         this.replyMessage = this.replyMessage.bind(this);
@@ -26,9 +26,17 @@ class App extends React.Component {
         this.onReplyMessageChange = this.onReplyMessageChange.bind(this);
         this.onGetProjectSuccess = this.onGetProjectSuccess.bind(this);
         this.onPostMessageSuccess = this.onPostMessageSuccess.bind(this);
+        this.onGetUserSapIdSuccess = this.onGetUserSapIdSuccess.bind(this);
+        this.onReadUserProfilesSuccess = this.onReadUserProfilesSuccess.bind(this);
         if(window.PBPlusDream) {
             let projectId = PBPlusDream.getProjectIdFromUrl();
             PBPlusDream.getProject(projectId, this.onAjaxError, this.onGetProjectSuccess);
+            this.state.userSapId = PBPlusDream.userSapId;
+            if(!PBPlusDream.userSapId) {
+                PBPlusDream.getUserSapId(undefined, this.onGetUserSapIdSuccess);
+            } else {
+                PBPlusDream.readProfiles([PBPlusDream.userSapId], undefined, this.onReadUserProfilesSuccess);
+            }
         }
     }
     isAboveScreenTop(element, offset) {
@@ -63,6 +71,15 @@ class App extends React.Component {
         } else {
             this.onAjaxError(response);
         }
+    }
+    onGetUserSapIdSuccess(sapId) {
+        if(sapId) { PBPlusDream.readProfiles([sapId], undefined, this.onReadUserProfilesSuccess); }
+        this.setState({userSapId: sapId});
+    }
+    onReadUserProfilesSuccess(profiles) {
+        let stateUserProfiles = this.state.userProfiles;
+        profiles.forEach(profile => { stateUserProfiles[profile.userPK] = profile; });
+        this.setState({userProfiles: stateUserProfiles});
     }
     onAjaxError(xhr) {
         let networkError = '網路錯誤，請檢查您的網路，或稍候再試一次。<br />'
@@ -129,6 +146,11 @@ class App extends React.Component {
                 count: state.comments.length, href: '/message?p=' + state.project.id
             });
         }
+        let userImageSrc = '', userNickname = '';
+        if(state.userSapId && state.userProfiles[state.userSapId]) {
+            userImageSrc = state.userProfiles[state.userSapId].src;
+            userNickname = state.userProfiles[state.userSapId].nickname;
+        }
         return <div id='wrapper'>
             <Header fixed={false} />
             <ProjectHeader
@@ -150,13 +172,14 @@ class App extends React.Component {
                     <div className='col-md-8'>
                         <ProjectMessageBox
                             ref='messageBox'
-                            author={'使用者名稱'} authorImageSrc={undefined}
+                            author={userNickname} authorImageSrc={userImageSrc}
                             message={this.state.message} onChange={this.onMessageChange}
                             onSubmit={this.createMessage}
                         />
                         {state.comments.map((comment, index) => <ProjectMessage
                             message={comment.body} index={index} key={index} uuid={comment.uuid}
                             shouldHideReplyBox={index !== state.replyMessageIndex}
+                            author={userNickname} authorImageSrc={userImageSrc}
                             replyMessage={index === state.replyMessageIndex ? state.replyMessage : ''}
                             onReplyChange={this.onReplyMessageChange} onSubmit={this.replyMessage}
                         />)}
