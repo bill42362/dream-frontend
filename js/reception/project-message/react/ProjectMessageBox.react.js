@@ -75,8 +75,9 @@ class ProjectMessageBox extends React.Component {
                 <BootstrapInput
                     ref='message' gridWidth={'12'} headAddon={''} type='textarea'
                     label={strings.message.label.string} labelHidden={true}
-                    title={strings.message.title.string} autoFocus={!this.props.shouldHide}
+                    title={strings.message.title.string} autoFocus={this.props.shouldAutoFocus}
                     value={message} onChange={this.onChange} onBlur={this.onBlur}
+                    onFocus={this.props.onFocus}
                 />
             </div>
         </div>;

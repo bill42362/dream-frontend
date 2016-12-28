@@ -6,7 +6,9 @@ if(undefined === window.PBPlus) { window.PBPlus = function() {}; };
 PBPlus.Dream = function() {
     this.apiBase = 'https://g46grc5kd1.execute-api.ap-southeast-2.amazonaws.com/';
     this.apiStage = 'testing/';
-    this.adminToken = 'TEST_STRING';
+    this.userToken = '';
+    this.userSapId = '';
+    this.getUserSapId();
 	return this;
 }
 
@@ -20,13 +22,31 @@ PBPlus.Dream.prototype.getProjectIdFromUrl = function() {
     return projectId;
 }
 
-PBPlus.Dream.prototype.postMessage = function(message, errorCallback, successCallback) {
-    let url = this.apiBase + this.apiStage + 'createMessage';
-    let payload = Object.assign(message, {token: this.adminToken});
+PBPlus.Dream.prototype.readProfiles = function(sapIds, errorCallback, successCallback) {
+    let url = this.apiBase + this.apiStage + 'readProfile';
+    let payload = {token: this.userToken, uid: sapIds};
     Request.post(
         {url: url, json: payload,},
         (err, httpResponse, body) => {
-            if(err) { errorCallback(err); }; successCallback(body);
+            if(err) { errorCallback && errorCallback(err); }
+            else {
+                let response = JSON.parse(body.errorMessage);
+                if(200 === response.status) {
+                    successCallback && successCallback(response.message);
+                } else { errorCallback && errorCallback('Not found.'); }
+            }
+        }
+    );
+}
+
+PBPlus.Dream.prototype.postMessage = function(message, errorCallback, successCallback) {
+    let url = this.apiBase + this.apiStage + 'createMessage';
+    let payload = Object.assign(message, {token: this.userToken});
+    Request.post(
+        {url: url, json: payload,},
+        (err, httpResponse, body) => {
+            if(err) { errorCallback && errorCallback(err); }
+            else { successCallback(body); }
         }
     );
 }
@@ -34,7 +54,7 @@ PBPlus.Dream.prototype.postMessage = function(message, errorCallback, successCal
 PBPlus.Dream.prototype.createMessage = function(message, projectId, errorCallback, successCallback) {
     let payload = {
         id: projectId,
-        message: [{ timestamp: Date.now(), content: message, authorId: NODE.USER_ID, }],
+        message: [{ timestamp: Date.now(), content: message, authorId: this.userSapId, }],
     };
     this.postMessage(payload, errorCallback, successCallback);
 }
@@ -46,7 +66,7 @@ PBPlus.Dream.prototype.replyMessage = function(message, messageUuid, projectId, 
         })[0];
         if(replyingMessage) {
             let payload = this.conformMessage(replyingMessage);
-            payload.message.push({timestamp: Date.now(), content: message, authorId: NODE.USER_ID});
+            payload.message.push({timestamp: Date.now(), content: message, authorId: this.userSapId});
             this.postMessage(payload, errorCallback, successCallback);
         } else {
             errorCallback({status: 500, message: '內部錯誤'});
@@ -178,24 +198,36 @@ PBPlus.Dream.prototype.getProject = function(projectId, errorCallback, successCa
 	});
 }
 
+PBPlus.Dream.prototype.getUserSapId = function(errorCallback, successCallback) {
+    let url = location.protocol + '//' + location.host + '/token';
+    Request.get({url: url}, (err, httpResponse, body) => {
+        if(err) { errorCallback && errorCallback(err); }
+        else if(body) {
+            let response = JSON.parse(body);
+            this.userToken = response.token;
+            this.userSapId = response.sapId;
+            successCallback && successCallback(response.sapId);
+        }
+    });
+}
+
 PBPlus.Dream.prototype.getProjects = function(search, offset, limit, errorCallback, successCallback) {
     var searchString = '';
     if(!!search) { searchString = '/' + search; }
     searchString += '?offset=' + (offset || '0');
     if(!!limit) { searchString += '&limit=' + limit; }
-	$.ajax({
-        url: this.apiBase + this.apiStage + 'readAll' + searchString,
-        type: 'post', dataType: 'json', data: {token: this.adminToken},
-        success: function(response) {
-            if(200 === response.status) {
-                var projects = response.message;
+    let url = this.apiBase + this.apiStage + 'read' + searchString;
+    Request.get({url: url}, (err, httpResponse, body) => {
+        if(err) { errorCallback && errorCallback(err); }
+        else {
+            if(200 === body.status) {
+                var projects = body.message;
                 projects = projects.map(this.reformProject);
-                response.message = projects;
+                body.message = projects;
             }
-            successCallback(response);
-        }.bind(this),
-        error: errorCallback
-	});
+            successCallback && successCallback(body);
+        }
+    });
 }
 
 module.exports = PBPlus.Dream;
