@@ -57,14 +57,14 @@ var BootstrapInput = React.createClass({
             className="form-control" id={inputUuid} ref='input'
             title={title} placeholder={title} autoFocus={autoFocus}
             type={type} list={dataListUuid} onBlur={this.props.onBlur}
-            value={value} onChange={this.props.onChange}
+            value={value} onChange={this.props.onChange} onFocus={this.props.onFocus}
             aria-describedby={helpUuid} readOnly={readOnly}
         />;
         if('textarea' === type) {
             input = <textarea
                 className="form-control" id={inputUuid} ref='input'
                 title={title} placeholder={title} autoFocus={autoFocus}
-                value={value} onChange={this.props.onChange}
+                value={value} onChange={this.props.onChange} onFocus={this.props.onFocus}
                 aria-describedby={helpUuid} onBlur={this.props.onBlur}
             />;
         }

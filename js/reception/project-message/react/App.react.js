@@ -21,6 +21,7 @@ class App extends React.Component {
         };
         this.createMessage = this.createMessage.bind(this);
         this.replyMessage = this.replyMessage.bind(this);
+        this.noMessageAlert = this.noMessageAlert.bind(this);
         this.onWindowScroll = this.onWindowScroll.bind(this);
         this.onMessageChange = this.onMessageChange.bind(this);
         this.onReplyMessageChange = this.onReplyMessageChange.bind(this);
@@ -47,6 +48,21 @@ class App extends React.Component {
         var pictures = this.state.pictures;
         if(pictureData.id) { pictures[pictureData.id] = pictureData; }
         this.setState({pictures: pictures});
+    }
+    noMessageAlert() {
+        let state = this.state;
+        if(!state.userSapId) {
+            Toastr.warning('請先登入後再留言。');
+            this.setState({replyMessage: '', replyMessageIndex: -1});
+            document.activeElement.blur();
+        } else {
+            let userProfile = state.userProfiles[state.userSapId];
+            if(userProfile && !userProfile.nickname) {
+                Toastr.warning('請先設定暱稱後再留言。');
+                this.setState({replyMessage: '', replyMessageIndex: -1});
+                document.activeElement.blur();
+            }
+        }
     }
     onGetProjectSuccess(response) {
         if(200 === response.status) {
@@ -186,15 +202,17 @@ class App extends React.Component {
                             ref='messageBox'
                             author={userNickname} authorImageSrc={userImageSrc}
                             message={this.state.message} onChange={this.onMessageChange}
-                            onSubmit={this.createMessage}
+                            onSubmit={this.createMessage} onFocus={this.noMessageAlert}
+                            shouldAutoFocus={!!userNickname}
                         />
                         {state.comments.map((comment, index) => <ProjectMessage
                             message={comment.body} index={index} key={index} uuid={comment.uuid}
                             userProfiles={state.userProfiles}
                             shouldHideReplyBox={index !== state.replyMessageIndex}
-                            author={userNickname} authorImageSrc={userImageSrc}
+                            userNickname={userNickname} userImageSrc={userImageSrc}
                             replyMessage={index === state.replyMessageIndex ? state.replyMessage : ''}
                             onReplyChange={this.onReplyMessageChange} onSubmit={this.replyMessage}
+                            noMessageAlert={this.noMessageAlert}
                         />)}
                     </div>
                     <div className='col-md-4'>

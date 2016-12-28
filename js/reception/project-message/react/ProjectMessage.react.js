@@ -14,7 +14,9 @@ class ProjectMessage extends React.Component {
     }
     onReplyChange() {
         if(this.props.onReplyClick) { this.props.onReplyClick(); }
-        else if(this.props.onReplyChange) {
+        else if(!this.props.userNickname && this.props.noMessageAlert) {
+            this.props.noMessageAlert();
+        } else if(this.props.onReplyChange) {
             this.props.onReplyChange(this.refs.messageBox.getValue(), this.props.index);
         }
     }
@@ -45,14 +47,14 @@ class ProjectMessage extends React.Component {
                 <div className='project-message-content'>{message.content}</div>
                 {message.replies && message.replies.map((reply, index) => <ProjectMessage
                     key={index} message={reply} userProfiles={this.props.userProfiles}
-                    onReplyClick={this.onReplyChange}
-                    author={this.props.author} authorImageSrc={this.props.authorImageSrc}
+                    onReplyClick={this.onReplyChange} noMessageAlert={this.props.noMessageAlert}
+                    userNickname={this.props.author} userImageSrc={this.props.authorImageSrc}
                 />)}
                 <ProjectMessageBox
                     ref='messageBox' shouldHide={this.props.shouldHideReplyBox}
-                    author={this.props.author} authorImageSrc={this.props.authorImageSrc}
+                    author={this.props.userNickname} authorImageSrc={this.props.userImageSrc}
                     message={this.props.replyMessage} onChange={this.onReplyChange}
-                    onSubmit={this.onSubmit}
+                    onSubmit={this.onSubmit} onFocus={this.props.noMessageAlert}
                 />
             </div>
         </div>;
