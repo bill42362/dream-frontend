@@ -25,14 +25,16 @@ class ProjectMessage extends React.Component {
     componentDidUpdate() { }
     render() {
         let message = this.props.message;
+        const userProfiles = this.props.userProfiles;
+        const authorProfile = userProfiles[message.authorId] || {};
         return <div className='project-message' ref='base' >
             <img
                 className='project-message-author-image'
-                src={message.authorImageSrc || 'img/mock_user_icon.jpg'}
-                title={message.author}
+                src={authorProfile.src || 'img/mock_user_icon.jpg'}
+                title={authorProfile.nickname}
             />
             <div className='project-message-texts' >
-                <h5 className='project-message-author'>{message.author}</h5>
+                <h5 className='project-message-author'>{authorProfile.nickname || ''}</h5>
                 <span className='project-message-date-string'>
                     {Core.getDateStringWithFormat(message.timestamp, 'YYYY-MM-DD hh:mm:ss')}
                 </span>
@@ -42,7 +44,8 @@ class ProjectMessage extends React.Component {
                 >回覆</span>
                 <div className='project-message-content'>{message.content}</div>
                 {message.replies && message.replies.map((reply, index) => <ProjectMessage
-                    key={index} message={reply} onReplyClick={this.onReplyChange}
+                    key={index} message={reply} userProfiles={this.props.userProfiles}
+                    onReplyClick={this.onReplyChange}
                     author={this.props.author} authorImageSrc={this.props.authorImageSrc}
                 />)}
                 <ProjectMessageBox

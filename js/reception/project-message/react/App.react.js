@@ -61,6 +61,18 @@ class App extends React.Component {
             response.timelineItems.forEach(function(timelineItem) {
                 this.cachePicture(timelineItem.pictureData);
             }.bind(this));
+            let messageUserSapIds = response.messages.map(function(message) {
+                return message.body.authorId;
+            });
+            response.messages.forEach(function(message) {
+                if(message.body.replies) {
+                    messageUserSapIds = messageUserSapIds.concat(message.body.replies.map(
+                        function(reply) { return reply.authorId; }
+                    ));
+                }
+            });
+            messageUserSapIds = [...new Set(messageUserSapIds)]; // Get unique items.
+            PBPlusDream.readProfiles(messageUserSapIds, undefined, this.onReadUserProfilesSuccess);
             this.setState({
                 project: project,
                 stories: response.stories,
@@ -178,6 +190,7 @@ class App extends React.Component {
                         />
                         {state.comments.map((comment, index) => <ProjectMessage
                             message={comment.body} index={index} key={index} uuid={comment.uuid}
+                            userProfiles={state.userProfiles}
                             shouldHideReplyBox={index !== state.replyMessageIndex}
                             author={userNickname} authorImageSrc={userImageSrc}
                             replyMessage={index === state.replyMessageIndex ? state.replyMessage : ''}
