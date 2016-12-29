@@ -10,14 +10,7 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.staticStrings = { };
-        this.state = {
-            isTabbarAboveScreen: false
-        };
-        this.onWindowScroll = this.onWindowScroll.bind(this);
-    }
-    isAboveScreenTop(element, offset) {
-        var clientRect = element.getBoundingClientRect();
-        return 0 > clientRect.top + offset;
+        this.state = { };
     }
     onAjaxError(xhr) {
         let networkError = '網路錯誤，請檢查您的網路，或稍候再試一次。<br />'
@@ -32,13 +25,8 @@ class App extends React.Component {
             Toastr['warning'](xhr.status + xhr.message);
         }
     }
-    onWindowScroll(e) {
-        var isTabbarAboveScreen = this.state.isTabbarAboveScreen;
-        var newValue = this.isAboveScreenTop(this.refs.projectTabbarContainerAnchor, 0);
-        if(isTabbarAboveScreen != newValue) { this.setState({isTabbarAboveScreen: newValue}); }
-    }
-    componentDidMount() { document.addEventListener('scroll', this.onWindowScroll, false); }
-    componentWillUnmount() { document.removeEventListener('scroll', this.onWindowScroll, false); }
+    componentDidMount() { }
+    componentWillUnmount() { }
     render() {
         const state = this.state;
         return <div id='wrapper'>
@@ -61,14 +49,61 @@ class App extends React.Component {
                     </div>
                 </div>
                 <div className='payment-form'>
-                    <div className='row'>
-                        <BootstrapInput
-                            ref='name' gridWidth={'12'}
-                            label={'姓名'} title={'姓名'} autoFocus={true}
-                            value={''} onChange={this.onChange}
-                        />
+                    <div className='payment-form-inputs'>
+                        <div className='row'>
+                            <BootstrapInput
+                                ref='name' gridWidth={'12'}
+                                label={'姓名'} title={'姓名'} autoFocus={true}
+                                value={'大中天'} onChange={this.onChange}
+                            />
+                        </div>
+                        <div className='row'>
+                            <BootstrapInput
+                                ref='phoneNumber' gridWidth={'12'} type={'number'}
+                                label={'手機號碼'} title={'手機號碼'} readOnly={true}
+                                value={'0912999999'} onChange={this.onChange}
+                            />
+                        </div>
+                        <div className='row'>
+                            <BootstrapInput
+                                ref='email' gridWidth={'12'} type={'email'}
+                                label={'電子郵件'} title={'電子郵件'}
+                                value={'service@pcgbros.com'} onChange={this.onChange}
+                            />
+                        </div>
+                        <div className='row'>
+                            <BootstrapInput
+                                ref='postcode' gridWidth={'2'} type={'number'}
+                                label={'郵遞區號'} title={'郵遞區號'}
+                                value={'10694'} onChange={this.onChange}
+                            />
+                            <BootstrapInput
+                                ref='address' gridWidth={'10'}
+                                label={'地址'} title={'地址'}
+                                value={'台北市大安區光復南路102號6樓之2'} onChange={this.onChange}
+                            />
+                        </div>
+                        <div className='row'>
+                            <BootstrapInput
+                                ref='remark' gridWidth={'12'} type={'textarea'}
+                                label={'備註'} title={'備註'}
+                                value={'安安你好'} onChange={this.onChange}
+                            />
+                        </div>
+                    </div>
+                    <hr />
+                    <div className='payment-form-buttons row'>
+                        <div
+                            className='payment-form-button primary col-md-4 col-md-offset-1'
+                            role='button' onClick={this.submit}
+                        >前往付款</div>
+                        <div
+                            className='payment-form-button col-md-4 col-md-offset-2'
+                            role='button' onClick={this.cancel}
+                        >回上一頁</div>
                     </div>
                 </div>
+                <div className='paper-shadow'></div>
             </div>
             <Footer />
         </div>;
