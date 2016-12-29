@@ -11,7 +11,38 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.staticStrings = { };
-        this.state = { };
+        this.state = {
+            userSapId: '', userProfiles: {},
+            paymentData: {
+                paymentMethod: 'CVS',
+                userData: {
+                    name: '大中天', phoneNumber: '0912999999', email: 'service@pcgbros.com',
+                    postcode: '10694', address: '台北市大安區光復南路102號6樓之2',
+                },
+                receipt: { type: 'three', number: '54883155', title: '寶悍運動平台' },
+                remark: '安安你好',
+            },
+        };
+        this.onGetUserSapIdSuccess = this.onGetUserSapIdSuccess.bind(this);
+        this.onReadUserProfilesSuccess = this.onReadUserProfilesSuccess.bind(this);
+        this.onChange = this.onChange.bind(this);
+        if(window.PBPlusDream) {
+            this.state.userSapId = PBPlusDream.userSapId;
+            if(!PBPlusDream.userSapId) {
+                PBPlusDream.getUserSapId(undefined, this.onGetUserSapIdSuccess);
+            } else {
+                PBPlusDream.readProfiles([PBPlusDream.userSapId], undefined, this.onReadUserProfilesSuccess);
+            }
+        }
+    }
+    onGetUserSapIdSuccess(sapId) {
+        if(sapId) { PBPlusDream.readProfiles([sapId], undefined, this.onReadUserProfilesSuccess); }
+        this.setState({userSapId: sapId});
+    }
+    onReadUserProfilesSuccess(profiles) {
+        let stateUserProfiles = this.state.userProfiles;
+        profiles.forEach(profile => { stateUserProfiles[profile.userPK] = profile; });
+        this.setState({userProfiles: stateUserProfiles});
     }
     onAjaxError(xhr) {
         let networkError = '網路錯誤，請檢查您的網路，或稍候再試一次。<br />'
@@ -26,10 +57,29 @@ class App extends React.Component {
             Toastr['warning'](xhr.status + xhr.message);
         }
     }
+    onChange() {
+        let paymentData = {
+            paymentMethod: this.refs.paymentMethod.getValue(),
+            userData: {
+                name: this.refs.name.getValue(),
+                phoneNumber: this.refs.phoneNumber.getValue(),
+                email: this.refs.email.getValue(),
+                postcode: this.refs.postcode.getValue(),
+                address: this.refs.address.getValue(),
+            },
+            receipt: { type: this.refs.receiptType.getValue(), number: '', title: '', },
+            remark: this.refs.remark.getValue(),
+        };
+        if(this.refs.receiptNumber) { paymentData.receipt.number = this.refs.receiptNumber.getValue(); }
+        if(this.refs.receiptTitle) { paymentData.receipt.title = this.refs.receiptTitle.getValue(); }
+        this.setState({paymentData: paymentData});
+    }
     componentDidMount() { }
     componentWillUnmount() { }
     render() {
         const state = this.state;
+        const {paymentMethod, userData, receipt, remark} = state.paymentData;
+        console.log(state.userProfiles[state.userSapId]);
         return <div id='wrapper'>
             <Header fixed={false} />
             <h1 className='pay-title'>訂單付款資訊</h1>
@@ -59,70 +109,68 @@ class App extends React.Component {
                                     {key: 'ATM', display: 'ATM 付款'},
                                     {key: 'Credit', display: '信用卡付款'},
                                 ]}
-                                value={'ATM'} onChange={(value) => { console.log(value); }}
+                                value={paymentMethod} onChange={this.onChange}
                             />
                         </div>
                         <div className='row'>
                             <BootstrapInput
                                 ref='name' gridWidth={'12'}
                                 label={'姓名'} title={'姓名'} autoFocus={true}
-                                value={'大中天'} onChange={this.onChange}
+                                value={userData.name} onChange={this.onChange}
                             />
                         </div>
                         <div className='row'>
                             <BootstrapInput
                                 ref='phoneNumber' gridWidth={'12'} type={'number'}
                                 label={'手機號碼'} title={'手機號碼'} readOnly={true}
-                                value={'0912999999'} onChange={this.onChange}
+                                value={userData.phoneNumber} onChange={this.onChange}
                             />
                         </div>
                         <div className='row'>
                             <BootstrapInput
                                 ref='email' gridWidth={'12'} type={'email'}
                                 label={'電子郵件'} title={'電子郵件'}
-                                value={'service@pcgbros.com'} onChange={this.onChange}
+                                value={userData.email} onChange={this.onChange}
                             />
                         </div>
                         <div className='row'>
                             <BootstrapInput
                                 ref='postcode' gridWidth={'3'} type={'number'}
                                 label={'郵遞區號'} title={'郵遞區號'}
-                                value={'10694'} onChange={this.onChange}
+                                value={userData.postcode} onChange={this.onChange}
                             />
                             <BootstrapInput
-                                ref='address' gridWidth={'9'}
-                                label={'地址'} title={'地址'}
-                                value={'台北市大安區光復南路102號6樓之2'} onChange={this.onChange}
+                                ref='address' gridWidth={'9'} label={'地址'} title={'地址'}
+                                value={userData.address} onChange={this.onChange}
                             />
                         </div>
                         <div className='row'>
                             <BootstrapRadios
                                 ref='receiptType' gridWidth={'12'} label={'發票種類'}
-                                status={'error'}
                                 options={[
                                     {key: 'two', display: '二聯式發票'},
                                     {key: 'three', display: '三聯式發票'}
                                 ]}
-                                value={'two'} onChange={(value) => { console.log(value); }}
+                                value={receipt.type} onChange={this.onChange}
                             />
                         </div>
-                        <div className='row'>
+                        {'three' === receipt.type && <div className='row'>
                             <BootstrapInput
                                 ref='receiptNumber' gridWidth={'4'}
                                 label={'統一編號'} title={'統一編號'}
-                                value={'54883155'} onChange={this.onChange}
+                                value={receipt.number} onChange={this.onChange}
                             />
                             <BootstrapInput
                                 ref='receiptTitle' gridWidth={'8'}
                                 label={'公司名稱'} title={'公司名稱'}
-                                value={'寶悍運動平台'} onChange={this.onChange}
+                                value={receipt.title} onChange={this.onChange}
                             />
-                        </div>
+                        </div>}
                         <div className='row'>
                             <BootstrapInput
                                 ref='remark' gridWidth={'12'} type={'textarea'}
                                 label={'備註'} title={'備註'}
-                                value={'安安你好'} onChange={this.onChange}
+                                value={remark} onChange={this.onChange}
                             />
                         </div>
                     </div>
