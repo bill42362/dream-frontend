@@ -4,6 +4,7 @@ import React from 'react';
 import ClassNames from 'classnames';
 import Header from '../../../common/react/Header.react.js';
 import BootstrapInput from '../../../common/react/BootstrapInput.react.js';
+import BootstrapRadios from '../../../common/react/BootstrapRadios.react.js';
 import Footer from '../../../common/react/Footer.react.js';
 
 class App extends React.Component {
@@ -51,6 +52,17 @@ class App extends React.Component {
                 <div className='payment-form'>
                     <div className='payment-form-inputs'>
                         <div className='row'>
+                            <BootstrapRadios
+                                ref='paymentMethod' gridWidth={'12'} label={'付款方式'}
+                                options={[
+                                    {key: 'CVS', display: '超商付款'},
+                                    {key: 'ATM', display: 'ATM 付款'},
+                                    {key: 'Credit', display: '信用卡付款'},
+                                ]}
+                                value={'ATM'} onChange={(value) => { console.log(value); }}
+                            />
+                        </div>
+                        <div className='row'>
                             <BootstrapInput
                                 ref='name' gridWidth={'12'}
                                 label={'姓名'} title={'姓名'} autoFocus={true}
@@ -73,14 +85,37 @@ class App extends React.Component {
                         </div>
                         <div className='row'>
                             <BootstrapInput
-                                ref='postcode' gridWidth={'2'} type={'number'}
+                                ref='postcode' gridWidth={'3'} type={'number'}
                                 label={'郵遞區號'} title={'郵遞區號'}
                                 value={'10694'} onChange={this.onChange}
                             />
                             <BootstrapInput
-                                ref='address' gridWidth={'10'}
+                                ref='address' gridWidth={'9'}
                                 label={'地址'} title={'地址'}
                                 value={'台北市大安區光復南路102號6樓之2'} onChange={this.onChange}
+                            />
+                        </div>
+                        <div className='row'>
+                            <BootstrapRadios
+                                ref='receiptType' gridWidth={'12'} label={'發票種類'}
+                                status={'error'}
+                                options={[
+                                    {key: 'two', display: '二聯式發票'},
+                                    {key: 'three', display: '三聯式發票'}
+                                ]}
+                                value={'two'} onChange={(value) => { console.log(value); }}
+                            />
+                        </div>
+                        <div className='row'>
+                            <BootstrapInput
+                                ref='receiptNumber' gridWidth={'4'}
+                                label={'統一編號'} title={'統一編號'}
+                                value={'54883155'} onChange={this.onChange}
+                            />
+                            <BootstrapInput
+                                ref='receiptTitle' gridWidth={'8'}
+                                label={'公司名稱'} title={'公司名稱'}
+                                value={'寶悍運動平台'} onChange={this.onChange}
                             />
                         </div>
                         <div className='row'>
