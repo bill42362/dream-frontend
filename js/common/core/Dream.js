@@ -122,6 +122,7 @@ PBPlus.Dream.prototype.reformOption = (option) => {
             title: option.picture_title, src: option.picture_src, file: '',
         },
         id: option.oid,
+        projectId: option.pid,
         title: option.title,
         description: option.content,
         price: option.amount,
