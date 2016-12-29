@@ -12,7 +12,8 @@ class App extends React.Component {
         super(props);
         this.staticStrings = { };
         this.state = {
-            userSapId: '', userProfiles: {},
+            project: {}, items: [], userSapId: '', userProfiles: {},
+            itemId: Core.getUrlSearches().id,
             paymentData: {
                 paymentMethod: 'CVS',
                 userData: {
@@ -23,16 +24,28 @@ class App extends React.Component {
                 remark: '安安你好',
             },
         };
+        this.onGetProjectSuccess = this.onGetProjectSuccess.bind(this);
         this.onGetUserSapIdSuccess = this.onGetUserSapIdSuccess.bind(this);
         this.onReadUserProfilesSuccess = this.onReadUserProfilesSuccess.bind(this);
         this.onChange = this.onChange.bind(this);
         if(window.PBPlusDream) {
+            let projectId = PBPlusDream.getProjectIdFromUrl();
+            PBPlusDream.getProject(projectId, this.onAjaxError, this.onGetProjectSuccess);
             this.state.userSapId = PBPlusDream.userSapId;
             if(!PBPlusDream.userSapId) {
                 PBPlusDream.getUserSapId(undefined, this.onGetUserSapIdSuccess);
             } else {
                 PBPlusDream.readProfiles([PBPlusDream.userSapId], undefined, this.onReadUserProfilesSuccess);
             }
+        }
+    }
+    cancel() { history.back(); }
+    onGetProjectSuccess(response) {
+        if(200 === response.status) {
+            var project = response.message[0];
+            this.setState({project: project, items: response.items,});
+        } else {
+            this.onAjaxError(response);
         }
     }
     onGetUserSapIdSuccess(sapId) {
@@ -80,6 +93,9 @@ class App extends React.Component {
         const state = this.state;
         const {paymentMethod, userData, receipt, remark} = state.paymentData;
         console.log(state.userProfiles[state.userSapId]);
+        const item = state.items.filter((item) => { return '' + item.id === state.itemId; })[0];
+        let itemTitle = '';
+        if(item) { itemTitle = item.title; }
         return <div id='wrapper'>
             <Header fixed={false} />
             <h1 className='pay-title'>訂單付款資訊</h1>
@@ -101,6 +117,13 @@ class App extends React.Component {
                 </div>
                 <div className='payment-form'>
                     <div className='payment-form-inputs'>
+                        <div className='row'>
+                            <BootstrapInput
+                                gridWidth={'12'} readOnly={true}
+                                label={'訂單項目'} title={'訂單項目'}
+                                value={itemTitle}
+                            />
+                        </div>
                         <div className='row'>
                             <BootstrapRadios
                                 ref='paymentMethod' gridWidth={'12'} label={'付款方式'}
@@ -180,10 +203,10 @@ class App extends React.Component {
                             className='payment-form-button primary col-md-4 col-md-offset-1'
                             role='button' onClick={this.submit}
                         >前往付款</div>
-                        <div
+                        <a
                             className='payment-form-button col-md-4 col-md-offset-2'
                             role='button' onClick={this.cancel}
-                        >回上一頁</div>
+                        >回上一頁</a>
                     </div>
                 </div>
                 <div className='paper-shadow'></div>
