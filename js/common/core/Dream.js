@@ -22,6 +22,32 @@ PBPlus.Dream.prototype.getProjectIdFromUrl = function() {
     return projectId;
 }
 
+PBPlus.Dream.prototype.createPayment = function(projectId, itemId, paymentData, errorCallback, successCallback) {
+    let url = this.apiBase + this.apiStage + 'createPayment';
+    let payload = {
+        token: this.userToken,
+        pid: projectId,
+        oid: itemId,
+        basis: paymentData.paymentMethod,
+        addressee: paymentData.receipt.title,
+        address: paymentData.userData.address,
+        codezip: paymentData.userData.postcode,
+        phone: paymentData.userData.phoneNumber,
+        comments: paymentData.remark,
+    };
+    Request.post(
+        {url: url, json: payload,},
+        (err, httpResponse, body) => {
+            if(err) { errorCallback && errorCallback(err); }
+            else if(200 === body.status) {
+                successCallback && successCallback(body.message);
+            } else if(401 === body.status) {
+                errorCallback && errorCallback({status: 401, message: '已售完'});
+            } else { errorCallback && errorCallback({status: 500, message: 'Not Found.'}); }
+        }
+    );
+}
+
 PBPlus.Dream.prototype.readProfiles = function(sapIds, errorCallback, successCallback) {
     let url = this.apiBase + this.apiStage + 'readProfile';
     let payload = {token: this.userToken, uid: sapIds};

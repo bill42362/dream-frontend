@@ -21,6 +21,7 @@ class App extends React.Component {
                 remark: '',
             },
         };
+        this.submit = this.submit.bind(this);
         this.onGetProjectSuccess = this.onGetProjectSuccess.bind(this);
         this.onGetUserSapIdSuccess = this.onGetUserSapIdSuccess.bind(this);
         this.onReadUserProfilesSuccess = this.onReadUserProfilesSuccess.bind(this);
@@ -37,6 +38,19 @@ class App extends React.Component {
         }
     }
     cancel() { history.back(); }
+    submit() {
+        const state = this.state;
+        if(window.PBPlusDream && state.project.id && state.userSapId) {
+            PBPlusDream.createPayment(
+                state.project.id, state.itemId, state.paymentData,
+                this.onAjaxError, this.onCreatePaymentSuccess
+            );
+        }
+    }
+    onCreatePaymentSuccess(html) {
+        let formDiv = document.getElementById('payment-form');
+        formDiv.innerHTML = html;
+    }
     onGetProjectSuccess(response) {
         if(200 === response.status) {
             var project = response.message[0];
@@ -69,13 +83,12 @@ class App extends React.Component {
         let networkError = '網路錯誤，請檢查您的網路，或稍候再試一次。<br />'
             + 'Network error, please check your network, or try again later.';
         let systemError = '系統錯誤，請稍候再試一次。<br />System error, please try again later.';
-        var errorStrings = this.staticStrings.errors;
         if(!xhr.message) {
             Toastr['error'](networkError);
-        } else if(/[45]\d\d/.test(xhr.status)) {
+        } else if(/5\d\d/.test(xhr.status)) {
             Toastr['error'](xhr.status + ' "' + xhr.message + '"<br />' + systemError);
         } else {
-            Toastr['warning'](xhr.status + xhr.message);
+            Toastr['warning'](xhr.status + ', ' + xhr.message);
         }
     }
     onChange() {
