@@ -39,8 +39,9 @@ App.token = function(request, response, next) {
     response.json({token: request.session.token, sapId: request.session.sapId});
 }
 App.logout = function(request, response) {
+    const quertLocation = atob(URLSafe.decode(request.query.location));
     request.session.destroy();
-    return response.redirect('/');
+    return response.redirect(quertLocation);
 }
 App.expressStaticRoutes = [
     {path: '/js/', serverPath: '/dist/js'},
