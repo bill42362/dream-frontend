@@ -15,13 +15,10 @@ class App extends React.Component {
             project: {}, items: [], userSapId: '', userProfiles: {},
             itemId: Core.getUrlSearches().id,
             paymentData: {
-                paymentMethod: 'CVS',
-                userData: {
-                    name: '大中天', phoneNumber: '0912999999', email: 'service@pcgbros.com',
-                    postcode: '10694', address: '台北市大安區光復南路102號6樓之2',
-                },
-                receipt: { type: 'three', number: '54883155', title: '寶悍運動平台' },
-                remark: '安安你好',
+                paymentMethod: '',
+                userData: { name: '', phoneNumber: '', email: '', postcode: '', address: '', },
+                receipt: { type: '', number: '', title: '' },
+                remark: '',
             },
         };
         this.onGetProjectSuccess = this.onGetProjectSuccess.bind(this);
@@ -55,6 +52,17 @@ class App extends React.Component {
     onReadUserProfilesSuccess(profiles) {
         let stateUserProfiles = this.state.userProfiles;
         profiles.forEach(profile => { stateUserProfiles[profile.userPK] = profile; });
+        let userProfile = stateUserProfiles[this.state.userSapId];
+        if(userProfile) {
+            let paymentData = this.state.paymentData;
+            let userData = paymentData.userData;
+            userData.name = userData.name || userProfile.name || '';
+            userData.phoneNumber = userData.phoneNumber || userProfile.mobile || '';
+            userData.email = userData.email || userProfile.email || '';
+            userData.postcode = userData.postcode || userProfile.zipcode || '';
+            userData.address = userData.address || userProfile.address || '';
+            this.setState({paymentData: paymentData});
+        }
         this.setState({userProfiles: stateUserProfiles});
     }
     onAjaxError(xhr) {
@@ -92,7 +100,6 @@ class App extends React.Component {
     render() {
         const state = this.state;
         const {paymentMethod, userData, receipt, remark} = state.paymentData;
-        console.log(state.userProfiles[state.userSapId]);
         const item = state.items.filter((item) => { return '' + item.id === state.itemId; })[0];
         let itemTitle = '';
         if(item) { itemTitle = item.title; }
