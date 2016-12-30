@@ -2,6 +2,7 @@
 'use strict'
 import React from 'react';
 import ClassNames from 'classnames';
+import URLSafe from 'urlsafe-base64';
 import Header from '../../../common/react/Header.react.js';
 import BootstrapInput from '../../../common/react/BootstrapInput.react.js';
 import BootstrapRadios from '../../../common/react/BootstrapRadios.react.js';
@@ -12,21 +13,23 @@ class App extends React.Component {
         super(props);
         this.staticStrings = { };
         this.state = {
-            userSapId: '', userProfiles: {},
+            project: {}, items: [], userSapId: '', userProfiles: {},
+            itemId: Core.getUrlSearches().id,
             paymentData: {
-                paymentMethod: 'CVS',
-                userData: {
-                    name: '大中天', phoneNumber: '0912999999', email: 'service@pcgbros.com',
-                    postcode: '10694', address: '台北市大安區光復南路102號6樓之2',
-                },
-                receipt: { type: 'three', number: '54883155', title: '寶悍運動平台' },
-                remark: '安安你好',
+                paymentMethod: '',
+                userData: { name: '', phoneNumber: '', email: '', postcode: '', address: '', },
+                receipt: { type: '', number: '', title: '' },
+                remark: '',
             },
         };
+        this.submit = this.submit.bind(this);
+        this.onGetProjectSuccess = this.onGetProjectSuccess.bind(this);
         this.onGetUserSapIdSuccess = this.onGetUserSapIdSuccess.bind(this);
         this.onReadUserProfilesSuccess = this.onReadUserProfilesSuccess.bind(this);
         this.onChange = this.onChange.bind(this);
         if(window.PBPlusDream) {
+            let projectId = PBPlusDream.getProjectIdFromUrl();
+            PBPlusDream.getProject(projectId, this.onAjaxError, this.onGetProjectSuccess);
             this.state.userSapId = PBPlusDream.userSapId;
             if(!PBPlusDream.userSapId) {
                 PBPlusDream.getUserSapId(undefined, this.onGetUserSapIdSuccess);
@@ -35,26 +38,79 @@ class App extends React.Component {
             }
         }
     }
+    cancel() { history.back(); }
+    submit() {
+        const state = this.state;
+        if(window.PBPlusDream && state.project.id && state.userSapId) {
+            PBPlusDream.createPayment(
+                state.project.id, state.itemId, state.paymentData,
+                this.onAjaxError, this.onCreatePaymentSuccess
+            );
+        }
+    }
+    onCreatePaymentSuccess(html) {
+        let body = document.getElementById('body');
+
+        let formDiv = document.createElement('div');
+        formDiv.innerHTML = html;
+        body.appendChild(formDiv);
+
+        let allpayIframeContainer = document.createElement('div');
+        allpayIframeContainer.className = 'allpay-iframe-container';
+        body.appendChild(allpayIframeContainer);
+
+        let allpayIframe = document.createElement('iframe');
+        allpayIframe.className = 'allpay-iframe';
+        allpayIframe.name = 'allpay_iframe';
+        allpayIframeContainer.appendChild(allpayIframe);
+
+        document.getElementById('_allpayForm').submit();
+    }
+    onGetProjectSuccess(response) {
+        if(200 === response.status) {
+            var project = response.message[0];
+            this.setState({project: project, items: response.items,});
+        } else {
+            this.onAjaxError(response);
+        }
+    }
     onGetUserSapIdSuccess(sapId) {
         if(sapId) { PBPlusDream.readProfiles([sapId], undefined, this.onReadUserProfilesSuccess); }
+        else {
+            Toastr.warning('您必須登入後才能訂購，5 秒後為您轉至登入頁。');
+            window.setTimeout(() => {
+                let locationBase64 = URLSafe.encode(btoa(location.pathname + location.search));
+                location.href = '/login?location=' + locationBase64;
+            }, 5000);
+        }
         this.setState({userSapId: sapId});
     }
     onReadUserProfilesSuccess(profiles) {
         let stateUserProfiles = this.state.userProfiles;
         profiles.forEach(profile => { stateUserProfiles[profile.userPK] = profile; });
+        let userProfile = stateUserProfiles[this.state.userSapId];
+        if(userProfile) {
+            let paymentData = this.state.paymentData;
+            let userData = paymentData.userData;
+            userData.name = userData.name || userProfile.name || '';
+            userData.phoneNumber = userData.phoneNumber || userProfile.mobile || '';
+            userData.email = userData.email || userProfile.email || '';
+            userData.postcode = userData.postcode || userProfile.zipcode || '';
+            userData.address = userData.address || userProfile.address || '';
+            this.setState({paymentData: paymentData});
+        }
         this.setState({userProfiles: stateUserProfiles});
     }
     onAjaxError(xhr) {
         let networkError = '網路錯誤，請檢查您的網路，或稍候再試一次。<br />'
             + 'Network error, please check your network, or try again later.';
         let systemError = '系統錯誤，請稍候再試一次。<br />System error, please try again later.';
-        var errorStrings = this.staticStrings.errors;
         if(!xhr.message) {
             Toastr['error'](networkError);
-        } else if(/[45]\d\d/.test(xhr.status)) {
+        } else if(/5\d\d/.test(xhr.status)) {
             Toastr['error'](xhr.status + ' "' + xhr.message + '"<br />' + systemError);
         } else {
-            Toastr['warning'](xhr.status + xhr.message);
+            Toastr['warning'](xhr.status + ', ' + xhr.message);
         }
     }
     onChange() {
@@ -79,7 +135,9 @@ class App extends React.Component {
     render() {
         const state = this.state;
         const {paymentMethod, userData, receipt, remark} = state.paymentData;
-        console.log(state.userProfiles[state.userSapId]);
+        const item = state.items.filter((item) => { return '' + item.id === state.itemId; })[0];
+        let itemTitle = '';
+        if(item) { itemTitle = item.title; }
         return <div id='wrapper'>
             <Header fixed={false} />
             <h1 className='pay-title'>訂單付款資訊</h1>
@@ -101,6 +159,13 @@ class App extends React.Component {
                 </div>
                 <div className='payment-form'>
                     <div className='payment-form-inputs'>
+                        <div className='row'>
+                            <BootstrapInput
+                                gridWidth={'12'} readOnly={true}
+                                label={'訂單項目'} title={'訂單項目'}
+                                value={itemTitle}
+                            />
+                        </div>
                         <div className='row'>
                             <BootstrapRadios
                                 ref='paymentMethod' gridWidth={'12'} label={'付款方式'}

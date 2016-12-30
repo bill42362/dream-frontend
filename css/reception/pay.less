@@ -253,6 +253,20 @@ body {
             }
         }
     }
+    div.allpay-iframe-container {
+        position: fixed;
+        border: 1px solid @themeBackground;
+        border-radius: 5px;
+        top: 10%; left: 10%;
+        width: 80%; height: 80%;
+        background-color: @themeForeground;
+        z-index: 56;
+        overflow: hidden;
+        iframe.allpay-iframe {
+            border: 0;
+            width: 100%; height: 100%;
+        }
+    }
 }
 
 @media (max-width: 991px) {

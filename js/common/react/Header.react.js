@@ -1,5 +1,6 @@
 // Header.react.js
 import ClassNames from 'classnames';
+import URLSafe from 'urlsafe-base64';
 import NavbarMenu from './NavbarMenu.react.js';
 import ContentEditable from './ContentEditable.react.js';
 
@@ -42,6 +43,7 @@ class Header extends React.Component {
     }
     render() {
         const state = this.state;
+        const locationBase64 = URLSafe.encode(btoa(location.pathname + location.search));
         let navbarMenuItems = [];
         return <header id="header" className={ClassNames({'on-top': this.props.isOnTop})}>
             <nav className={ClassNames(
@@ -74,7 +76,7 @@ class Header extends React.Component {
                         aria-label="user profile icon" role='button' 
                         src='/img/mock_user_icon.jpg' onClick={this.switchUserPanel}
                     />}
-                    {!this.state.userSapId && <a href='/login' >
+                    {!this.state.userSapId && <a href={'/login?location=' + locationBase64} >
                         <span
                             className="navbar-icon glyphicon glyphicon-user"
                             aria-label="login button" role='button'
@@ -99,7 +101,10 @@ class Header extends React.Component {
                 <hr className='user-panel-seperator' />
                 <div className='user-panel-buttons'>
                     <a className='user-panel-button user-center' role='button'>使用者中心</a>
-                    <a className='user-panel-button logout' role='button' href='/logout' >登出</a>
+                    <a
+                        className='user-panel-button logout' role='button'
+                        href={'/logout?location=' + locationBase64}
+                    >登出</a>
                 </div>
             </div>
         </header>;

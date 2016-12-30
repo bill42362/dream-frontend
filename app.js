@@ -6,19 +6,22 @@ const Express = require('express');
 const BodyParser = require('body-parser');
 const Session = require('express-session');
 const Request = require('request');
+const URLSafe = require('urlsafe-base64');
+const atob = require('atob');
 
 const config = JSON.parse(Fs.readFileSync('./config.json', 'utf8'));
 const App = function() {};
 App.goLoginPage = function(request, response, next) {
-    return response.redirect(
-        config.LOGIN_URL
-        || 'http://52.192.199.179:8000/page/auth?client_id=850479850ad111e6b5c10a138ae18a98'
-    );
+    let ref = '&ref=' + request.query.location || '';
+    let url = config.LOGIN_URL
+        || 'http://52.192.199.179:8000/page/auth?client_id=850479850ad111e6b5c10a138ae18a98';
+    return response.redirect(url + ref);
 }
 App.login = function(request, response, next) {
     if(request.body && request.body.token) {
         let url = 'https://api.pbplus.me/api/verification';
         let payload = { token: request.body.token, };
+        const quertLocation = atob(URLSafe.decode(request.body.ref));
         Request.post(
             {url: url, json: payload,},
             (err, httpResponse, body) => {
@@ -26,7 +29,7 @@ App.login = function(request, response, next) {
                     request.session.sapId = request.body.user_pk;
                     request.session.token = request.body.token;
                 }
-                return response.redirect('/');
+                return response.redirect(quertLocation);
             }
         );
     }
@@ -36,8 +39,9 @@ App.token = function(request, response, next) {
     response.json({token: request.session.token, sapId: request.session.sapId});
 }
 App.logout = function(request, response) {
+    const quertLocation = atob(URLSafe.decode(request.query.location));
     request.session.destroy();
-    return response.redirect('/');
+    return response.redirect(quertLocation);
 }
 App.expressStaticRoutes = [
     {path: '/js/', serverPath: '/dist/js'},
