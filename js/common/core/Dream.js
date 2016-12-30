@@ -57,9 +57,8 @@ PBPlus.Dream.prototype.readProfiles = function(sapIds, errorCallback, successCal
         (err, httpResponse, body) => {
             if(err) { errorCallback && errorCallback(err); }
             else {
-                let response = JSON.parse(body.errorMessage);
-                if(200 === response.status) {
-                    successCallback && successCallback(response.message);
+                if(200 === body.status) {
+                    successCallback && successCallback(body.message);
                 } else { errorCallback && errorCallback('Not found.'); }
             }
         }
