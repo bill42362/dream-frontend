@@ -2,6 +2,7 @@
 'use strict'
 import React from 'react';
 import ClassNames from 'classnames';
+import URLSafe from 'urlsafe-base64';
 import Header from '../../../common/react/Header.react.js';
 import BootstrapInput from '../../../common/react/BootstrapInput.react.js';
 import BootstrapRadios from '../../../common/react/BootstrapRadios.react.js';
@@ -75,6 +76,13 @@ class App extends React.Component {
     }
     onGetUserSapIdSuccess(sapId) {
         if(sapId) { PBPlusDream.readProfiles([sapId], undefined, this.onReadUserProfilesSuccess); }
+        else {
+            Toastr.warning('您必須登入後才能訂購，5 秒後為您轉至登入頁。');
+            window.setTimeout(() => {
+                let locationBase64 = URLSafe.encode(btoa(location.pathname + location.search));
+                location.href = '/login?location=' + locationBase64;
+            }, 5000);
+        }
         this.setState({userSapId: sapId});
     }
     onReadUserProfilesSuccess(profiles) {
