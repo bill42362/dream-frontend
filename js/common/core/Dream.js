@@ -33,6 +33,7 @@ PBPlus.Dream.prototype.createPayment = function(projectId, itemId, paymentData, 
         address: paymentData.userData.address,
         codezip: paymentData.userData.postcode,
         phone: paymentData.userData.phoneNumber,
+        email: paymentData.userData.email || 'test-api@pcgbros.com',
         comments: paymentData.remark,
     };
     Request.post(
@@ -41,7 +42,7 @@ PBPlus.Dream.prototype.createPayment = function(projectId, itemId, paymentData, 
             if(err) { errorCallback && errorCallback(err); }
             else if(200 === body.status) {
                 successCallback && successCallback(body.message);
-            } else if(401 === body.status) {
+            } else if(401 === body.status && 'status:fail, Sold Out.' === body.message) {
                 errorCallback && errorCallback({status: 401, message: '已售完'});
             } else { errorCallback && errorCallback({status: 500, message: 'Not Found.'}); }
         }

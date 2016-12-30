@@ -48,8 +48,22 @@ class App extends React.Component {
         }
     }
     onCreatePaymentSuccess(html) {
-        let formDiv = document.getElementById('payment-form');
+        let body = document.getElementById('body');
+
+        let formDiv = document.createElement('div');
         formDiv.innerHTML = html;
+        body.appendChild(formDiv);
+
+        let allpayIframeContainer = document.createElement('div');
+        allpayIframeContainer.className = 'allpay-iframe-container';
+        body.appendChild(allpayIframeContainer);
+
+        let allpayIframe = document.createElement('iframe');
+        allpayIframe.className = 'allpay-iframe';
+        allpayIframe.name = 'allpay_iframe';
+        allpayIframeContainer.appendChild(allpayIframe);
+
+        document.getElementById('_allpayForm').submit();
     }
     onGetProjectSuccess(response) {
         if(200 === response.status) {
@@ -223,10 +237,10 @@ class App extends React.Component {
                             className='payment-form-button primary col-md-4 col-md-offset-1'
                             role='button' onClick={this.submit}
                         >前往付款</div>
-                        <a
+                        <div
                             className='payment-form-button col-md-4 col-md-offset-2'
                             role='button' onClick={this.cancel}
-                        >回上一頁</a>
+                        >回上一頁</div>
                     </div>
                 </div>
                 <div className='paper-shadow'></div>
