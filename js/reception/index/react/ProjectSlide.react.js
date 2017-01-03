@@ -8,9 +8,10 @@ class Slide extends React.Component {
         this.state = {
             initialContentZoneTop: undefined,
             contentZoneTop: undefined,
-            imageTop: 0,
+            imageTop: 0, imageLeft: 0,
         };
         this.onWindowScroll = this.onWindowScroll.bind(this);
+        this.updateImageLeft = this.updateImageLeft.bind(this);
     }
     onWindowScroll(e) {
         let baseTop = this.refs.base.getBoundingClientRect().top;
@@ -27,23 +28,35 @@ class Slide extends React.Component {
         let newImageTop = -imageBottomOffset*(1 - baseViewportPercent);
         this.setState({contentZoneTop: newZoneTop, imageTop: newImageTop});
     }
+    updateImageLeft() {
+        let imageContainerWidth = this.refs.imageContainer.getBoundingClientRect().width;
+        let imageWidth = this.refs.image.clientWidth;
+        let imageLeft = Math.floor(0.5*imageContainerWidth - 0.5*imageWidth);
+        this.setState({imageLeft: imageLeft});
+    }
     componentDidMount() {
         document.addEventListener('scroll', this.onWindowScroll, false);
         let contentZoneTop = this.refs.contentZone.getBoundingClientRect().top;
         this.setState({initialContentZoneTop: contentZoneTop});
+        if(this.refs.image) { this.updateImageLeft(); }
     }
     componentWillUnmount() { document.removeEventListener('scroll', this.onWindowScroll, false); }
     render() {
         const project = this.props.project;
-        return <div
-            className="project-slide" ref='base'
-            style={{height: '100%'}}
-        >
-            <div className='slide-image-container' style={{position: 'relative'}}>
+        return <div className="project-slide" ref='base' style={{height: '100%'}} >
+            <div
+                className='slide-image-container' ref='imageContainer'
+                style={{position: 'relative', height: '100%', backgroundColor: 'rgb(250, 130, 160)'}}
+            >
                 {project.bannerData && <img
                     className="slide-image" ref='image'
-                    style={{position: 'absolute', top: this.state.imageTop}}
+                    style={{
+                        position: 'absolute',
+                        left: this.state.imageLeft, top: this.state.imageTop,
+                        width: '100%', minWidth: '800px'
+                    }}
                     src={project.bannerData.src}
+                    onLoad={this.updateImageLeft}
                 />}
             </div>
             <div className="slide-content-zone-container">
