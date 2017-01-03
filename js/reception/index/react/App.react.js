@@ -46,7 +46,7 @@ class App extends React.Component {
         let state = this.state;
         return <div id='wrapper' ref='base'>
             <Header fixed={true} isOnTop={this.state.headerOnTop} />
-            <Slide />
+            <Slide projects={state.projects} />
             <Carousel />
             <div className='project-cards row'>
                 {state.projects.map((project, index) => {
