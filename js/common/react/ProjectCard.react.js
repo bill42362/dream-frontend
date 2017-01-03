@@ -8,25 +8,20 @@ class ProjectCard extends React.Component {
         this.state = { };
     }
     render() {
+        const project = this.props.project;
         let proposer = {title: 'pb+寶悍運動平台', src: '//www.pbplus.me/'};
-        let banner = {src: "http://dream.pbplus.me/wp-content/uploads/2016/03/DSCN8334.jpg", title: '新城國小'};
-        let projectData = {
-            title: '世界十二強的愛 傳送溫暖至偏鄉',
-            subtitle: 'pb+圓夢加舉辦了世界12強紀念套票拍賣活動，活動所得將全數捐給新城國小',
-            description: '專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述專案敘述',
-            foundTarget: 500000, currentFound: 300000,
-            startTimestamp: 1472869212136, dueTimestamp: 1478139612136,
-            proposerId: 'proposerId', banner: 'bannerId',
-        };
-        let leftDays = (projectData.dueTimestamp - projectData.startTimestamp)/86400000;
-        return <a className="project-card" href='/project.html' >
+        let leftDays = (project.dueTimestamp - project.startTimestamp)/86400000;
+        return <a className="project-card" href={`/project/${project.id}`} >
             <div className='ratio-fixer'>
-                <img className='project-banner' {...banner} />
+                <img
+                    className='project-banner'
+                    src={project.bannerData.src} title={project.bannerData.title}
+                />
                 <div className='project-content'>
-                    <h4 className='project-title'>{projectData.title}</h4>
+                    <h4 className='project-title'>{project.title}</h4>
                     <div className='project-content-hover-texts'>
-                        <h6 className='project-subtitle'>{projectData.subtitle}</h6>
-                        <div className='project-description'>{projectData.description}</div>
+                        <h6 className='project-subtitle'>{project.subtitle}</h6>
+                        <div className='project-description'>{project.description}</div>
                     </div>
                     <div className='project-content-footer'>
                         <div className='project-progress-line'> ---------- </div>

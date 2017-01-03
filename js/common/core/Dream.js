@@ -247,12 +247,14 @@ PBPlus.Dream.prototype.getProjects = function(search, offset, limit, errorCallba
     Request.get({url: url}, (err, httpResponse, body) => {
         if(err) { errorCallback && errorCallback(err); }
         else {
-            if(200 === body.status) {
-                var projects = body.message;
+            let response = JSON.parse(body);
+            if(200 === response.status) {
+                var projects = response.message;
                 projects = projects.map(this.reformProject);
-                body.message = projects;
+                successCallback && successCallback(projects);
+            } else {
+                errorCallback && errorCallback({status: 500, message: 'Server Error.'});
             }
-            successCallback && successCallback(body);
         }
     });
 }
