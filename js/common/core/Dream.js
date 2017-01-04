@@ -109,6 +109,7 @@ PBPlus.Dream.prototype.reformProject = (project) => {
             title: project.picture_title, src: project.picture_src, file: '',
         },
         id: project.pid,
+        type: ('0' === project.type ? 'fund' : 'bid'),
         title: project.project_name,
         subtitle: project.subtitle,
         description: project.description,
@@ -118,6 +119,7 @@ PBPlus.Dream.prototype.reformProject = (project) => {
         startTimestamp: project.start_timestamp,
         dueTimestamp: project.end_timestamp,
         awares: JSON.parse(project.awares || '[]').slice(0, 6),
+        relateUrl: project.relate_url,
     };
 };
 
