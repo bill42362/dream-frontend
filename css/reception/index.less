@@ -2,42 +2,6 @@
 @themeForeground: rgb(190, 136, 247);
 @headerHeight: 60px;
 @footerHeight: 4em;
-.transparent(@ratio) {
-    zoom: 1;
-    -ms-filter: e("progid:DXImageTransform.Microsoft.Alpha(Opacity=")(100*@ratio)e(");");
-    filter: e("alpha(opacity=")(100*@ratio)e(");");
-    -moz-opacity: @ratio;
-    -khtml-opacity: @ratio;
-    opacity: @ratio;
-}
-.keyframes (@name, @rules) {
-    @-webkit-keyframes ~'@{name}' { @rules(); }
-    @-moz-keyframes ~'@{name}' { @rules(); }
-    @-ms-keyframes ~'@{name}' { @rules(); }
-    @-o-keyframes ~'@{name}' { @rules(); }
-    @keyframes ~'@{name}' { @rules(); }
-}
-.keyframes(fadein, {
-    0% { .transparent(0); }
-    100% { .transparent(1); }
-});
-.keyframes(fadeout, {
-    0% { .transparent(1); }
-    100% { .transparent(0); }
-});
-.animation(@name, @duration: 3s, @delay: 0s, @ease: ease-out, @fillMode: forwards) {
-    -webkit-animation: @name @duration @ease @delay 1 normal @fillMode;
-    -moz-animation:    @name @duration @ease @delay 1 normal @fillMode;
-    -ms-animation:     @name @duration @ease @delay 1 normal @fillMode;
-    -o-animation:     @name @duration @ease @delay 1 normal @fillMode;
-    animation:     @name @duration @ease @delay 1 normal @fillMode;
-}
-.transition(@property, @time, @function) {
-    transition: @property @time @function;
-    -webkit-transition: @property @time @function;
-    -moz-transition: @property @time @function;
-    -o-transition: @property @time @function;
-}
 html {
     position: relative;
     min-height: 100%;
@@ -185,22 +149,17 @@ body {
         }
         & > div#slide {
             position: relative;
-            display: flex;
             height: 100vh;
             overflow: hidden;
-            img.slide-image {
-                position: absolute;
-                width: 100%;
-                min-height: 100%;
-                top: 0px;
-            }
             div.slide-swipe-zone {
-                flex: auto;
-                width: 10%;
+                position: absolute;
+                width: 10%; height: 100%;
+                min-width: 75px; max-width: 100px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 z-index: 1;
+                &.swipe-right { right: 0px; }
                 &:hover {
                     cursor: pointer;
                     span.slide-swipe-icon {
@@ -209,8 +168,7 @@ body {
                     }
                 }
                 span.slide-swipe-icon {
-                    border-radius: 1em;
-                    margin: 0em 1em;
+                    border-radius: 0.7em;
                     width: 1.4em; height: 1.4em;
                     font-size: 2em;
                     line-height: 1.4em;
@@ -220,36 +178,11 @@ body {
                     transition: all .5s ease;
                 }
             }
-            div.slide-content-zone-container {
-                flex: auto;
-                div.slide-content-zone {
-                    position: relative;
-                    top: 50%;
-                    padding-bottom: 2em;
-                    div.slide-texts {
-                        padding-left: 15%;
-                        color: rgba(255, 255, 255, 0.8);
-                        text-shadow: rgba(0, 0, 0, 0.8) 1px 1px 10px; 
-                        h1 { margin: 0em 0em 1em; }
-                        h3 { margin: 0em 0em 3em; }
-                    }
-                    div.project-button-container {
-                        top: 60%;
-                        span.project-button {
-                            background-color: rgba(255, 255, 255, 0.2);
-                            border-radius: 0.5em;
-                            padding: 1em 2em;
-                            color: rgba(255, 255, 255, 0.8);
-                            font-weight: 200;
-                            transition: all .5s ease;
-                            &:hover {
-                                background-color: rgba(255, 255, 255, 0.8);
-                                cursor: pointer;
-                                color: rgba(250, 130, 160, 0.8);
-                            }
-                        }
-                    }
-                }
+            div.project-slide-container {
+                position: absolute;
+                width: 100%; height: 100%;
+                top: 0px;
+                &.previous { .animation(fadeout, .5s); }
             }
         }
         & > div#carousel {
@@ -429,6 +362,7 @@ body {
                     }
                 }
             }
+            & > div#slide { max-height: 450px; }
             & > footer#footer {
                 div#footer-content {
                     div.site-map {
@@ -446,4 +380,40 @@ body {
             }
         }
     }
+}
+.transparent(@ratio) {
+    zoom: 1;
+    -ms-filter: e("progid:DXImageTransform.Microsoft.Alpha(Opacity=")(100*@ratio)e(");");
+    filter: e("alpha(opacity=")(100*@ratio)e(");");
+    -moz-opacity: @ratio;
+    -khtml-opacity: @ratio;
+    opacity: @ratio;
+}
+.keyframes (@name, @rules) {
+    @-webkit-keyframes ~'@{name}' { @rules(); }
+    @-moz-keyframes ~'@{name}' { @rules(); }
+    @-ms-keyframes ~'@{name}' { @rules(); }
+    @-o-keyframes ~'@{name}' { @rules(); }
+    @keyframes ~'@{name}' { @rules(); }
+}
+.keyframes(fadein, {
+    0% { .transparent(0); }
+    100% { .transparent(1); }
+});
+.keyframes(fadeout, {
+    0% { .transparent(1); }
+    100% { .transparent(0); }
+});
+.animation(@name, @duration: 3s, @delay: 0s, @ease: ease-out, @fillMode: forwards) {
+    -webkit-animation: @name @duration @ease @delay 1 normal @fillMode;
+    -moz-animation:    @name @duration @ease @delay 1 normal @fillMode;
+    -ms-animation:     @name @duration @ease @delay 1 normal @fillMode;
+    -o-animation:     @name @duration @ease @delay 1 normal @fillMode;
+    animation:     @name @duration @ease @delay 1 normal @fillMode;
+}
+.transition(@property, @time, @function) {
+    transition: @property @time @function;
+    -webkit-transition: @property @time @function;
+    -moz-transition: @property @time @function;
+    -o-transition: @property @time @function;
 }
