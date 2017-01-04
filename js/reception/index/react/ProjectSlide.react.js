@@ -51,7 +51,6 @@ class Slide extends React.Component {
         const {props, state} = this;
         const project = this.props.project;
         const leftDays = Math.round((project.dueTimestamp - (Date.now()/1000))/8640000)/10;
-        console.log(project);
         return <div className="project-slide" ref='base' style={{height: '100%'}} >
             <div
                 className='slide-image-container' ref='imageContainer'

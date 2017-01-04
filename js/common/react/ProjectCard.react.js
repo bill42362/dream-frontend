@@ -54,7 +54,13 @@ class ProjectCard extends React.Component {
                         <div className='project-progress-line'> ---------- </div>
                         <div className='project-content-footer-texts'>
                             <span className='project-proposer'>{proposer.title}</span>
-                            <span className='project-follower'>追蹤一個很長的字串</span>
+                            <span className='project-progress'>
+                                {!!+project.currentFound && <span className='project-progress-text'>
+                                    {`$${Core.addNumberComma(project.foundTarget)}`}
+                                    <span style={{margin: '0 0.5em', color: 'lightgray'}}>/</span>
+                                    {`$${Core.addNumberComma(project.foundTarget)}`}
+                                </span>}
+                            </span>
                             <span className='project-day-countdown'>還剩 {leftDays} 天</span>
                         </div>
                     </div>
