@@ -27,7 +27,7 @@ class App extends React.Component {
         let headerOnTop = -5 < baseTop;
         this.setState({headerOnTop: headerOnTop});
     }
-    onGetProjectsSuccess(projects) { console.table(projects); this.setState({projects: projects}); }
+    onGetProjectsSuccess(projects) { this.setState({projects: projects}); }
     onAjaxError(xhr) {
         let networkError = '網路錯誤，請檢查您的網路，或稍候再試一次。<br />'
             + 'Network error, please check your network, or try again later.';
