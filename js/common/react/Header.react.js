@@ -18,6 +18,7 @@ class Header extends React.Component {
         this.onSearchTextChange = this.onSearchTextChange.bind(this);
         this.onGetUserSapIdSuccess = this.onGetUserSapIdSuccess.bind(this);
         this.onReadUserProfileSuccess = this.onReadUserProfileSuccess.bind(this);
+        this.onWindowScroll = this.onWindowScroll.bind(this);
         if(window.PBPlusDream) {
             this.state.userSapId = PBPlusDream.userSapId;
             if(!PBPlusDream.userSapId) {
@@ -41,11 +42,19 @@ class Header extends React.Component {
     onReadUserProfileSuccess(profiles) {
         this.setState({userNickname: profiles[0].nickname, userEmail: profiles[0].email});
     }
+    onWindowScroll() {
+        const baseRect = this.refs.base.getBoundingClientRect();
+        if(0 != baseRect.top && !this.state.isUserPanelCollapsed) {
+            this.setState({isUserPanelCollapsed: true});
+        }
+    }
+    componentDidMount() { document.addEventListener('scroll', this.onWindowScroll, false); }
+    componentWillUnmount() { document.removeEventListener('scroll', this.onWindowScroll, false); }
     render() {
         const state = this.state;
         const locationBase64 = URLSafe.encode(btoa(location.pathname + location.search));
         let navbarMenuItems = [];
-        return <header id="header" className={ClassNames({'on-top': this.props.isOnTop})}>
+        return <header id="header" className={ClassNames({'on-top': this.props.isOnTop})} ref='base'>
             <nav className={ClassNames(
                 'navbar', {'navbar-fixed-top': this.props.fixed},
                 {'navbar-user-panel-shown': !state.isUserPanelCollapsed}
