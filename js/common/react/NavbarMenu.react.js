@@ -14,9 +14,8 @@ class NavbarMenu extends React.Component {
         })[0] || {key: 'home', display: 'Home'};
         return <div id="navbar-menu">
             <span className="menu-icon glyphicon glyphicon-list" aria-hidden="true"></span>
-            <span className="menu-display">{currentItem.display}</span>
+            <span className="menu-display" role='button'>{currentItem.display}</span>
         </div>;
     }
 }
 module.exports = NavbarMenu;
-
