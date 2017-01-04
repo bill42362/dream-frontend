@@ -7,7 +7,7 @@ class Slide extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            projectIndex: 0, previousProjectIndex: 2,
+            projectIndex: 0, previousProjectIndex: 0,
             shouldDisplayPreviousProject: false
         };
         this.switchToProjectIndex = this.switchToProjectIndex.bind(this);
