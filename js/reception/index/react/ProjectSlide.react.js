@@ -8,6 +8,7 @@ class Slide extends React.Component {
         this.state = {
             contentZoneTop: '50%',
             imageTop: 0, imageLeft: 0,
+            isProjectButtonHovered: false,
         };
         this.onWindowScroll = this.onWindowScroll.bind(this);
         this.updateImageLeft = this.updateImageLeft.bind(this);
@@ -47,6 +48,7 @@ class Slide extends React.Component {
     componentDidUpdate() { this.updateContentZoneTop(); }
     componentWillUnmount() { document.removeEventListener('scroll', this.onWindowScroll, false); }
     render() {
+        const {props, state} = this;
         const project = this.props.project;
         return <div className="project-slide" ref='base' style={{height: '100%'}} >
             <div
@@ -67,19 +69,39 @@ class Slide extends React.Component {
             <div
                 className="slide-content-zone row" ref='contentZone'
                 style={{
-                    position: 'absolute',
-                    top: this.state.contentZoneTop,
-                    width: '60%', left: '20%',
-                    color: 'white'
+                    position: 'absolute', width: '60%', left: '20%',
+                    top: this.state.contentZoneTop
                 }}
             >
-                <div className="slide-texts col-md-8">
-                    <h1>{project.title || '...'}</h1>
-                    <h3>{project.subtitle || '...'}</h3>
+                <div
+                    className="slide-texts col-md-8"
+                    style={{color: 'rgb(240, 240, 240)', textShadow: 'black 1px 1px 10px'}}
+                >
+                    <h1 style={{margin: '0em 0em 1em'}}>{project.title || '...'}</h1>
+                    <h3 style={{margin: '0em 0em 3em'}}>{project.subtitle || '...'}</h3>
                     <h4>倒數、達標、追蹤</h4>
                 </div>
-                <div className="project-button-container col-md-4">
-                    <span className="project-button" role='button'>進一步了解</span>
+                <div className="project-button-container col-md-4" style={{textAlign: 'center'}}>
+                    <a href={`/project?p=${project.id}`} style={{textDecoration: 'none', color: 'white'}}>
+                        <span
+                            className="project-button" role='button'
+                            style={Object.assign({
+                                display: 'inline-block',
+                                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                                borderRadius: '0.5em',
+                                padding: '1em 2em',
+                                color: 'white',
+                                fontWeight: '200',
+                                transition: 'all .5s ease'
+                            }, state.isProjectButtonHovered && {
+                                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                                cursor: 'pointer',
+                                color: 'rgb(250, 130, 160)'
+                            })}
+                            onMouseEnter={() => {this.setState({isProjectButtonHovered: true})}}
+                            onMouseLeave={() => {this.setState({isProjectButtonHovered: false})}}
+                        >進一步了解</span>
+                    </a>
                 </div>
             </div>
         </div>;
