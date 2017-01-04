@@ -50,6 +50,8 @@ class Slide extends React.Component {
     render() {
         const {props, state} = this;
         const project = this.props.project;
+        const leftDays = Math.round((project.dueTimestamp - (Date.now()/1000))/8640000)/10;
+        console.log(project);
         return <div className="project-slide" ref='base' style={{height: '100%'}} >
             <div
                 className='slide-image-container' ref='imageContainer'
@@ -79,7 +81,27 @@ class Slide extends React.Component {
                 >
                     <h1 style={{margin: '0em 0em 1em'}}>{project.title || '...'}</h1>
                     <h3 style={{margin: '0em 0em 3em'}}>{project.subtitle || '...'}</h3>
-                    <h4>倒數、達標、追蹤</h4>
+                    <h4>
+                        <span className='left-days-label' style={{marginRight: '2em'}}>
+                            <i className='fa fa-clock-o' aria-hidden='true'></i>
+                            {` 還剩 ${leftDays} 天`}
+                        </span>
+                        {!!+project.founderCount && <span
+                            className='funder-count-label' style={{marginRight: '2em'}}
+                        >
+                            <i className='fa fa-user-circle-o' aria-hidden='true'></i>
+                            {` ${project.founderCount} 人贊助`}
+                        </span>}
+                        {!!+project.currentFound && <span
+                            className='fund-target-label' style={{marginRight: '2em'}}
+                        >
+                            <i className='fa fa-flag-checkered' aria-hidden='true'></i>
+                            {
+                                ` $${Core.addNumberComma(project.currentFound)} 
+                                / $${Core.addNumberComma(project.foundTarget)}`
+                            }
+                        </span>}
+                    </h4>
                 </div>
                 <div className="project-button-container col-md-4" style={{textAlign: 'center'}}>
                     <a href={`/project?p=${project.id}`} style={{textDecoration: 'none', color: 'white'}}>

@@ -34,7 +34,7 @@ class ProjectCard extends React.Component {
         const {props, state} = this;
         const project = this.props.project;
         let proposer = {title: 'pb+寶悍運動平台', src: '//www.pbplus.me/'};
-        let leftDays = Math.round((project.dueTimestamp - project.startTimestamp)/8640000)/10;
+        let leftDays = Math.round((project.dueTimestamp - (Date.now()/1000))/8640000)/10;
         let href = `/project/${project.id}`;
         if('bid' === project.type) { href = project.relateUrl; }
         return <a className="project-card" href={href} ref='base'>
