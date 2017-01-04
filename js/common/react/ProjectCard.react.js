@@ -14,13 +14,15 @@ class ProjectCard extends React.Component {
         const state = this.state;
         const baseRect = this.refs.base.getBoundingClientRect();
         const imageSize = {width: this.refs.image.width, height: this.refs.image.height};
-        const resizeFactor = Math.min(imageSize.width/baseRect.width, imageSize.height/baseRect.height);
-        const imageStyle = Object.assign({}, state.imageStyle, {
+        const resizeFactor = Math.min(imageSize.width/baseRect.width, imageSize.height/baseRect.height) || 1;
+        const newImageStyle = {
             marginTop: -Math.floor(0.5*imageSize.height/resizeFactor),
             marginLeft: -Math.floor(0.5*imageSize.width/resizeFactor),
             width: imageSize.width/resizeFactor,
             height: imageSize.height/resizeFactor,
-        });
+        };
+        let imageStyle = Object.assign({}, state.imageStyle);
+        if(!!newImageStyle.marginTop) { Object.assign(imageStyle, newImageStyle); }
         if(JSON.stringify(state.imageStyle) !== JSON.stringify(imageStyle)) {
             this.setState({imageStyle});
         }
