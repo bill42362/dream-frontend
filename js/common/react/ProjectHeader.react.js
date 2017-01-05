@@ -18,11 +18,13 @@ class ProjectHeader extends React.Component {
         let data = {
             title: '...', subtitle: '...', description: '...',
             foundTarget: 0, currentFound: 0, founderCount: 0,
-            startTimestamp: Date.now(), dueTimestamp: Date.now(),
+            startTimestamp: Date.now()/1000, dueTimestamp: Date.now()/1000,
             awares: [],
         };
         data = Object.assign(data, this.props.project);
-        let leftDays = Math.floor((data.dueTimestamp - data.startTimestamp)/86400);
+        let leftDays = (data.dueTimestamp - (Date.now()/1000))/86400;
+        if(10 > leftDays) { leftDays = Math.round(10*leftDays)/10; }
+        else { leftDays = Math.round(leftDays); }
         let eventItems = [
             {imageSrc: '/img/mock_user_icon.jpg', type: 'donation', text: 'AAA 捐了 $1000 給 BBB 計畫', },
             {imageSrc: '/img/mock_user_icon.jpg', type: 'comment', text: 'CCC 對 DDD 計畫說：加油喔！', },
