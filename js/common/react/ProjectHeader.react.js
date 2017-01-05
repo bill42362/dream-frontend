@@ -57,14 +57,17 @@ class ProjectHeader extends React.Component {
                                     <div className='found'>${Core.addNumberComma(data.currentFound)}</div>
                                     <div className='footnote'>目標金額 ${Core.addNumberComma(data.foundTarget)}</div>
                                 </div>
-                                <div className='current-state-item'>
+                                {0 < leftDays && <div className='current-state-item'>
                                     <div className='left-days'>{leftDays}</div>
                                     <div className='footnote'>剩餘天數</div>
-                                </div>
+                                </div>}
                                 <div className='current-state-item'>
                                     <div className='founder-count'>{data.founderCount}</div>
                                     <div className='footnote'>贊助人數</div>
                                 </div>
+                                {0 >= leftDays && <div className='current-state-item'>
+                                    <div className='left-days'>{'專案結束'}</div>
+                                </div>}
                             </div>
                             <div className='recent-events'>
                                 {eventItems.map((item, index) =>
