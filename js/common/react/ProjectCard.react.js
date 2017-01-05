@@ -33,8 +33,11 @@ class ProjectCard extends React.Component {
     render() {
         const {props, state} = this;
         const project = this.props.project;
-        let proposer = {title: 'pb+寶悍運動平台', src: '//www.pbplus.me/'};
-        let leftDays = Math.round((project.dueTimestamp - (Date.now()/1000))/8640000)/10;
+        const proposer = {title: 'pb+寶悍運動平台', src: '//www.pbplus.me/'};
+        const leftSeconds = project.dueTimestamp - (Date.now()/1000);
+        let leftDays = leftSeconds/86400;
+        if(10 > leftDays) { leftDays = Math.round(10*leftDays)/10; }
+        else { leftDays = Math.round(leftDays); }
         let href = `/project/${project.id}`;
         if('bid' === project.type) { href = project.relateUrl; }
         return <a className="project-card" href={href} ref='base'>
@@ -56,12 +59,13 @@ class ProjectCard extends React.Component {
                             <span className='project-proposer'>{proposer.title}</span>
                             <span className='project-progress'>
                                 {!!+project.currentFound && <span className='project-progress-text'>
-                                    {`$${Core.addNumberComma(project.foundTarget)}`}
+                                    {`$${Core.addNumberComma(project.currentFound)}`}
                                     <span style={{margin: '0 0.5em', color: 'lightgray'}}>/</span>
                                     {`$${Core.addNumberComma(project.foundTarget)}`}
                                 </span>}
                             </span>
-                            <span className='project-day-countdown'>還剩 {leftDays} 天</span>
+                            {(0 < leftSeconds) && <span className='project-day-countdown'>{`還剩 ${leftDays} 天`}</span>}
+                            {(0 >= leftSeconds) && <span className='project-day-countdown'>{`募資結束`}</span>}
                         </div>
                     </div>
                 </div>
@@ -70,4 +74,3 @@ class ProjectCard extends React.Component {
     }
 }
 module.exports = ProjectCard;
-
