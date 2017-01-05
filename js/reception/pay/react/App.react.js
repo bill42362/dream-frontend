@@ -68,8 +68,17 @@ class App extends React.Component {
     }
     onGetProjectSuccess(response) {
         if(200 === response.status) {
-            var project = response.message[0];
-            this.setState({project: project, items: response.items,});
+            const state = this.state;
+            const project = response.message[0];
+            const item = response.items.filter((item) => { return '' + item.id === state.itemId; })[0];
+            let paymentData = state.paymentData;
+            if(item) {
+                paymentData.paymentMethod = paymentData.paymentMethod || item.paymentMethods[0];
+            }
+            this.setState({
+                project, paymentData,
+                items: response.items,
+            });
         } else {
             this.onAjaxError(response);
         }
@@ -96,7 +105,7 @@ class App extends React.Component {
             userData.phoneNumber = userData.phoneNumber || userProfile.mobile || '';
             userData.email = userData.email || userProfile.email || '';
             userData.postcode = userData.postcode || userProfile.zipcode || '';
-            userData.address = userData.address || userProfile.address || '';
+            userData.address = userData.address || (userProfile.city || '') + userProfile.address || '';
             this.setState({paymentData: paymentData});
         }
         this.setState({userProfiles: stateUserProfiles});
