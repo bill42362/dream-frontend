@@ -11,7 +11,14 @@ class ProjectItem extends React.Component {
     componentDidMount() {}
     componentDidUpdate() {}
     render() {
-        const item = this.props.item;
+        const {props, state} = this;
+        const item = props.item;
+        const now = Date.now()/1000;
+        const isItemAvaliable =
+            !props.isProjectFinished
+            && now < item.limitedTimestamp
+            && item.sponsorCount < item.limitedQuantity;
+        let href = isItemAvaliable ? `/pay?p=${item.projectId}&id=${item.id}` : undefined;
         let limitedQuantityLabel = undefined;
         if(!!item.limitedQuantity) { limitedQuantityLabel = `限量 ${item.limitedQuantity} 組`; }
         const labels = [limitedQuantityLabel, ...item.labels];
@@ -21,8 +28,18 @@ class ProjectItem extends React.Component {
             src: "http://dream.pbplus.me/wp-content/uploads/2016/03/DSCN8334.jpg",
         };
         media = Object.assign(media, this.props.picture, this.props.video);
-        return <div ref='base' className='project-item' role='button'>
-            <a href={'/pay?p=' + item.projectId + '&id=' + item.id} title={item.title} >
+        let buttonDisplay = '立即贊助專案';
+        if(!isItemAvaliable) {
+            if(props.isProjectFinished) { buttonDisplay = '專案已經結束'; }
+            else if(now >= item.limitedTimestamp) { buttonDisplay = '已截止贊助'; }
+            else if(item.sponsorCount >= item.limitedQuantity) { buttonDisplay = '贊助名額已滿'; }
+            else { buttonDisplay = '已停止'; }
+        }
+        return <div
+            ref='base' role='button'
+            className={ClassNames('project-item', {'unavaliable': !isItemAvaliable})}
+        >
+            <a href={href} title={item.title} >
                 <div className='project-item-header'>
                     <h3 className='project-item-price'>${Core.addNumberComma(item.price)}</h3>
                     <h5 className='project-item-status'>{itemStatus}</h5>
@@ -37,9 +54,9 @@ class ProjectItem extends React.Component {
                     <div className='project-item-description'>{item.description}</div>
                     <img className='project-item-picture' src={media.src} title={media.title} />
                 </div>
-                <div className='project-item-fake-button'>
-                    <span className="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
-                    立即贊助專案
+                 <div className='project-item-fake-button'>
+                    {isItemAvaliable && <span className="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>}
+                    {buttonDisplay}
                 </div>
             </a>
         </div>;
