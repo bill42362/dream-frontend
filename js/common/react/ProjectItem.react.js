@@ -12,6 +12,9 @@ class ProjectItem extends React.Component {
     componentDidUpdate() {}
     render() {
         const item = this.props.item;
+        let limitedQuantityLabel = undefined;
+        if(!!item.limitedQuantity) { limitedQuantityLabel = `限量 ${item.limitedQuantity} 組`; }
+        const labels = [limitedQuantityLabel, ...item.labels];
         let itemStatus = Core.addNumberComma(item.sponsorCount) + ' 人';
         let media = {
             type: 'image', title: '新城國小',
@@ -24,9 +27,11 @@ class ProjectItem extends React.Component {
                     <h3 className='project-item-price'>${Core.addNumberComma(item.price)}</h3>
                     <h5 className='project-item-status'>{itemStatus}</h5>
                 </div>
-                {0 < item.labels.length && <div className='project-item-labels'>{item.labels.map((label, index) =>
-                    <span className='project-item-label' key={index}>{label}</span>
-                )}</div>}
+                {0 < labels.length && <div className='project-item-labels'>
+                    {labels.map((label, index) =>
+                        <span className='project-item-label' key={index}>{label}</span>
+                    )}
+                </div>}
                 <h4 className='project-item-title'>{item.title}</h4>
                 <div className='project-item-content'>
                     <div className='project-item-description'>{item.description}</div>
