@@ -393,6 +393,19 @@ body {
                             h5.project-item-status { color: lighten(rgb(70, 200, 250), 20%); }
                         }
                     }
+                    &.unavaliable {
+                        div.project-item-fake-button {
+                            background-color: lighten(@themeBackground, 25%);
+                        }
+                    }
+                    &.unavaliable:hover {
+                        background-color: lighten(@themeBackground, 45%);
+                        cursor: no-drop;
+                        div.project-item-header {
+                            h3.project-item-price { color: @themeBackground; }
+                            h5.project-item-status { color: rgb(70, 200, 250); }
+                        }
+                    }
                     a { color: black; }
                     div.project-item-header {
                         display: flex;

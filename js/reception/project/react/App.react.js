@@ -79,6 +79,7 @@ class App extends React.Component {
     componentWillUnmount() { document.removeEventListener('scroll', this.onWindowScroll, false); }
     render() {
         const state = this.state;
+        const project = state.project;
         let tabs = [];
         tabs.push(
             {key: 'story', display: '專案故事', count: 0, href: '/project?p=' + state.project.id}
@@ -121,7 +122,7 @@ class App extends React.Component {
                     </div>
                     <div className='col-md-4'>
                         {this.state.items.map((item, index) => <ProjectItem
-                            key={index}
+                            key={index} isProjectFinished={Date.now()/1000 > project.dueTimestamp}
                             item={item} picture={this.state.pictures[item.pictureId]}
                         />)}
                     </div>
