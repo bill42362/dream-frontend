@@ -136,8 +136,12 @@ class App extends React.Component {
         const state = this.state;
         const {paymentMethod, userData, receipt, remark} = state.paymentData;
         const item = state.items.filter((item) => { return '' + item.id === state.itemId; })[0];
-        let itemTitle = '', itemPrice = 0;
-        if(item) { itemTitle = item.title; itemPrice = item.price; }
+        let itemTitle = '', itemPrice = 0, itemPaymentMethods = ['Credit'];
+        if(item) {
+            itemTitle = item.title;
+            itemPrice = item.price;
+            itemPaymentMethods = item.paymentMethods;
+        }
         return <div id='wrapper'>
             <Header fixed={false} />
             <h1 className='pay-title'>訂單付款資訊</h1>
@@ -178,7 +182,9 @@ class App extends React.Component {
                                     {key: 'CVS', display: '超商付款'},
                                     {key: 'ATM', display: 'ATM 付款'},
                                     {key: 'Credit', display: '信用卡付款'},
-                                ]}
+                                ].filter(option => {
+                                    return -1 != itemPaymentMethods.indexOf(option.key);
+                                })}
                                 value={paymentMethod} onChange={this.onChange}
                             />
                         </div>
