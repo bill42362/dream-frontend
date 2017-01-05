@@ -1,5 +1,0 @@
-{
-    "NODE_ENV": "develop",
-    "LOGIN_URL": "http://52.192.199.179:8000/page/auth?client_id=850479850ad111e6b5c10a138ae18a98"
-}
-
