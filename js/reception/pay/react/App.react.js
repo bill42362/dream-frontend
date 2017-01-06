@@ -163,14 +163,18 @@ class App extends React.Component {
                 </a>
             </div>
             <div className='payment-panel'>
-                <div className='user-image-section'>
-                    <div className='image-input-box'>
-                        {/*<img src='/img/mock_user_icon.jpg' />*/}
-                        <ConnectedAnimateSquare />
+                <div className='user-image-section' style={{position: 'relative'}}>
+                    <div className='image-input-box' style={{zIndex: '1'}}>
+                        <img src='/img/mock_user_icon.jpg' />
                         <div className='edit-button' role='button'>
                             <span className='glyphicon glyphicon-camera'></span>
                         </div>
                     </div>
+                    <ConnectedAnimateSquare canvasProps={{style: {
+                        position: 'absolute',
+                        width: '100%', height: '100%',
+                        top: '0px', left: '0px',
+                    }}} />
                 </div>
                 <div className='payment-form'>
                     <div className='payment-form-inputs'>

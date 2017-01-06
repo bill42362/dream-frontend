@@ -70,6 +70,7 @@
     "react": "global:React",
     "react-dom": "global:ReactDOM",
     "react-tinymce": "global:TinyMCE",
+    "animate-square": "global:AnimateSquare",
     "mersenne-twister": "global:MersenneTwister"
   }
 }
