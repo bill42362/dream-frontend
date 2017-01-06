@@ -17,5 +17,8 @@ window.ReactDOM = ReactDOM;
 let TinyMCE = require('react-tinymce');
 window.TinyMCE = TinyMCE;
 
+let AnimateSquare = require('animate-square');
+window.AnimateSquare = AnimateSquare;
+
 let MersenneTwister = require('mersenne-twister');
 window.MersenneTwister = MersenneTwister;

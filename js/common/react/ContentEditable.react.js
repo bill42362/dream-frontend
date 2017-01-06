@@ -1,4 +1,5 @@
 // ContentEditable.react.js
+const React = require('react');
 var ContentEditable = React.createClass({
     render: function(){
         return <span

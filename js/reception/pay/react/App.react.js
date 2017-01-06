@@ -4,6 +4,7 @@ import React from 'react';
 import ClassNames from 'classnames';
 import URLSafe from 'urlsafe-base64';
 import Header from '../../../common/react/Header.react.js';
+import ConnectedAnimateSquare from './ConnectedAnimateSquare.react.js';
 import BootstrapInput from '../../../common/react/BootstrapInput.react.js';
 import BootstrapRadios from '../../../common/react/BootstrapRadios.react.js';
 import Footer from '../../../common/react/Footer.react.js';
@@ -162,13 +163,18 @@ class App extends React.Component {
                 </a>
             </div>
             <div className='payment-panel'>
-                <div className='user-image-section'>
-                    <div className='image-input-box'>
+                <div className='user-image-section' style={{position: 'relative'}}>
+                    <div className='image-input-box' style={{zIndex: '1'}}>
                         <img src='/img/mock_user_icon.jpg' />
                         <div className='edit-button' role='button'>
                             <span className='glyphicon glyphicon-camera'></span>
                         </div>
                     </div>
+                    <ConnectedAnimateSquare canvasProps={{style: {
+                        position: 'absolute',
+                        width: '100%', height: '100%',
+                        top: '0px', left: '0px',
+                    }}} />
                 </div>
                 <div className='payment-form'>
                     <div className='payment-form-inputs'>

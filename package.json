@@ -32,6 +32,7 @@
     "urlsafe-base64": "^1.0.0"
   },
   "devDependencies": {
+    "animate-square": "^0.1.0",
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-react": "^6.5.0",
     "babelify": "^7.3.0",
@@ -51,9 +52,11 @@
     "imagemin-pngquant": "^5.0.0",
     "jquery": "^2.2.4",
     "mersenne-twister": "^1.0.1",
-    "react": "^15.1.0",
-    "react-dom": "^15.1.0",
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1",
+    "react-redux": "^5.0.1",
     "react-tinymce": "^0.5.1",
+    "redux": "^3.6.0",
     "request": "^2.79.0",
     "toastr": "^2.1.2",
     "urlsafe-base64": "^1.0.0",
@@ -67,6 +70,7 @@
     "react": "global:React",
     "react-dom": "global:ReactDOM",
     "react-tinymce": "global:TinyMCE",
+    "animate-square": "global:AnimateSquare",
     "mersenne-twister": "global:MersenneTwister"
   }
 }
