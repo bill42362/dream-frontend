@@ -16,16 +16,18 @@ class ProjectCard extends React.Component {
         const imageSize = {width: this.refs.image.width, height: this.refs.image.height};
         const resizeFactor = Math.min(imageSize.width/baseRect.width, imageSize.height/baseRect.height) || 1;
         const newImageStyle = {
-            marginTop: -Math.floor(0.5*imageSize.height/resizeFactor),
-            marginLeft: -Math.floor(0.5*imageSize.width/resizeFactor),
+            marginTop: -0.5*imageSize.height/resizeFactor,
+            marginLeft: -0.5*imageSize.width/resizeFactor,
             width: imageSize.width/resizeFactor,
             height: imageSize.height/resizeFactor,
         };
         let imageStyle = Object.assign({}, state.imageStyle);
-        if(!!newImageStyle.marginTop) { Object.assign(imageStyle, newImageStyle); }
-        if(JSON.stringify(state.imageStyle) !== JSON.stringify(imageStyle)) {
-            this.setState({imageStyle});
-        }
+        if(!!newImageStyle.height) { Object.assign(imageStyle, newImageStyle); }
+        if(
+            (Math.abs(1 - resizeFactor) > 0.01)
+            || (Math.abs(state.marginTop - newImageStyle.marginTop) > 1)
+            || (Math.abs(state.marginLeft - newImageStyle.marginLeft) > 1)
+        ) { this.setState({imageStyle}); }
     }
     onImageLoad() { this.updateImageStyle(); }
     componentDidMount() { this.updateImageStyle(); }
