@@ -1,4 +1,5 @@
 // Header.react.js
+import React from 'react';
 import ClassNames from 'classnames';
 import URLSafe from 'urlsafe-base64';
 import NavbarMenu from './NavbarMenu.react.js';

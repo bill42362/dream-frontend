@@ -1,4 +1,5 @@
 // NavbarMenu.react.js
+import React from 'react';
 import ClassNames from 'classnames';
 
 class NavbarMenu extends React.Component {

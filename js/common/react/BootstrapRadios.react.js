@@ -1,4 +1,5 @@
 // BootstrapRadios.react.js
+import React from 'react';
 var BootstrapRadios = React.createClass({
     statusClassNameDictionary: {
         success: {formGroup: 'has-success'},
