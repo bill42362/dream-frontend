@@ -50,7 +50,10 @@ class Slide extends React.Component {
     render() {
         const {props, state} = this;
         const project = this.props.project;
-        const leftDays = Math.round((project.dueTimestamp - (Date.now()/1000))/8640000)/10;
+        const leftSeconds = project.dueTimestamp - (Date.now()/1000);
+        let leftDays = leftSeconds/86400;
+        if(10 > leftDays) { leftDays = Math.round(10*leftDays)/10; }
+        else { leftDays = Math.round(leftDays); }
         return <div className="project-slide" ref='base' style={{height: '100%'}} >
             <div
                 className='slide-image-container' ref='imageContainer'
@@ -83,7 +86,8 @@ class Slide extends React.Component {
                     <h4>
                         <span className='left-days-label' style={{marginRight: '2em'}}>
                             <i className='fa fa-clock-o' aria-hidden='true'></i>
-                            {` 還剩 ${leftDays} 天`}
+                            {(0 < leftSeconds) && ` 還剩 ${leftDays} 天`}
+                            {(0 >= leftSeconds) && ` 募資結束`}
                         </span>
                         {!!+project.founderCount && <span
                             className='funder-count-label' style={{marginRight: '2em'}}

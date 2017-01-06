@@ -9,12 +9,12 @@ import App from '../react/App.react.js';
 import Core from '../../../common/core/Core.js';
 import Dream from '../../../common/core/Dream.js';
 
-let animateSquaresStore = createStore(Reducer);
+const animateSquaresStore = createStore(Reducer);
 for(let i = 0; i < 30; ++i) {
     animateSquaresStore.dispatch(Actions.addRandomSquare());
 }
 
-var onReactDOMRendered = function() {
+const onReactDOMRendered = function() {
     let goNextStep = () => {
         animateSquaresStore.dispatch(Actions.goNextStep());
         window.requestAnimationFrame(goNextStep);
