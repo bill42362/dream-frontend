@@ -79,12 +79,28 @@ PBPlus.Dream.prototype.postMessage = function(message, errorCallback, successCal
     );
 }
 
+PBPlus.Dream.prototype.postNewsfeed = function(message, projectId, errorCallback, successCallback) {
+    let url = this.apiBase + this.apiStage + 'createNewsfeed';
+    let payload = {
+        token: this.userToken, projectId: projectId,
+        type: 'message', message: message,
+    };
+    Request.post(
+        {url: url, json: payload,},
+        (err, httpResponse, body) => {
+            if(err) { errorCallback && errorCallback(err); }
+            else { successCallback && successCallback(body); }
+        }
+    );
+}
+
 PBPlus.Dream.prototype.createMessage = function(message, projectId, errorCallback, successCallback) {
     let payload = {
         id: projectId,
         message: [{ timestamp: Date.now(), content: message, authorId: this.userSapId, }],
     };
     this.postMessage(payload, errorCallback, successCallback);
+    this.postNewsfeed(message, projectId);
 }
 
 PBPlus.Dream.prototype.replyMessage = function(message, messageUuid, projectId, errorCallback, successCallback) {
@@ -96,6 +112,7 @@ PBPlus.Dream.prototype.replyMessage = function(message, messageUuid, projectId, 
             let payload = this.conformMessage(replyingMessage);
             payload.message.push({timestamp: Date.now(), content: message, authorId: this.userSapId});
             this.postMessage(payload, errorCallback, successCallback);
+            this.postNewsfeed(message, projectId);
         } else {
             errorCallback({status: 500, message: '內部錯誤'});
         }
