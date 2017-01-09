@@ -104,7 +104,7 @@ class App extends React.Component {
         if(sapId) { PBPlusDream.readProfiles([sapId], undefined, this.onReadUserProfilesSuccess); }
         this.setState({userSapId: sapId});
     }
-    onReadUserProfilesSuccess(profiles) {
+    onReadUserProfilesSuccess(profiles = []) {
         let stateUserProfiles = this.state.userProfiles;
         profiles.forEach(profile => { stateUserProfiles[profile.userPK] = profile; });
         this.setState({userProfiles: stateUserProfiles});
