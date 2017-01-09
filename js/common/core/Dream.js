@@ -204,10 +204,11 @@ PBPlus.Dream.prototype.reformMessage = (message) => {
 };
 
 PBPlus.Dream.prototype.getProject = function(projectId, errorCallback, successCallback) {
-	$.ajax({
-        url: this.apiBase + this.apiStage + 'read/' + projectId,
-        type: 'get', dataType: 'json', data: undefined,
-        success: function(response) {
+    let url = this.apiBase + this.apiStage + 'read/' + projectId;
+    Request.get({url: url}, (err, httpResponse, body) => {
+        if(err) { errorCallback && errorCallback(err); }
+        else if(body) {
+            let response = JSON.parse(body);
             if(200 === response.status) {
                 response.message = [this.reformProject(response.message[0])];
                 response.stories = (response.progress || [])
@@ -224,9 +225,8 @@ PBPlus.Dream.prototype.getProject = function(projectId, errorCallback, successCa
                     });
             }
             successCallback(response);
-        }.bind(this),
-        error: errorCallback
-	});
+        }
+    });
 }
 
 PBPlus.Dream.prototype.getUserSapId = function(errorCallback, successCallback) {
