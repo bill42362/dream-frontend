@@ -106,7 +106,7 @@ class App extends React.Component {
             userData.phoneNumber = userData.phoneNumber || userProfile.mobile || '';
             userData.email = userData.email || userProfile.email || '';
             userData.postcode = userData.postcode || userProfile.zipcode || '';
-            userData.address = userData.address || (userProfile.city || '') + userProfile.address || '';
+            userData.address = userData.address || (userProfile.city || '') + (userProfile.address || '') || '';
             this.setState({paymentData: paymentData});
         }
         this.setState({userProfiles: stateUserProfiles});
