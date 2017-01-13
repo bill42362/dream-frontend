@@ -10,6 +10,7 @@ class ProjectHeader extends React.Component {
         this.state = { };
     }
     render() {
+        const { newsfeeds = [], userProfiles = {} } = this.props;
         let banner = {
             type: 'image', title: '新城國小',
             src: "http://dream.pbplus.me/wp-content/uploads/2016/03/DSCN8334.jpg",
@@ -25,14 +26,19 @@ class ProjectHeader extends React.Component {
         let leftDays = (data.dueTimestamp - (Date.now()/1000))/86400;
         if(10 > leftDays) { leftDays = Math.round(10*leftDays)/10; }
         else { leftDays = Math.round(leftDays); }
-        let eventItems = [
-            {imageSrc: '/img/mock_user_icon.jpg', type: 'donation', text: 'AAA 捐了 $1000 給 BBB 計畫', },
-            {imageSrc: '/img/mock_user_icon.jpg', type: 'comment', text: 'CCC 對 DDD 計畫說：加油喔！', },
-            {imageSrc: '/img/mock_user_icon.jpg', type: 'facebook-like', text: 'CCC 對 DDD 計畫按讚', },
-        ];
-        eventItems = eventItems.concat(
-            eventItems, eventItems, eventItems
-        );
+        let eventItems = newsfeeds.map(newsfeed => {
+            let nickname = 'pb+ 會員';
+            let imageSrc = '/img/mock_user_icon.jpg';
+            if(userProfiles[newsfeed.userPK]) {
+                nickname = userProfiles[newsfeed.userPK].nickname || nickname;
+                imageSrc = userProfiles[newsfeed.userPK].src || imageSrc;
+            }
+            return {
+                nickname, imageSrc,
+                type: newsfeed.type,
+                text: newsfeed.message,
+            };
+        });
         return <div className='project-header'>
             <div className='title-section'>
                 <h2 className='project-title'>{data.title}</h2>
@@ -72,7 +78,7 @@ class ProjectHeader extends React.Component {
                             <div className='recent-events'>
                                 {eventItems.map((item, index) =>
                                     <div className='event-item' key={index}>
-                                       <img className='event-item-image' src={item.imageSrc} />
+                                       <img className='event-item-image' src={item.imageSrc} title={item.nickname}/>
                                        <span className='event-item-text'>{item.text}</span>
                                     </div>
                                 )}

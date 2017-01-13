@@ -15,7 +15,7 @@ class App extends React.Component {
         super(props);
         this.staticStrings = { };
         this.state = {
-            project: {}, stories: [], items: [], timelineItems: [], comments: [],
+            project: {}, stories: [], items: [], timelineItems: [], comments: [], newsfeeds: [],
             message: '', replyMessage: '', replyMessageIndex: -1,
             userSapId: '', userProfiles: {}, pictures: {}, isTabbarAboveScreen: false,
         };
@@ -29,6 +29,7 @@ class App extends React.Component {
         this.onPostMessageSuccess = this.onPostMessageSuccess.bind(this);
         this.onGetUserSapIdSuccess = this.onGetUserSapIdSuccess.bind(this);
         this.onReadUserProfilesSuccess = this.onReadUserProfilesSuccess.bind(this);
+        this.onReadNewsfeedSuccess = this.onReadNewsfeedSuccess.bind(this);
         if(window.PBPlusDream) {
             let projectId = PBPlusDream.getProjectIdFromUrl();
             PBPlusDream.getProject(projectId, this.onAjaxError, this.onGetProjectSuccess);
@@ -38,6 +39,7 @@ class App extends React.Component {
             } else {
                 PBPlusDream.readProfiles([PBPlusDream.userSapId], undefined, this.onReadUserProfilesSuccess);
             }
+            PBPlusDream.readNewsfeed(projectId, undefined, this.onReadNewsfeedSuccess);
         }
     }
     isAboveScreenTop(element, offset) {
@@ -103,6 +105,22 @@ class App extends React.Component {
     onGetUserSapIdSuccess(sapId) {
         if(sapId) { PBPlusDream.readProfiles([sapId], undefined, this.onReadUserProfilesSuccess); }
         this.setState({userSapId: sapId});
+    }
+    onReadNewsfeedSuccess(newsfeeds = []) {
+        const userProfiles = this.state.userProfiles;
+        const oldNewsfeeds = this.state.newsfeeds;
+        oldNewsfeeds.forEach(oldNewsfeed => {
+            const existedNewsFeed = newsfeeds.filter(newsfeed => { return oldNewsfeeds.id === newsfeeds.id; })[0];
+            if(!existedNewsFeed) { newsfeeds.push(oldNewsfeed); }
+        });
+        const noProfileNewsfeeds = newsfeeds.filter(newsfeed => {
+            return !userProfiles[newsfeed.userPK];
+        });
+        if(0 < noProfileNewsfeeds.length) {
+            let userPKs = noProfileNewsfeeds.map(noProfileNewsfeed => { return noProfileNewsfeed.userPK; });
+            PBPlusDream.readProfiles(userPKs, undefined, this.onReadUserProfilesSuccess);
+        }
+        this.setState({newsfeeds});
     }
     onReadUserProfilesSuccess(profiles = []) {
         let stateUserProfiles = this.state.userProfiles;
@@ -182,7 +200,8 @@ class App extends React.Component {
         return <div id='wrapper'>
             <Header fixed={false} />
             <ProjectHeader
-                project={this.state.project} banner={this.state.pictures[this.state.project.bannerId]}
+                project={state.project} banner={state.pictures[state.project.bannerId]}
+                newsfeeds={state.newsfeeds} userProfiles={state.userProfiles}
             />
             <div
                 ref='projectTabbarContainerAnchor'
