@@ -1,0 +1,36 @@
+.transparent(@ratio) {
+    zoom: 1;
+    -ms-filter: e("progid:DXImageTransform.Microsoft.Alpha(Opacity=")(100*@ratio)e(");");
+    filter: e("alpha(opacity=")(100*@ratio)e(");");
+    -moz-opacity: @ratio;
+    -khtml-opacity: @ratio;
+    opacity: @ratio;
+}
+.keyframes (@name, @rules) {
+    @-webkit-keyframes ~'@{name}' { @rules(); }
+    @-moz-keyframes ~'@{name}' { @rules(); }
+    @-ms-keyframes ~'@{name}' { @rules(); }
+    @-o-keyframes ~'@{name}' { @rules(); }
+    @keyframes ~'@{name}' { @rules(); }
+}
+.keyframes(fadein, {
+    0% { .transparent(0); }
+    100% { .transparent(1); }
+});
+.keyframes(fadeout, {
+    0% { .transparent(1); }
+    100% { .transparent(0); }
+});
+.animation(@name, @duration: 3s, @delay: 0s, @ease: ease-out, @fillMode: forwards) {
+    -webkit-animation: @name @duration @ease @delay 1 normal @fillMode;
+    -moz-animation:    @name @duration @ease @delay 1 normal @fillMode;
+    -ms-animation:     @name @duration @ease @delay 1 normal @fillMode;
+    -o-animation:     @name @duration @ease @delay 1 normal @fillMode;
+    animation:     @name @duration @ease @delay 1 normal @fillMode;
+}
+.transition(@property, @time, @function) {
+    transition: @property @time @function;
+    -webkit-transition: @property @time @function;
+    -moz-transition: @property @time @function;
+    -o-transition: @property @time @function;
+}
