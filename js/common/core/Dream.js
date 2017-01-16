@@ -94,6 +94,25 @@ PBPlus.Dream.prototype.postNewsfeed = function(message, projectId, errorCallback
     );
 }
 
+PBPlus.Dream.prototype.readNewsfeed = function(projectId, errorCallback, successCallback) {
+    let url = this.apiBase + this.apiStage + 'readNewsfeed';
+    if(projectId) { url += `/${projectId}`; }
+    Request.get(
+        {url: url, json: undefined,},
+        (err, httpResponse, body) => {
+            if(err) { errorCallback && errorCallback(err); }
+            else {
+                let response = JSON.parse(body);
+                if(200 === response.status) {
+                    successCallback && successCallback(response.message);
+                } else {
+                    errorCallback && errorCallback({status: 500, message: 'Server error.'});
+                }
+            }
+        }
+    );
+}
+
 PBPlus.Dream.prototype.createMessage = function(message, projectId, errorCallback, successCallback) {
     let payload = {
         id: projectId,

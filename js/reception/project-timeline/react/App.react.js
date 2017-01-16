@@ -13,14 +13,17 @@ class App extends React.Component {
         super(props);
         this.staticStrings = { };
         this.state = {
-            project: {}, stories: [], items: [], timelineItems: [], comments: [],
-            pictures: {}, isTabbarAboveScreen: false
+            project: {}, stories: [], items: [], timelineItems: [], comments: [], newsfeeds: [],
+            pictures: {}, userProfiles: {}, isTabbarAboveScreen: false
         };
         this.onWindowScroll = this.onWindowScroll.bind(this);
         this.onGetProjectSuccess = this.onGetProjectSuccess.bind(this);
+        this.onReadUserProfilesSuccess = this.onReadUserProfilesSuccess.bind(this);
+        this.onReadNewsfeedSuccess = this.onReadNewsfeedSuccess.bind(this);
         if(window.PBPlusDream) {
             let projectId = PBPlusDream.getProjectIdFromUrl();
             PBPlusDream.getProject(projectId, this.onAjaxError, this.onGetProjectSuccess);
+            PBPlusDream.readNewsfeed(projectId, undefined, this.onReadNewsfeedSuccess);
         }
     }
     isAboveScreenTop(element, offset) {
@@ -55,6 +58,27 @@ class App extends React.Component {
         } else {
             this.onAjaxError(response);
         }
+    }
+    onReadNewsfeedSuccess(newsfeeds = []) {
+        const userProfiles = this.state.userProfiles;
+        const oldNewsfeeds = this.state.newsfeeds;
+        oldNewsfeeds.forEach(oldNewsfeed => {
+            const existedNewsFeed = newsfeeds.filter(newsfeed => { return oldNewsfeeds.id === newsfeeds.id; })[0];
+            if(!existedNewsFeed) { newsfeeds.push(oldNewsfeed); }
+        });
+        const noProfileNewsfeeds = newsfeeds.filter(newsfeed => {
+            return !userProfiles[newsfeed.userPK];
+        });
+        if(0 < noProfileNewsfeeds.length) {
+            let userPKs = noProfileNewsfeeds.map(noProfileNewsfeed => { return noProfileNewsfeed.userPK; });
+            PBPlusDream.readProfiles(userPKs, undefined, this.onReadUserProfilesSuccess);
+        }
+        this.setState({newsfeeds});
+    }
+    onReadUserProfilesSuccess(profiles = []) {
+        let stateUserProfiles = this.state.userProfiles;
+        profiles.forEach(profile => { stateUserProfiles[profile.userPK] = profile; });
+        this.setState({userProfiles: stateUserProfiles});
     }
     onAjaxError(xhr) {
         let networkError = '網路錯誤，請檢查您的網路，或稍候再試一次。<br />'
@@ -97,7 +121,8 @@ class App extends React.Component {
         return <div id='wrapper'>
             <Header fixed={false} />
             <ProjectHeader
-                project={this.state.project} banner={this.state.pictures[this.state.project.bannerId]}
+                project={state.project} banner={state.pictures[state.project.bannerId]}
+                newsfeeds={state.newsfeeds} userProfiles={state.userProfiles}
             />
             <div
                 ref='projectTabbarContainerAnchor'
