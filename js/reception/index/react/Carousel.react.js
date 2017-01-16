@@ -25,8 +25,10 @@ class Carousel extends React.Component {
         return <div id="carousel">
             {carouselItems.map((item, index) =>
                 <div className='carousel-item' key={index}>
-                   <img className='carousel-item-image' src={item.imageSrc} />
-                   <span className='carousel-item-text'>{item.text}</span>
+                    <div className='carousel-item-image-wrapper'>
+                        <img className='carousel-item-image' src={item.imageSrc} />
+                    </div>
+                    <div className='carousel-item-text'>{`${item.text} &nbsp;`}</div>
                 </div>
             )}
         </div>;

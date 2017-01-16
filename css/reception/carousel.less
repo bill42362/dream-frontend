@@ -1,34 +1,37 @@
 @themeBackground: rgb(250, 130, 160);
 @themeForeground: rgb(190, 136, 247);
 .carousel() {
-    position: relative;
-    height: 4.5em;
-    white-space: nowrap;
-    overflow: hidden;
+    display: flex;
+    height: 4.6em;
     div.carousel-item {
-        position: relative;
-        display: inline-block;
-        border-radius: 1.7em;
-        margin: 0.5em 0em 0.5em 1em;
-        padding: 0.3em;
-        height: 3.6em;
+        flex: none;
+        display: flex;
+        border-radius: 1.8em;
+        padding: 0.3em 0.5em 0.3em 0.3em;
+        margin: 0.5em;
         max-width: 3.6em;
-        white-space: nowrap;
-        transition: all .5s ease;
-        overflow: hidden;
-        img.carousel-item-image {
+        transition: background-color .5s ease, max-width .5s ease;
+        div.carousel-item-image-wrapper {
+            position: relative;
+            flex: 0 0 3em;
             border-radius: 1.5em;
             margin-right: 0.5em;
-            width: 3em; height: 3em;
+            overflow: hidden;
+            background-color: skyblue;
+            img.carousel-item-image {
+                position: absolute;
+                height: 100%; width: auto;
+            }
         }
-        span.carousel-item-text {
-            display: inline-block;
+        div.carousel-item-text {
+            flex: 1;
             color: white;
+            line-height: 3em;
+            overflow: hidden;
         }
         &:hover {
             background-color: darken(@themeBackground, 10%);
-            padding-right: 1em;
-            max-width: 20em;
+            max-width: 30em;
         }
     }
 }
