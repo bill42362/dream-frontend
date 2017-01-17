@@ -2,7 +2,7 @@
 'use strict'
 import { createStore, applyMiddleware } from 'redux';
 import ReduxThunk from 'redux-thunk';
-import { connect, Provider } from 'react-redux';
+import { Provider } from 'react-redux';
 import ReactDOM from 'react-dom';
 import App from '../react/App.react.js';
 import Core from '../../../common/core/Core.js';

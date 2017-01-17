@@ -11,7 +11,7 @@ class Footer extends React.Component {
     render() {
         const { links } = this.props;
         let state = this.state;
-        const siteMap = links;
+        const siteMap = links || [];
         return <footer id='footer'>
             <div id='footer-content' >
                 <div className='site-map row'>

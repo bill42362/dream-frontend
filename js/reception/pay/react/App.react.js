@@ -1,5 +1,6 @@
 // App.react.js
 'use strict'
+import { connect } from 'react-redux';
 import React from 'react';
 import ClassNames from 'classnames';
 import URLSafe from 'urlsafe-base64';
@@ -8,6 +9,8 @@ import ConnectedAnimateSquare from './ConnectedAnimateSquare.react.js';
 import BootstrapInput from '../../../common/react/BootstrapInput.react.js';
 import BootstrapRadios from '../../../common/react/BootstrapRadios.react.js';
 import Footer from '../../../common/react/Footer.react.js';
+
+const ConnectedFooter = connect(state => { return {links: state.siteMap}; })(Footer);
 
 class App extends React.Component {
     constructor(props) {
@@ -279,7 +282,7 @@ class App extends React.Component {
                 </div>
                 <div className='paper-shadow'></div>
             </div>
-            <Footer />
+            <ConnectedFooter />
         </div>;
     }
 }
