@@ -9,37 +9,9 @@ class Footer extends React.Component {
         this.state = { };
     }
     render() {
+        const { links } = this.props;
         let state = this.state;
-        let siteMap = [
-            {title: '關羽你的歌', items: [
-                {display: '關於我們', href: 'http://pcgbros.com/'},
-                {display: '關於我們', href: 'http://pcgbros.com/'},
-                {display: '關於我們', href: 'http://pcgbros.com/'},
-                {display: '關於我們', href: 'http://pcgbros.com/'},
-            ]},
-            {title: '上杉踩稻姬', items: [
-                {display: '關於我們', href: 'http://pcgbros.com/'},
-                {display: '關於我們', href: 'http://pcgbros.com/'},
-                {display: '關於我們', href: 'http://pcgbros.com/'},
-                {display: '關於我們', href: 'http://pcgbros.com/'},
-                {display: '關於我們', href: 'http://pcgbros.com/'},
-                {display: '關於我們', href: 'http://pcgbros.com/'},
-                {display: '關於我們', href: 'http://pcgbros.com/'},
-                {display: '關於我們', href: 'http://pcgbros.com/'},
-            ]},
-            {title: '明智脫光秀', items: [
-                {display: '關於我們', href: 'http://pcgbros.com/'},
-                {display: '關於我們', href: 'http://pcgbros.com/'},
-                {display: '關於我們', href: 'http://pcgbros.com/'},
-                {display: '關於我們', href: 'http://pcgbros.com/'},
-            ]},
-            {title: '郭嘉地理頻道', items: [
-                {display: '關於我們', href: 'http://pcgbros.com/'},
-                {display: '關於我們', href: 'http://pcgbros.com/'},
-                {display: '關於我們', href: 'http://pcgbros.com/'},
-                {display: '關於我們', href: 'http://pcgbros.com/'},
-            ]},
-        ];
+        const siteMap = links;
         return <footer id='footer'>
             <div id='footer-content' >
                 <div className='site-map row'>
