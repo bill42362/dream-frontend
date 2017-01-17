@@ -9,8 +9,8 @@ import Core from '../../../common/core/Core.js';
 import Dream from '../../../common/core/Dream.js';
 import Sitemap from '../../../common/core/Sitemap.js';
 
-const footerLinksStore = createStore(Sitemap.Reducer, applyMiddleware(ReduxThunk));
-footerLinksStore.dispatch(Sitemap.Actions.updateLinks());
+const sitemapStore = createStore(Sitemap.Reducer, applyMiddleware(ReduxThunk));
+sitemapStore.dispatch(Sitemap.Actions.updateLinks());
 
 var onReactDOMRendered = function() {
 }
@@ -19,7 +19,7 @@ var onReadyStateChange = function() {
     if(document.readyState == 'complete') {
         window.PBPlusDream = new Dream();
         ReactDOM.render(
-            <Provider store={footerLinksStore} >
+            <Provider store={sitemapStore} >
                 <App />
             </Provider>,
             document.getElementById('app-root'),

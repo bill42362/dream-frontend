@@ -7,7 +7,7 @@ import ProjectHeader from '../../../common/react/ProjectHeader.react.js';
 import ProjectTabbar from '../../../common/react/ProjectTabbar.react.js';
 import ProjectStory from './ProjectStory.react.js';
 import ProjectItem from '../../../common/react/ProjectItem.react.js';
-import Footer from '../../../common/react/Footer.react.js';
+import ConnectedFooter from '../../../common/react/ConnectedFooter.react.js';
 
 class App extends React.Component {
     constructor(props) {
@@ -153,7 +153,7 @@ class App extends React.Component {
                     </div>
                 </div>
             </div>
-            <Footer />
+            <ConnectedFooter />
         </div>;
     }
 }

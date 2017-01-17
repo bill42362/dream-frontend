@@ -6,7 +6,7 @@ import Header from '../../../common/react/Header.react.js';
 import ProjectHeader from '../../../common/react/ProjectHeader.react.js';
 import ProjectTabbar from '../../../common/react/ProjectTabbar.react.js';
 import ProjectTimeline from './ProjectTimeline.react.js';
-import Footer from '../../../common/react/Footer.react.js';
+import ConnectedFooter from '../../../common/react/ConnectedFooter.react.js';
 
 class App extends React.Component {
     constructor(props) {
@@ -144,7 +144,7 @@ class App extends React.Component {
                     />
                 </div>
             </div>
-            <Footer />
+            <ConnectedFooter />
         </div>;
     }
 }
