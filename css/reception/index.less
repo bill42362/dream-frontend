@@ -186,7 +186,11 @@ body {
                 &.previous { .animation(fadeout, .5s); }
             }
         }
-        & > div#carousel { .carousel(); }
+        & > div#carousel {
+            margin-top: 0.5em;
+            margin-left: 0.5em;
+            .carousel();
+        }
         & > div.project-cards {
             margin-right: 0;
             padding: 15px 15px 15px 30px;

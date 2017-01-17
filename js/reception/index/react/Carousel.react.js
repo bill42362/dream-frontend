@@ -28,7 +28,7 @@ class Carousel extends React.Component {
                     <div className='carousel-item-image-wrapper'>
                         <img className='carousel-item-image' src={item.imageSrc} />
                     </div>
-                    <div className='carousel-item-text'>{`${item.text} &nbsp;`}</div>
+                    <div className='carousel-item-text'>{`${item.text} ..................`}</div>
                 </div>
             )}
         </div>;

@@ -1,20 +1,19 @@
 @themeBackground: rgb(250, 130, 160);
 @themeForeground: rgb(190, 136, 247);
-.carousel() {
+.carousel(@height: 4em) {
     display: flex;
-    height: 4.6em;
+    height: @height;
     div.carousel-item {
         flex: none;
         display: flex;
-        border-radius: 1.8em;
-        padding: 0.3em 0.5em 0.3em 0.3em;
-        margin: 0.5em;
-        max-width: 3.6em;
+        border-radius: 0.5*@height;
+        margin-right: 0.8em;
+        max-width: @height;
         transition: background-color .5s ease, max-width .5s ease;
         div.carousel-item-image-wrapper {
             position: relative;
-            flex: 0 0 3em;
-            border-radius: 1.5em;
+            flex: 0 0 @height;
+            border-radius: 0.5*@height;
             margin-right: 0.5em;
             overflow: hidden;
             background-color: skyblue;
@@ -26,12 +25,13 @@
         div.carousel-item-text {
             flex: 1;
             color: white;
-            line-height: 3em;
+            line-height: @height;
+            word-break: break-all;
             overflow: hidden;
         }
         &:hover {
             background-color: darken(@themeBackground, 10%);
-            max-width: 30em;
+            max-width: 20*@height;
         }
     }
 }

@@ -77,9 +77,11 @@ class ProjectHeader extends React.Component {
                             </div>
                             <div className='recent-events'>
                                 {eventItems.map((item, index) =>
-                                    <div className='event-item' key={index}>
-                                       <img className='event-item-image' src={item.imageSrc} title={item.nickname}/>
-                                       <span className='event-item-text'>{item.text}</span>
+                                    <div className='carousel-item' key={index}>
+                                        <div className='carousel-item-image-wrapper'>
+                                            <img className='carousel-item-image' src={item.imageSrc} title={item.nickname}/>
+                                        </div>
+                                        <div className='carousel-item-text'>{`${item.text} ...............`}</div>
                                     </div>
                                 )}
                             </div>
