@@ -210,7 +210,7 @@ PBPlus.Dream.prototype.reformOption = (option) => {
         price: option.amount,
         sponsorCount: option.num,
         paymentMethods: option.payment.split(','),
-        creditcardPaymentExpireSeconds: option.credit_expire,
+        creditcardPaymentExpireMinutes: option.credit_expire,
         limitedTimestamp: option.timestamp,
         limitedQuantity: option.sets,
         labels: JSON.parse(option.label),

@@ -10,6 +10,7 @@ import ConnectedAnimateSquare from './ConnectedAnimateSquare.react.js';
 import BootstrapInput from '../../../common/react/BootstrapInput.react.js';
 import BootstrapRadios from '../../../common/react/BootstrapRadios.react.js';
 import Footer from '../../../common/react/Footer.react.js';
+import AllpayFullscreenWrapper from './AllpayFullscreenWrapper.react.js';
 
 const ConnectedFooter = connect(state => { return {links: state.siteMap}; })(Footer);
 
@@ -70,45 +71,41 @@ class App extends React.Component {
         }
     }
     closeAllpayIframe() {
-        const { tradeNumber, formDiv, allpayFullscreenWrapper } = this.state;
+        const { tradeNumber, formDiv, allpayFullscreenWrapperDock } = this.state;
         let body = document.getElementById('body');
         body.removeChild(formDiv);
-        body.removeChild(allpayFullscreenWrapper);
+        body.removeChild(allpayFullscreenWrapperDock);
         PBPlusDream.cancelOrder(tradeNumber);
         this.setState({
             tradeNumber: undefined,
-            formDiv: undefined, allpayFullscreenWrapper: undefined,
+            formDiv: undefined, allpayFullscreenWrapperDock: undefined,
         });
     }
     onCreatePaymentSuccess({html, tradeNumber}) {
+        const state = this.state;
+        const item = state.items.filter(item => { return '' + item.id === state.itemId; })[0];
+
         let body = document.getElementById('body');
 
         let formDiv = document.createElement('div');
         formDiv.innerHTML = html;
         body.appendChild(formDiv);
 
-        let allpayFullscreenWrapper = document.createElement('div');
-        allpayFullscreenWrapper.className = 'allpay-fullscreen-wrapper';
-        body.appendChild(allpayFullscreenWrapper);
+        let allpayFullscreenWrapperDock = document.createElement('div');
+        body.appendChild(allpayFullscreenWrapperDock);
 
         ReactDOM.render(
-            <div>
-                <div className='allpay-iframe-container'>
-                    <iframe className='allpay-iframe' name='allpay_iframe'/>
-                </div>
-                <div
-                    className='allpay-cancel-button' role='button' onClick={this.closeAllpayIframe}
-                >取 消</div>
-            </div>,
-            allpayFullscreenWrapper,
+            <AllpayFullscreenWrapper
+                expireTimestamp={Date.now() + item.creditcardPaymentExpireMinutes*60*1000}
+                closeAllpayIframe={this.closeAllpayIframe}
+            />,
+            allpayFullscreenWrapperDock,
             () => {
                 document.getElementById('_allpayForm').submit();
-                const state = this.state;
-                const item = state.items.filter(item => { return '' + item.id === state.itemId; })[0];
-                window.setTimeout(this.closeAllpayIframe, item.creditcardPaymentExpireSeconds*1000);
+                window.setTimeout(this.closeAllpayIframe, item.creditcardPaymentExpireMinutes*60*1000);
             }
         );
-        this.setState({ tradeNumber, formDiv, allpayFullscreenWrapper });
+        this.setState({ tradeNumber, formDiv, allpayFullscreenWrapperDock });
     }
     onGetProjectSuccess(response) {
         if(200 === response.status) {
