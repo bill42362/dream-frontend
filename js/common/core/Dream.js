@@ -43,9 +43,25 @@ PBPlus.Dream.prototype.createPayment = function(projectId, itemId, paymentData, 
         (err, httpResponse, body) => {
             if(err) { errorCallback && errorCallback(err); }
             else if(200 === body.status) {
-                successCallback && successCallback(body.message);
+                successCallback && successCallback({
+                    tradeNumber: body.tradeNo, html: body.message,
+                });
             } else if(401 === body.status && 'status:fail, Sold Out.' === body.message) {
                 errorCallback && errorCallback({status: 401, message: '已售完'});
+            } else { errorCallback && errorCallback({status: 500, message: 'Not Found.'}); }
+        }
+    );
+}
+
+PBPlus.Dream.prototype.cancelOrder = function(tradeNumber, errorCallback, successCallback) {
+    let url = this.apiBase + this.apiStage + 'cancelOrder/' + tradeNumber;
+    let payload = { token: this.userToken };
+    Request.put(
+        {url: url, json: payload,},
+        (err, httpResponse, body) => {
+            if(err) { errorCallback && errorCallback(err); }
+            else if(200 === body.status) {
+                successCallback && successCallback(body);
             } else { errorCallback && errorCallback({status: 500, message: 'Not Found.'}); }
         }
     );
@@ -194,6 +210,7 @@ PBPlus.Dream.prototype.reformOption = (option) => {
         price: option.amount,
         sponsorCount: option.num,
         paymentMethods: option.payment.split(','),
+        creditcardPaymentExpireSeconds: option.credit_expire,
         limitedTimestamp: option.timestamp,
         limitedQuantity: option.sets,
         labels: JSON.parse(option.label),

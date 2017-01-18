@@ -2,6 +2,7 @@
 'use strict'
 import { connect } from 'react-redux';
 import React from 'react';
+import ReactDOM from 'react-dom';
 import ClassNames from 'classnames';
 import URLSafe from 'urlsafe-base64';
 import Header from '../../../common/react/Header.react.js';
@@ -18,7 +19,7 @@ class App extends React.Component {
         this.staticStrings = { };
         this.state = {
             project: {}, items: [], userSapId: '', userProfiles: {},
-            itemId: Core.getUrlSearches().id,
+            itemId: Core.getUrlSearches().id, tradeNumber: undefined,
             paymentData: {
                 paymentMethod: '',
                 userData: { name: '', phoneNumber: '', email: '', postcode: '', address: '', },
@@ -27,9 +28,11 @@ class App extends React.Component {
             },
         };
         this.submit = this.submit.bind(this);
+        this.closeAllpayIframe = this.closeAllpayIframe.bind(this);
         this.onGetProjectSuccess = this.onGetProjectSuccess.bind(this);
         this.onGetUserSapIdSuccess = this.onGetUserSapIdSuccess.bind(this);
         this.onReadUserProfilesSuccess = this.onReadUserProfilesSuccess.bind(this);
+        this.onCreatePaymentSuccess = this.onCreatePaymentSuccess.bind(this);
         this.onChange = this.onChange.bind(this);
         if(window.PBPlusDream) {
             let projectId = PBPlusDream.getProjectIdFromUrl();
@@ -45,30 +48,55 @@ class App extends React.Component {
     cancel() { history.back(); }
     submit() {
         const state = this.state;
-        if(window.PBPlusDream && state.project.id && state.userSapId) {
+        if(window.PBPlusDream && state.project.id && state.userSapId && !state.tradeNumber) {
             PBPlusDream.createPayment(
                 state.project.id, state.itemId, state.paymentData,
-                this.onAjaxError, this.onCreatePaymentSuccess
+                (error) => { this.setState({tradeNumber: undefined}); this.onAjaxError(error); },
+                this.onCreatePaymentSuccess
             );
+            this.setState({tradeNumber: 'lock_submit_button'});
         }
     }
-    onCreatePaymentSuccess(html) {
+    closeAllpayIframe() {
+        const { tradeNumber, formDiv, allpayFullscreenWrapper } = this.state;
+        let body = document.getElementById('body');
+        body.removeChild(formDiv);
+        body.removeChild(allpayFullscreenWrapper);
+        PBPlusDream.cancelOrder(tradeNumber);
+        this.setState({
+            tradeNumber: undefined,
+            formDiv: undefined, allpayFullscreenWrapper: undefined,
+        });
+    }
+    onCreatePaymentSuccess({html, tradeNumber}) {
         let body = document.getElementById('body');
 
         let formDiv = document.createElement('div');
         formDiv.innerHTML = html;
         body.appendChild(formDiv);
 
-        let allpayIframeContainer = document.createElement('div');
-        allpayIframeContainer.className = 'allpay-iframe-container';
-        body.appendChild(allpayIframeContainer);
+        let allpayFullscreenWrapper = document.createElement('div');
+        allpayFullscreenWrapper.className = 'allpay-fullscreen-wrapper';
+        body.appendChild(allpayFullscreenWrapper);
 
-        let allpayIframe = document.createElement('iframe');
-        allpayIframe.className = 'allpay-iframe';
-        allpayIframe.name = 'allpay_iframe';
-        allpayIframeContainer.appendChild(allpayIframe);
-
-        document.getElementById('_allpayForm').submit();
+        ReactDOM.render(
+            <div>
+                <div className='allpay-iframe-container'>
+                    <iframe className='allpay-iframe' name='allpay_iframe'/>
+                </div>
+                <div
+                    className='allpay-cancel-button' role='button' onClick={this.closeAllpayIframe}
+                >取 消</div>
+            </div>,
+            allpayFullscreenWrapper,
+            () => {
+                document.getElementById('_allpayForm').submit();
+                const state = this.state;
+                const item = state.items.filter(item => { return '' + item.id === state.itemId; })[0];
+                window.setTimeout(this.closeAllpayIframe, item.creditcardPaymentExpireSeconds*1000);
+            }
+        );
+        this.setState({ tradeNumber, formDiv, allpayFullscreenWrapper });
     }
     onGetProjectSuccess(response) {
         if(200 === response.status) {

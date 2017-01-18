@@ -254,18 +254,37 @@ body {
             }
         }
     }
-    div.allpay-iframe-container {
+    div.allpay-fullscreen-wrapper {
         position: fixed;
-        border: 1px solid @themeBackground;
-        border-radius: 5px;
-        top: 10%; left: 10%;
-        width: 80%; height: 80%;
-        background-color: @themeForeground;
+        background-color: rgb(111, 51, 129);
+        width: 100%; height: 100%;
+        top: 0;
         z-index: 56;
-        overflow: hidden;
-        iframe.allpay-iframe {
-            border: 0;
-            width: 100%; height: 100%;
+        div.allpay-iframe-container {
+            position: absolute;
+            border: 0px solid darkgrey;
+            border-radius: 5px;
+            top: 2em; right: 5%; bottom: 6em; left: 5%;
+            background-color: @themeForeground;
+            overflow: hidden;
+            iframe.allpay-iframe {
+                border: 0;
+                width: 100%; height: 100%;
+            }
+        }
+        div.allpay-cancel-button {
+            position: absolute;
+            border-radius: 5px;
+            right: 5%; bottom: 2em; left: 5%;
+            height: 3em;
+            color: white;
+            text-align: center;
+            line-height: 3em;
+            background-color: tomato;
+            &:hover {
+                cursor: pointer;
+                background-color: firebrick;
+            }
         }
     }
 }
