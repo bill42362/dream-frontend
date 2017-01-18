@@ -46,8 +46,20 @@ class App extends React.Component {
         }
     }
     cancel() { history.back(); }
+    isFormComplete() {
+        const { paymentData } = this.state;
+        const { userData, receipt } = paymentData;
+        let result = false;
+        result = (
+            userData.name && userData.phoneNumber && userData.email && userData.postcode && userData.address
+        ) && (
+            'two' === receipt.type || ('three' === receipt.type && receipt.number && receipt.title)
+        );
+        return result;
+    }
     submit() {
         const state = this.state;
+        if(!this.isFormComplete()) { Toastr.warning('請先填完 * 標記之選項。'); return; }
         if(window.PBPlusDream && state.project.id && state.userSapId && !state.tradeNumber) {
             PBPlusDream.createPayment(
                 state.project.id, state.itemId, state.paymentData,
@@ -237,7 +249,7 @@ class App extends React.Component {
                         <div className='row'>
                             <BootstrapInput
                                 ref='name' gridWidth={'12'}
-                                label={'姓名'} title={'姓名'} autoFocus={true}
+                                label={'姓名*'} title={'姓名'} autoFocus={true}
                                 value={userData.name} onChange={this.onChange}
                             />
                         </div>
@@ -251,26 +263,26 @@ class App extends React.Component {
                         <div className='row'>
                             <BootstrapInput
                                 ref='email' gridWidth={'12'} type={'email'}
-                                label={'電子郵件'} title={'電子郵件'}
+                                label={'電子郵件*'} title={'電子郵件'}
                                 value={userData.email} onChange={this.onChange}
                             />
                         </div>
                         <div className='row'>
                             <BootstrapInput
                                 ref='postcode' gridWidth={'3'} type={'number'}
-                                label={'郵遞區號'} title={'郵遞區號'}
+                                label={'郵遞區號*'} title={'郵遞區號'}
                                 value={userData.postcode} onChange={this.onChange}
                             />
                             <BootstrapInput
-                                ref='address' gridWidth={'9'} label={'地址'} title={'地址'}
+                                ref='address' gridWidth={'9'} label={'地址*'} title={'地址'}
                                 value={userData.address} onChange={this.onChange}
                             />
                         </div>
                         <div className='row'>
                             <BootstrapRadios
-                                ref='receiptType' gridWidth={'12'} label={'發票種類'}
+                                ref='receiptType' gridWidth={'12'} label={'發票種類*'}
                                 options={[
-                                    {key: 'two', display: '二聯式發票'},
+                                    {key: 'two', display: '電子發票'},
                                     {key: 'three', display: '三聯式發票'}
                                 ]}
                                 value={receipt.type} onChange={this.onChange}
@@ -279,12 +291,12 @@ class App extends React.Component {
                         {'three' === receipt.type && <div className='row'>
                             <BootstrapInput
                                 ref='receiptNumber' gridWidth={'4'}
-                                label={'統一編號'} title={'統一編號'}
+                                label={'統一編號*'} title={'統一編號'}
                                 value={receipt.number} onChange={this.onChange}
                             />
                             <BootstrapInput
                                 ref='receiptTitle' gridWidth={'8'}
-                                label={'公司名稱'} title={'公司名稱'}
+                                label={'公司名稱*'} title={'公司名稱'}
                                 value={receipt.title} onChange={this.onChange}
                             />
                         </div>}
@@ -300,6 +312,10 @@ class App extends React.Component {
                     <div className='payment-form-buttons row'>
                         <div
                             className='payment-form-button primary col-md-4 col-md-offset-1'
+                            className={ClassNames(
+                                'payment-form-button col-md-4 col-md-offset-1',
+                                {'primary': this.isFormComplete()}
+                            )}
                             role='button' onClick={this.submit}
                         >前往付款</div>
                         <div
