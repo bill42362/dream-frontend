@@ -67,7 +67,7 @@ class Header extends React.Component {
                     </a>
                 </div>
                 <div id="navbar-buttons">
-                    <div className='navbar-search-container'>
+                    <div className='navbar-search-container' style={{visibility: 'hidden'}}>
                         <div className={ClassNames('navbar-search', {'editing': this.state.isEditingSearchText})}>
                             <span
                                 className="navbar-icon glyphicon glyphicon-search" aria-label="search"

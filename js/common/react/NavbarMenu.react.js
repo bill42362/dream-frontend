@@ -13,7 +13,7 @@ class NavbarMenu extends React.Component {
         let currentItem = items.filter(function(item) {
             return item.key === currentItemKey;
         })[0] || {key: 'home', display: 'Home'};
-        return <div id="navbar-menu">
+        return <div id="navbar-menu" style={{visibility: 'hidden'}}>
             <span className="menu-icon glyphicon glyphicon-list" aria-hidden="true"></span>
             <span className="menu-display" role='button'>{currentItem.display}</span>
         </div>;
