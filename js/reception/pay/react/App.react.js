@@ -35,6 +35,7 @@ class App extends React.Component {
         this.onReadUserProfilesSuccess = this.onReadUserProfilesSuccess.bind(this);
         this.onCreatePaymentSuccess = this.onCreatePaymentSuccess.bind(this);
         this.onChange = this.onChange.bind(this);
+        this.onWindowUnload = this.onWindowUnload.bind(this);
         if(window.PBPlusDream) {
             let projectId = PBPlusDream.getProjectIdFromUrl();
             PBPlusDream.getProject(projectId, this.onAjaxError, this.onGetProjectSuccess);
@@ -75,7 +76,7 @@ class App extends React.Component {
         let body = document.getElementById('body');
         body.removeChild(formDiv);
         body.removeChild(allpayFullscreenWrapperDock);
-        PBPlusDream.cancelOrder(tradeNumber);
+        window.PBPlusDream && PBPlusDream.cancelOrder(tradeNumber);
         this.setState({
             tradeNumber: undefined,
             formDiv: undefined, allpayFullscreenWrapperDock: undefined,
@@ -180,8 +181,15 @@ class App extends React.Component {
         if(this.refs.receiptTitle) { paymentData.receipt.title = this.refs.receiptTitle.getValue(); }
         this.setState({paymentData: paymentData});
     }
-    componentDidMount() { }
-    componentWillUnmount() { }
+    onWindowUnload() { }
+    componentDidMount() {
+        window.addEventListener('unload', this.onWindowUnload, false);
+        window.addEventListener('beforeunload', this.onWindowUnload, false);
+    }
+    componentWillUnmount() {
+        window.removeEventListener('unload', this.onWindowUnload, false);
+        window.removeEventListener('beforeunload', this.onWindowUnload, false);
+    }
     render() {
         const state = this.state;
         const {paymentMethod, userData, receipt, remark} = state.paymentData;
