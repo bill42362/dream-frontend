@@ -173,6 +173,7 @@ PBPlus.Dream.prototype.reformProject = (project) => {
         startTimestamp: project.start_timestamp,
         dueTimestamp: project.end_timestamp,
         awares: JSON.parse(project.awares || '[]').slice(0, 6),
+        positions: JSON.parse(project.positions || '[]'),
         relateUrl: project.relate_url,
     };
 };

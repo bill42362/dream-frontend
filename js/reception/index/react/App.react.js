@@ -67,13 +67,15 @@ class App extends React.Component {
     componentDidMount() { document.addEventListener('scroll', this.onWindowScroll, false); }
     componentWillUnmount() { document.removeEventListener('scroll', this.onWindowScroll, false); }
     render() {
-        let state = this.state;
+        const { projects, newsfeeds, userProfiles, headerOnTop } = this.state;
+        const slideStates = projects.filter(project => { return -1 != project.positions.indexOf('slide'); });
+        const listStates = projects.filter(project => { return -1 != project.positions.indexOf('list'); });
         return <div id='wrapper' ref='base'>
-            <Header fixed={true} isOnTop={this.state.headerOnTop} />
-            <Slide projects={state.projects} />
-            <Carousel newsfeeds={state.newsfeeds} userProfiles={state.userProfiles} />
+            <Header fixed={true} isOnTop={headerOnTop} />
+            <Slide projects={slideStates} slideInterval={5000} />
+            <Carousel newsfeeds={newsfeeds} userProfiles={userProfiles} />
             <div className='project-cards row'>
-                {state.projects.map((project, index) => {
+                {listStates.map((project, index) => {
                     return <div className='col-sm-4' key={index}>
                         <ProjectCard project={project} />
                     </div>;

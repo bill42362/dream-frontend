@@ -11,6 +11,7 @@ class Slide extends React.Component {
             shouldDisplayPreviousProject: false
         };
         this.switchToProjectIndex = this.switchToProjectIndex.bind(this);
+        this.switchToNextProject = this.switchToNextProject.bind(this);
     }
     switchToProjectIndex(index) {
         if(index != this.state.projectIndex) {
@@ -24,15 +25,22 @@ class Slide extends React.Component {
             }, 500);
         }
     }
-    componentDidMount() { }
-    componentWillUnmount() { }
+    switchToNextProject() {
+        const { projects } = this.props;
+        const { projectIndex } = this.state;
+        let nextProjectIndex = projectIndex + 1;
+        if(nextProjectIndex >= projects.length) { nextProjectIndex = 0; }
+        this.switchToProjectIndex(nextProjectIndex);
+    }
+    componentDidMount() {
+        this.intervalId = window.setInterval(this.switchToNextProject, this.props.slideInterval);
+    }
+    componentWillUnmount() { this.intervalId && window.clearInterval(this.intervalId); }
     render() {
         const {state, props} = this;
         const projects = props.projects;
         let project = projects[state.projectIndex] || {};
         let previousProject = projects[state.previousProjectIndex] || {};
-        let nextProjectIndex = state.projectIndex + 1;
-        if(nextProjectIndex >= projects.length) { nextProjectIndex = 0; }
         let previousProjectIndex = state.projectIndex - 1;
         if(previousProjectIndex < 0) { previousProjectIndex = projects.length - 1; }
         return <div id="slide" ref='base'>
@@ -40,7 +48,7 @@ class Slide extends React.Component {
                 <span
                     className="slide-swipe-icon glyphicon glyphicon-menu-left"
                     aria-label="previous slide"
-                    onClick={() => { this.switchToProjectIndex(previousProjectIndex); }}
+                    onClick={this.switchToNextProject}
                 ></span>
             </div>
             <div className='project-slide-container'><ProjectSlide project={project} /></div>
