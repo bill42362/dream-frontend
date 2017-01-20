@@ -41,7 +41,7 @@ class ProjectCard extends React.Component {
         if(10 > leftDays) { leftDays = Math.round(10*leftDays)/10; }
         else { leftDays = Math.round(leftDays); }
         let href = `/project/${project.id}`;
-        if('bid' === project.type) { href = project.relateUrl; }
+        if('outer' === project.type) { href = project.relateUrl; }
         return <a className="project-card" href={href} ref='base'>
             <div className='ratio-fixer'>
                 <img

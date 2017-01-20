@@ -12,6 +12,11 @@ PBPlus.Dream = function() {
 	return this;
 }
 
+PBPlus.Dream.projectTypeDictionary = {
+    '0': 'fund', '1': 'bid', '2': 'outer',
+    'fund': '0', 'bid': '1', 'outer': '2',
+};
+
 PBPlus.Dream.prototype.getProjectIdFromUrl = function() {
     let searches = Core.getUrlSearches();
     let pathname = location.pathname;
@@ -163,7 +168,7 @@ PBPlus.Dream.prototype.reformProject = (project) => {
             title: project.picture_title, src: project.picture_src, file: '',
         },
         id: project.pid,
-        type: ('0' === project.type ? 'fund' : 'bid'),
+        type: PBPlus.Dream.projectTypeDictionary[project.type],
         title: project.project_name,
         subtitle: project.subtitle,
         description: project.description,

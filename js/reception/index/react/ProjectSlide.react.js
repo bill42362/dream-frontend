@@ -55,7 +55,7 @@ class Slide extends React.Component {
         if(10 > leftDays) { leftDays = Math.round(10*leftDays)/10; }
         else { leftDays = Math.round(leftDays); }
         let projectButtonUrl = `/project?p=${project.id}`;
-        if('bid' === project.type) { projectButtonUrl = project.relateUrl; }
+        if('outer' === project.type) { projectButtonUrl = project.relateUrl; }
         return <div className="project-slide" ref='base' style={{height: '100%'}} >
             <div
                 className='slide-image-container' ref='imageContainer'
