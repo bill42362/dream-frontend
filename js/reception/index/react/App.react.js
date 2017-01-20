@@ -72,7 +72,7 @@ class App extends React.Component {
         const listStates = projects.filter(project => { return -1 != project.positions.indexOf('list'); });
         return <div id='wrapper' ref='base'>
             <Header fixed={true} isOnTop={headerOnTop} />
-            <Slide projects={slideStates} />
+            <Slide projects={slideStates} slideInterval={5000} />
             <Carousel newsfeeds={newsfeeds} userProfiles={userProfiles} />
             <div className='project-cards row'>
                 {listStates.map((project, index) => {
