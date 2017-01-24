@@ -46,7 +46,7 @@ var BootstrapRadios = React.createClass({
                     <input
                         type='radio' title={optionDisplay} name={label}
                         data-option_key={optionKey} data-checked={checked}
-                        onChange={this.onChange} checked={checked}
+                        onChange={this.onChange} checked={checked} value={checked}
                     />
                     {optionDisplay}
                 </label>;

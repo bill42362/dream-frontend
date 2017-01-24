@@ -19,7 +19,12 @@ class App extends React.Component {
         this.staticStrings = { };
         this.state = {
             userSapId: '',
-            userProfile: { name: '', phoneNumber: '', email: '', postcode: '', address: '', },
+            userProfile: {
+                pictureSrc: '',
+                nickname: '', name: '', gender: '',
+                phoneNumber: '', email: '',
+                postcode: '', city: '', address: '',
+            },
         };
         this.submit = this.submit.bind(this);
         this.onGetUserSapIdSuccess = this.onGetUserSapIdSuccess.bind(this);
@@ -37,7 +42,12 @@ class App extends React.Component {
     cancel() { history.back(); }
     submit() {
         const state = this.state;
-        if(window.PBPlusDream && state.project.id && state.userSapId) {
+        if(window.PBPlusDream && state.userSapId) {
+            PBPlusDream.saveProfiles(
+                state.userProfile,
+                this.onAjaxError,
+                response => { Toastr.success('儲存成功'); }
+            );
         }
     }
     onGetUserSapIdSuccess(sapId) {
@@ -76,10 +86,13 @@ class App extends React.Component {
     }
     onChange() {
         let userProfile = {
+            nickname: this.refs.nickname.getValue(),
             name: this.refs.name.getValue(),
+            gender: this.refs.gender.getValue(),
             phoneNumber: this.refs.phoneNumber.getValue(),
             email: this.refs.email.getValue(),
             postcode: this.refs.postcode.getValue(),
+            city: this.refs.city.getValue(),
             address: this.refs.address.getValue(),
         };
         this.setState({ userProfile });
@@ -109,9 +122,26 @@ class App extends React.Component {
                     <div className='user-info-form-inputs'>
                         <div className='row'>
                             <BootstrapInput
+                                ref='nickname' gridWidth={'12'}
+                                label={'暱稱'} title={'暱稱'} autoFocus={true}
+                                value={userProfile.nickname} onChange={this.onChange}
+                            />
+                        </div>
+                        <div className='row'>
+                            <BootstrapInput
                                 ref='name' gridWidth={'12'}
-                                label={'姓名'} title={'姓名'} autoFocus={true}
+                                label={'姓名'} title={'姓名'}
                                 value={userProfile.name} onChange={this.onChange}
+                            />
+                        </div>
+                        <div className='row'>
+                            <BootstrapRadios
+                                ref='gender' gridWidth={'12'}
+                                label={'性別'} options={[
+                                    {key: '1', display: '男'},
+                                    {key: '0', display: '女'},
+                                ]}
+                                value={userProfile.gender} onChange={this.onChange}
                             />
                         </div>
                         <div className='row'>
@@ -135,7 +165,12 @@ class App extends React.Component {
                                 value={userProfile.postcode} onChange={this.onChange}
                             />
                             <BootstrapInput
-                                ref='address' gridWidth={'9'} label={'地址'} title={'地址'}
+                                ref='city' gridWidth={'3'}
+                                label={'縣市'} title={'縣市'}
+                                value={userProfile.city} onChange={this.onChange}
+                            />
+                            <BootstrapInput
+                                ref='address' gridWidth={'6'} label={'地址'} title={'地址'}
                                 value={userProfile.address} onChange={this.onChange}
                             />
                         </div>
@@ -143,7 +178,6 @@ class App extends React.Component {
                     <hr />
                     <div className='user-info-form-buttons row'>
                         <div
-                            className='user-info-form-button primary col-md-4 col-md-offset-1'
                             className={ClassNames(
                                 'user-info-form-button primary col-md-4 col-md-offset-1'
                             )}
