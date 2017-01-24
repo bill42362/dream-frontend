@@ -10,7 +10,6 @@ import ConnectedAnimateSquare from './ConnectedAnimateSquare.react.js';
 import BootstrapInput from '../../../common/react/BootstrapInput.react.js';
 import BootstrapRadios from '../../../common/react/BootstrapRadios.react.js';
 import Footer from '../../../common/react/Footer.react.js';
-import AllpayFullscreenWrapper from './AllpayFullscreenWrapper.react.js';
 
 const ConnectedFooter = connect(state => { return {links: state.siteMap}; })(Footer);
 
@@ -19,26 +18,14 @@ class App extends React.Component {
         super(props);
         this.staticStrings = { };
         this.state = {
-            project: {}, items: [], userSapId: '', userProfiles: {},
-            itemId: Core.getUrlSearches().id, tradeNumber: undefined,
-            paymentData: {
-                paymentMethod: '',
-                userData: { name: '', phoneNumber: '', email: '', postcode: '', address: '', },
-                receipt: { type: '', number: '', title: '' },
-                remark: '',
-            },
+            userSapId: '',
+            userProfile: { name: '', phoneNumber: '', email: '', postcode: '', address: '', },
         };
         this.submit = this.submit.bind(this);
-        this.closeAllpayIframe = this.closeAllpayIframe.bind(this);
-        this.onGetProjectSuccess = this.onGetProjectSuccess.bind(this);
         this.onGetUserSapIdSuccess = this.onGetUserSapIdSuccess.bind(this);
         this.onReadUserProfilesSuccess = this.onReadUserProfilesSuccess.bind(this);
-        this.onCreatePaymentSuccess = this.onCreatePaymentSuccess.bind(this);
         this.onChange = this.onChange.bind(this);
-        this.onWindowUnload = this.onWindowUnload.bind(this);
         if(window.PBPlusDream) {
-            let projectId = PBPlusDream.getProjectIdFromUrl();
-            PBPlusDream.getProject(projectId, this.onAjaxError, this.onGetProjectSuccess);
             this.state.userSapId = PBPlusDream.userSapId;
             if(!PBPlusDream.userSapId) {
                 PBPlusDream.getUserSapId(undefined, this.onGetUserSapIdSuccess);
@@ -48,87 +35,15 @@ class App extends React.Component {
         }
     }
     cancel() { history.back(); }
-    isFormComplete() {
-        const { paymentData } = this.state;
-        const { userData, receipt } = paymentData;
-        let result = false;
-        result = (
-            userData.name && userData.phoneNumber && userData.email && userData.postcode && userData.address
-        ) && (
-            'two' === receipt.type || ('three' === receipt.type && receipt.number && receipt.title)
-        );
-        return result;
-    }
     submit() {
         const state = this.state;
-        if(!this.isFormComplete()) { Toastr.warning('請先填完 * 標記之選項。'); return; }
-        if(window.PBPlusDream && state.project.id && state.userSapId && !state.tradeNumber) {
-            PBPlusDream.createPayment(
-                state.project.id, state.itemId, state.paymentData,
-                (error) => { this.setState({tradeNumber: undefined}); this.onAjaxError(error); },
-                this.onCreatePaymentSuccess
-            );
-            this.setState({tradeNumber: 'lock_submit_button'});
-        }
-    }
-    closeAllpayIframe() {
-        const { tradeNumber, formDiv, allpayFullscreenWrapperDock } = this.state;
-        let body = document.getElementById('body');
-        body.removeChild(formDiv);
-        body.removeChild(allpayFullscreenWrapperDock);
-        window.PBPlusDream && PBPlusDream.cancelOrder(tradeNumber);
-        this.setState({
-            tradeNumber: undefined,
-            formDiv: undefined, allpayFullscreenWrapperDock: undefined,
-        });
-    }
-    onCreatePaymentSuccess({html, tradeNumber}) {
-        const state = this.state;
-        const item = state.items.filter(item => { return '' + item.id === state.itemId; })[0];
-
-        let body = document.getElementById('body');
-
-        let formDiv = document.createElement('div');
-        formDiv.innerHTML = html;
-        body.appendChild(formDiv);
-
-        let allpayFullscreenWrapperDock = document.createElement('div');
-        body.appendChild(allpayFullscreenWrapperDock);
-
-        ReactDOM.render(
-            <AllpayFullscreenWrapper
-                expireTimestamp={Date.now() + item.creditcardPaymentExpireMinutes*60*1000}
-                closeAllpayIframe={this.closeAllpayIframe}
-            />,
-            allpayFullscreenWrapperDock,
-            () => {
-                document.getElementById('_allpayForm').submit();
-                window.setTimeout(this.closeAllpayIframe, item.creditcardPaymentExpireMinutes*60*1000);
-            }
-        );
-        this.setState({ tradeNumber, formDiv, allpayFullscreenWrapperDock });
-    }
-    onGetProjectSuccess(response) {
-        if(200 === response.status) {
-            const state = this.state;
-            const project = response.message[0];
-            const item = response.items.filter((item) => { return '' + item.id === state.itemId; })[0];
-            let paymentData = state.paymentData;
-            if(item) {
-                paymentData.paymentMethod = paymentData.paymentMethod || item.paymentMethods[0];
-            }
-            this.setState({
-                project, paymentData,
-                items: response.items,
-            });
-        } else {
-            this.onAjaxError(response);
+        if(window.PBPlusDream && state.project.id && state.userSapId) {
         }
     }
     onGetUserSapIdSuccess(sapId) {
         if(sapId) { PBPlusDream.readProfiles([sapId], undefined, this.onReadUserProfilesSuccess); }
         else {
-            Toastr.warning('您必須登入後才能訂購，5 秒後為您轉至登入頁。');
+            Toastr.warning('您必須登入後才能修改會員資訊，5 秒後為您轉至登入頁。');
             window.setTimeout(() => {
                 let locationBase64 = URLSafe.encode(btoa(location.pathname + location.search));
                 location.href = '/login?location=' + locationBase64;
@@ -137,20 +52,15 @@ class App extends React.Component {
         this.setState({userSapId: sapId});
     }
     onReadUserProfilesSuccess(profiles) {
-        let stateUserProfiles = this.state.userProfiles;
-        profiles.forEach(profile => { stateUserProfiles[profile.userPK] = profile; });
-        let userProfile = stateUserProfiles[this.state.userSapId];
+        const stateUserProfile = this.state.userProfile;
+        const userProfile = profiles.filter(profile => +this.state.userSapId === +profile.userPK)[0];
         if(userProfile) {
-            let paymentData = this.state.paymentData;
-            let userData = paymentData.userData;
-            userData.name = userData.name || userProfile.name || '';
-            userData.phoneNumber = userData.phoneNumber || userProfile.mobile || '';
-            userData.email = userData.email || userProfile.email || '';
-            userData.postcode = userData.postcode || userProfile.zipcode || '';
-            userData.address = userData.address || (userProfile.city || '') + (userProfile.address || '') || '';
-            this.setState({paymentData: paymentData});
+            const newUserProfile = {};
+            Object.keys(stateUserProfile).forEach(key => {
+                newUserProfile[key] = stateUserProfile[key] || userProfile[key] || '';
+            });
+            this.setState({userProfile: newUserProfile});
         }
-        this.setState({userProfiles: stateUserProfiles});
     }
     onAjaxError(xhr) {
         let networkError = '網路錯誤，請檢查您的網路，或稍候再試一次。<br />'
@@ -165,51 +75,22 @@ class App extends React.Component {
         }
     }
     onChange() {
-        let paymentData = {
-            paymentMethod: this.refs.paymentMethod.getValue(),
-            userData: {
-                name: this.refs.name.getValue(),
-                phoneNumber: this.refs.phoneNumber.getValue(),
-                email: this.refs.email.getValue(),
-                postcode: this.refs.postcode.getValue(),
-                address: this.refs.address.getValue(),
-            },
-            receipt: { type: this.refs.receiptType.getValue(), number: '', title: '', },
-            remark: this.refs.remark.getValue(),
+        let userProfile = {
+            name: this.refs.name.getValue(),
+            phoneNumber: this.refs.phoneNumber.getValue(),
+            email: this.refs.email.getValue(),
+            postcode: this.refs.postcode.getValue(),
+            address: this.refs.address.getValue(),
         };
-        if(this.refs.receiptNumber) { paymentData.receipt.number = this.refs.receiptNumber.getValue(); }
-        if(this.refs.receiptTitle) { paymentData.receipt.title = this.refs.receiptTitle.getValue(); }
-        this.setState({paymentData: paymentData});
+        this.setState({ userProfile });
     }
-    onWindowUnload() { }
-    componentDidMount() {
-        window.addEventListener('unload', this.onWindowUnload, false);
-        window.addEventListener('beforeunload', this.onWindowUnload, false);
-    }
-    componentWillUnmount() {
-        window.removeEventListener('unload', this.onWindowUnload, false);
-        window.removeEventListener('beforeunload', this.onWindowUnload, false);
-    }
+    componentDidMount() { }
+    componentWillUnmount() { }
     render() {
-        const state = this.state;
-        const {paymentMethod, userData, receipt, remark} = state.paymentData;
-        const item = state.items.filter((item) => { return '' + item.id === state.itemId; })[0];
-        let itemTitle = '', itemPrice = 0, itemPaymentMethods = ['Credit'];
-        if(item) {
-            itemTitle = item.title;
-            itemPrice = item.price;
-            itemPaymentMethods = item.paymentMethods;
-        }
+        const { userProfile } = this.state;
         return <div id='wrapper'>
             <Header fixed={false} />
-            <h1 className='pay-title'>訂單付款資訊</h1>
-            <div className='company-info'>
-                <a className='site' href='http://pcgbros.com/' title='寶悍運動平台'>寶悍運動平台</a>
-                <a className='mail' href='mailto:service@pcgbros.com' title='聯絡客服單位'>
-                    聯絡客服單位
-                    <span className='glyphicon glyphicon-envelope' aria-hidden='true'></span>
-                </a>
-            </div>
+            <h1 className='pay-title'>使用者資訊</h1>
             <div className='payment-panel'>
                 <div className='user-image-section' style={{position: 'relative'}}>
                     <div className='image-input-box' style={{zIndex: '1'}}>
@@ -228,88 +109,34 @@ class App extends React.Component {
                     <div className='payment-form-inputs'>
                         <div className='row'>
                             <BootstrapInput
-                                gridWidth={'6'} readOnly={true}
-                                label={'訂單項目'} title={'訂單項目'}
-                                value={itemTitle}
-                            />
-                            <BootstrapInput
-                                gridWidth={'6'} readOnly={true}
-                                label={'贊助金額'} title={'贊助金額'}
-                                value={itemPrice}
-                            />
-                        </div>
-                        <div className='row'>
-                            <BootstrapRadios
-                                ref='paymentMethod' gridWidth={'12'} label={'付款方式'}
-                                options={[
-                                    {key: 'CVS', display: '超商付款'},
-                                    {key: 'ATM', display: 'ATM 付款'},
-                                    {key: 'Credit', display: '信用卡付款'},
-                                ].filter(option => {
-                                    return -1 != itemPaymentMethods.indexOf(option.key);
-                                })}
-                                value={paymentMethod} onChange={this.onChange}
-                            />
-                        </div>
-                        <div className='row'>
-                            <BootstrapInput
                                 ref='name' gridWidth={'12'}
-                                label={'姓名*'} title={'姓名'} autoFocus={true}
-                                value={userData.name} onChange={this.onChange}
+                                label={'姓名'} title={'姓名'} autoFocus={true}
+                                value={userProfile.name} onChange={this.onChange}
                             />
                         </div>
                         <div className='row'>
                             <BootstrapInput
                                 ref='phoneNumber' gridWidth={'12'} type={'number'}
                                 label={'手機號碼'} title={'手機號碼'} readOnly={true}
-                                value={userData.phoneNumber} onChange={this.onChange}
+                                value={userProfile.phoneNumber} onChange={this.onChange}
                             />
                         </div>
                         <div className='row'>
                             <BootstrapInput
                                 ref='email' gridWidth={'12'} type={'email'}
-                                label={'電子郵件*'} title={'電子郵件'}
-                                value={userData.email} onChange={this.onChange}
+                                label={'電子郵件'} title={'電子郵件'}
+                                value={userProfile.email} onChange={this.onChange}
                             />
                         </div>
                         <div className='row'>
                             <BootstrapInput
                                 ref='postcode' gridWidth={'3'} type={'number'}
-                                label={'郵遞區號*'} title={'郵遞區號'}
-                                value={userData.postcode} onChange={this.onChange}
+                                label={'郵遞區號'} title={'郵遞區號'}
+                                value={userProfile.postcode} onChange={this.onChange}
                             />
                             <BootstrapInput
-                                ref='address' gridWidth={'9'} label={'地址*'} title={'地址'}
-                                value={userData.address} onChange={this.onChange}
-                            />
-                        </div>
-                        <div className='row'>
-                            <BootstrapRadios
-                                ref='receiptType' gridWidth={'12'} label={'發票種類*'}
-                                options={[
-                                    {key: 'two', display: '電子發票'},
-                                    {key: 'three', display: '三聯式發票'}
-                                ]}
-                                value={receipt.type} onChange={this.onChange}
-                            />
-                        </div>
-                        {'three' === receipt.type && <div className='row'>
-                            <BootstrapInput
-                                ref='receiptNumber' gridWidth={'4'}
-                                label={'統一編號*'} title={'統一編號'}
-                                value={receipt.number} onChange={this.onChange}
-                            />
-                            <BootstrapInput
-                                ref='receiptTitle' gridWidth={'8'}
-                                label={'公司名稱*'} title={'公司名稱'}
-                                value={receipt.title} onChange={this.onChange}
-                            />
-                        </div>}
-                        <div className='row'>
-                            <BootstrapInput
-                                ref='remark' gridWidth={'12'} type={'textarea'}
-                                label={'備註'} title={'備註'}
-                                value={remark} onChange={this.onChange}
+                                ref='address' gridWidth={'9'} label={'地址'} title={'地址'}
+                                value={userProfile.address} onChange={this.onChange}
                             />
                         </div>
                     </div>
@@ -318,11 +145,10 @@ class App extends React.Component {
                         <div
                             className='payment-form-button primary col-md-4 col-md-offset-1'
                             className={ClassNames(
-                                'payment-form-button col-md-4 col-md-offset-1',
-                                {'primary': this.isFormComplete()}
+                                'payment-form-button primary col-md-4 col-md-offset-1'
                             )}
                             role='button' onClick={this.submit}
-                        >前往付款</div>
+                        >儲存</div>
                         <div
                             className='payment-form-button col-md-4 col-md-offset-2'
                             role='button' onClick={this.cancel}
