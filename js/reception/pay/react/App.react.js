@@ -143,11 +143,9 @@ class App extends React.Component {
         if(userProfile) {
             let paymentData = this.state.paymentData;
             let userData = paymentData.userData;
-            userData.name = userData.name || userProfile.name || '';
-            userData.phoneNumber = userData.phoneNumber || userProfile.mobile || '';
-            userData.email = userData.email || userProfile.email || '';
-            userData.postcode = userData.postcode || userProfile.zipcode || '';
-            userData.address = userData.address || (userProfile.city || '') + (userProfile.address || '') || '';
+            Object.keys(userData).forEach(key => {
+                userData[key] = userData[key] || userProfile[key] || '';
+            });
             this.setState({paymentData: paymentData});
         }
         this.setState({userProfiles: stateUserProfiles});

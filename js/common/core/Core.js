@@ -60,6 +60,14 @@ Core.parseDate = function(date) {
     return result != 'Invalid Date' ? result : undefined;
 }
 
+Core.trimObject = function(object) {
+    const result = {};
+    Object.keys(object)
+        .filter((key) => object[key] !== undefined)
+        .forEach((key) => result[key] = object[key]);
+    return result;
+}
+
 Core.iterateObject = function(object, func) {
     for(var property in object) {
         if(object.hasOwnProperty(property)) {
