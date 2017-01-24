@@ -90,8 +90,8 @@ class App extends React.Component {
         const { userProfile } = this.state;
         return <div id='wrapper'>
             <Header fixed={false} />
-            <h1 className='pay-title'>使用者資訊</h1>
-            <div className='payment-panel'>
+            <h1 className='user-info-title'>使用者資訊</h1>
+            <div className='user-info-panel'>
                 <div className='user-image-section' style={{position: 'relative'}}>
                     <div className='image-input-box' style={{zIndex: '1'}}>
                         <img src='/img/mock_user_icon.jpg' />
@@ -105,8 +105,8 @@ class App extends React.Component {
                         top: '0px', left: '0px',
                     }}} />
                 </div>
-                <div className='payment-form'>
-                    <div className='payment-form-inputs'>
+                <div className='user-info-form'>
+                    <div className='user-info-form-inputs'>
                         <div className='row'>
                             <BootstrapInput
                                 ref='name' gridWidth={'12'}
@@ -141,16 +141,16 @@ class App extends React.Component {
                         </div>
                     </div>
                     <hr />
-                    <div className='payment-form-buttons row'>
+                    <div className='user-info-form-buttons row'>
                         <div
-                            className='payment-form-button primary col-md-4 col-md-offset-1'
+                            className='user-info-form-button primary col-md-4 col-md-offset-1'
                             className={ClassNames(
-                                'payment-form-button primary col-md-4 col-md-offset-1'
+                                'user-info-form-button primary col-md-4 col-md-offset-1'
                             )}
                             role='button' onClick={this.submit}
                         >儲存</div>
                         <div
-                            className='payment-form-button col-md-4 col-md-offset-2'
+                            className='user-info-form-button col-md-4 col-md-offset-2'
                             role='button' onClick={this.cancel}
                         >回上一頁</div>
                     </div>
