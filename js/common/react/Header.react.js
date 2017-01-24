@@ -110,7 +110,10 @@ class Header extends React.Component {
                 </div>
                 <hr className='user-panel-seperator' />
                 <div className='user-panel-buttons'>
-                    <a className='user-panel-button user-center' role='button'>使用者中心</a>
+                    <a
+                        className='user-panel-button user-info' role='button'
+                        href={'/userinfo'}
+                    >使用者資訊</a>
                     <a
                         className='user-panel-button logout' role='button'
                         href={'/logout?location=' + locationBase64}
