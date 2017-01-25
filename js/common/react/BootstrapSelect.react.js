@@ -1,4 +1,5 @@
 // BootstrapSelect.react.js
+var Core = require('../core/Core.js');
 var React = require('react');
 var ClassNames = require('classnames');
 var BootstrapSelect = React.createClass({
@@ -18,7 +19,7 @@ var BootstrapSelect = React.createClass({
         var value = this.props.value || '';
         var status = this.props.status || 'default';
         var errorMessage = this.props.errorMessage || '';
-        var selectUuid = PBPlus.newUuid();
+        var selectUuid = Core.newUuid();
         var options = this.props.options;
         var optionElements = [];
         if(options && !!options.length) {
@@ -38,7 +39,7 @@ var BootstrapSelect = React.createClass({
         var labelClassName = ClassNames('control-label', {'sr-only': labelHidden});
         var helper = undefined, helpUuid = undefined;
         if((('error' === status) || ('warning' === status)) && !!errorMessage) {
-            helpUuid = PBPlus.newUuid();
+            helpUuid = Core.newUuid();
             helper = <span id={helpUuid} className='help-block'>{errorMessage}</span>;
         }
         return <div className={componentClassName}>

@@ -1,4 +1,4 @@
-var PBPlus = require('../../common/core/PBPlus.js');
+var Core = require('../core/Core.js');
 var ClassNames = require('classnames');
 var BootstrapSelect = require('./BootstrapSelect.react.js');
 var BootstrapInput = require('./BootstrapInput.react.js');
@@ -19,11 +19,9 @@ var BootstrapDateInput = React.createClass({
         state.day = this.refs.day.getValue();
         if(!!this.refs.time) { state.time = this.refs.time.getValue(); }
         this.setState(state);
-        if(this.props.parentOnDateChange) {
-            this.props.parentOnDateChange(this.getDate());
-        }
+        if(this.props.onChange) { this.props.onChange(this.getValue()); }
     },
-    getDate: function() {
+    getValue: function() {
         var year = Number(this.refs.year.getValue());
         var month = Number(this.refs.month.getValue()) - 1;
         var day = Number(this.refs.day.getValue());
@@ -51,7 +49,7 @@ var BootstrapDateInput = React.createClass({
             year = dateObject.getFullYear();
             month = dateObject.getMonth() + 1;
             date = dateObject.getDate();
-            time = PBPlus.getDateStringWithFormat(dateObject.getTime(), 'hh:mm');
+            time = Core.getDateStringWithFormat(dateObject.getTime(), 'hh:mm');
         }
 
         // Make option arrays.
@@ -100,7 +98,7 @@ var BootstrapDateInput = React.createClass({
         var labelClassName = ClassNames('control-label', {'sr-only': labelHidden});
         var helper = undefined, helpUuid = undefined;
         if(('error' === status) || ('warning' === status) && !!errorMessage) {
-            helpUuid = PBPlus.newUuid();
+            helpUuid = Core.newUuid();
             helper = <span id={helpUuid} className='help-block'>{errorMessage}</span>;
         }
         return <div className={componentClassName}>
@@ -126,7 +124,6 @@ var BootstrapDateInput = React.createClass({
                 />
                 {timeInput}
             </div>
-            {helper}
         </div>;
     }
 })

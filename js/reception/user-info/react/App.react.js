@@ -9,6 +9,7 @@ import Header from '../../../common/react/Header.react.js';
 import ConnectedAnimateSquare from './ConnectedAnimateSquare.react.js';
 import BootstrapInput from '../../../common/react/BootstrapInput.react.js';
 import BootstrapRadios from '../../../common/react/BootstrapRadios.react.js';
+import BootstrapDateInput from '../../../common/react/BootstrapDateInput.react.js';
 import Footer from '../../../common/react/Footer.react.js';
 
 const ConnectedFooter = connect(state => { return {links: state.siteMap}; })(Footer);
@@ -20,9 +21,8 @@ class App extends React.Component {
         this.state = {
             userSapId: '',
             userProfile: {
-                pictureSrc: '',
-                nickname: '', name: '', gender: '',
-                phoneNumber: '', email: '',
+                pictureSrc: '', nickname: '', name: '',
+                gender: '', birthday: '', phoneNumber: '', email: '',
                 postcode: '', city: '', address: '',
             },
         };
@@ -89,6 +89,7 @@ class App extends React.Component {
             nickname: this.refs.nickname.getValue(),
             name: this.refs.name.getValue(),
             gender: this.refs.gender.getValue(),
+            birthday: this.refs.birthday.getValue(),
             phoneNumber: this.refs.phoneNumber.getValue(),
             email: this.refs.email.getValue(),
             postcode: this.refs.postcode.getValue(),
@@ -142,6 +143,13 @@ class App extends React.Component {
                                     {key: '0', display: '女'},
                                 ]}
                                 value={userProfile.gender} onChange={this.onChange}
+                            />
+                        </div>
+                        <div className='row'>
+                            <BootstrapDateInput
+                                ref='birthday' gridWidth={'12'}
+                                label={'生日'} yearRange={[1900, (new Date().getFullYear())]}
+                                value={userProfile.birthday} onChange={this.onChange}
                             />
                         </div>
                         <div className='row'>
