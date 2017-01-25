@@ -52,6 +52,7 @@ App.expressStaticRoutes = [
     {path: '/project(/:id)?', serverPath: '/dist/html/reception/project.html'},
     {path: '/message(/:id)?', serverPath: '/dist/html/reception/project-message.html'},
     {path: '/timeline(/:id)?', serverPath: '/dist/html/reception/project-timeline.html'},
+    {path: '/userinfo', serverPath: '/dist/html/reception/user-info.html'},
     {path: '/:id', serverPath: '/dist/html/reception/project.html'},
     {path: '/', serverPath: '/dist/html/reception'},
 ];

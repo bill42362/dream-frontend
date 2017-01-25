@@ -72,6 +72,36 @@ PBPlus.Dream.prototype.cancelOrder = function(tradeNumber, errorCallback, succes
     );
 }
 
+PBPlus.Dream.prototype.reformProfile = function(profile) {
+    return {
+        userPK: profile.userPK,
+        pictureSrc: profile.picture,
+        nickname: profile.nickname,
+        name: profile.name,
+        gender: profile.gender,
+        birthday: profile.birthday,
+        phoneNumber: profile.mobile,
+        email: profile.email,
+        postcode: profile.zipcode,
+        city: profile.city,
+        address: profile.address,
+    };
+}
+
+PBPlus.Dream.prototype.conformProfile = function(profile) {
+    return {
+        picture: profile.pictureSrc,
+        nickname: profile.nickname,
+        name: profile.name,
+        gender: profile.gender,
+        birthday: profile.birthday,
+        email: profile.email,
+        zipcode: profile.postcode,
+        city: profile.city,
+        address: profile.address,
+    };
+}
+
 PBPlus.Dream.prototype.readProfiles = function(sapIds, errorCallback, successCallback) {
     let url = this.apiBase + this.apiStage + 'readProfile';
     let payload = {token: this.userToken, uid: sapIds};
@@ -81,8 +111,25 @@ PBPlus.Dream.prototype.readProfiles = function(sapIds, errorCallback, successCal
             if(err) { errorCallback && errorCallback(err); }
             else {
                 if(200 === body.status) {
-                    successCallback && successCallback(body.message);
+                    let profiles = body.message.map(this.reformProfile);
+                    successCallback && successCallback(profiles);
                 } else { errorCallback && errorCallback('Not found.'); }
+            }
+        }
+    );
+}
+
+PBPlus.Dream.prototype.saveProfiles = function(profile, errorCallback, successCallback) {
+    let url = 'https://gax2gdkur9.execute-api.ap-southeast-2.amazonaws.com/dev/updateProfile';
+    let payload = Object.assign({token: this.userToken}, this.conformProfile(profile));
+    Request.post(
+        {url: url, json: payload,},
+        (err, httpResponse, body) => {
+            if(err) { errorCallback && errorCallback(err); }
+            else {
+                if(200 === body.status) {
+                    successCallback && successCallback(body);
+                } else { errorCallback && errorCallback(body.message); }
             }
         }
     );
