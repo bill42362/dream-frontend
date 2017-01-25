@@ -5,13 +5,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ClassNames from 'classnames';
 import URLSafe from 'urlsafe-base64';
+import Postcodes from '../../../common/core/TaiwanPostcodes.js';
 import Header from '../../../common/react/Header.react.js';
 import ConnectedAnimateSquare from './ConnectedAnimateSquare.react.js';
 import BootstrapInput from '../../../common/react/BootstrapInput.react.js';
 import BootstrapRadios from '../../../common/react/BootstrapRadios.react.js';
 import BootstrapDateInput from '../../../common/react/BootstrapDateInput.react.js';
+import BootstrapSelect from '../../../common/react/BootstrapSelect.react.js';
 import Footer from '../../../common/react/Footer.react.js';
 
+const cities = Object.keys(Postcodes);
 const ConnectedFooter = connect(state => { return {links: state.siteMap}; })(Footer);
 
 class App extends React.Component {
@@ -172,10 +175,9 @@ class App extends React.Component {
                                 label={'郵遞區號'} title={'郵遞區號'}
                                 value={userProfile.postcode} onChange={this.onChange}
                             />
-                            <BootstrapInput
-                                ref='city' gridWidth={'3'}
-                                label={'縣市'} title={'縣市'}
-                                value={userProfile.city} onChange={this.onChange}
+                            <BootstrapSelect
+                                ref='city' gridWidth={'3'} label={'縣市'} title={'縣市'}
+                                options={cities} value={userProfile.city} onChange={this.onChange}
                             />
                             <BootstrapInput
                                 ref='address' gridWidth={'6'} label={'地址'} title={'地址'}

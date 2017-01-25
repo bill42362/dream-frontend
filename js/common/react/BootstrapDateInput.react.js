@@ -124,6 +124,7 @@ var BootstrapDateInput = React.createClass({
                 />
                 {timeInput}
             </div>
+            {helper}
         </div>;
     }
 })
