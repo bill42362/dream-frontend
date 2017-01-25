@@ -190,7 +190,11 @@ class App extends React.Component {
     }
     render() {
         const state = this.state;
-        const {paymentMethod, userData, receipt, remark} = state.paymentData;
+        const { userProfiles, userSapId } = state;
+        const { paymentMethod, userData, receipt, remark } = state.paymentData;
+        const userProfile = userProfiles[userSapId];
+        let userPicture = '/img/mock_user_icon.jpg';
+        if(userProfile) { userPicture = userProfile.pictureSrc || userPicture; }
         const item = state.items.filter((item) => { return '' + item.id === state.itemId; })[0];
         let itemTitle = '', itemPrice = 0, itemPaymentMethods = ['Credit'];
         if(item) {
@@ -211,10 +215,7 @@ class App extends React.Component {
             <div className='payment-panel'>
                 <div className='user-image-section' style={{position: 'relative'}}>
                     <div className='image-input-box' style={{zIndex: '1'}}>
-                        <img src='/img/mock_user_icon.jpg' />
-                        <div className='edit-button' role='button'>
-                            <span className='glyphicon glyphicon-camera'></span>
-                        </div>
+                        <img src={userPicture} />
                     </div>
                     <ConnectedAnimateSquare canvasProps={{style: {
                         position: 'absolute',

@@ -105,13 +105,15 @@ class App extends React.Component {
     componentWillUnmount() { }
     render() {
         const { userProfile } = this.state;
+        let userPicture = '/img/mock_user_icon.jpg';
+        if(userProfile) { userPicture = userProfile.pictureSrc || userPicture; }
         return <div id='wrapper'>
             <Header fixed={false} />
             <h1 className='user-info-title'>使用者資訊</h1>
             <div className='user-info-panel'>
                 <div className='user-image-section' style={{position: 'relative'}}>
                     <div className='image-input-box' style={{zIndex: '1'}}>
-                        <img src='/img/mock_user_icon.jpg' />
+                        <img src={userPicture} />
                         <div className='edit-button' role='button'>
                             <span className='glyphicon glyphicon-camera'></span>
                         </div>
