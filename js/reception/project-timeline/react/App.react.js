@@ -112,12 +112,10 @@ class App extends React.Component {
                 count: state.timelineItems.length, href: '/timeline?p=' + state.project.id
             });
         }
-        if(state.comments.length) {
-            tabs.push({
-                key: 'comment', display: '訊息回應',
-                count: state.comments.length, href: '/message?p=' + state.project.id
-            });
-        }
+        tabs.push({
+            key: 'comment', display: '訊息回應',
+            count: state.comments.length, href: '/message?p=' + state.project.id
+        });
         return <div id='wrapper'>
             <Header fixed={false} />
             <ProjectHeader
