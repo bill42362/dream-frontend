@@ -19,7 +19,7 @@ import Footer from '../../../common/react/Footer.react.js';
 const cities = Object.keys(Postcodes);
 const ConnectedFooter = connect(state => { return {links: state.siteMap}; })(Footer);
 const ConnectedImageInputBox = connect(
-    state => { return {source: state.pictureEditor.resultSource}; },
+    state => { return {editorState: state.pictureEditor}; },
     dispatch => { return {
         movePicture: vector => { return dispatch(PictureEditor.Actions.movePicture(vector)); },
     }; },

@@ -10,9 +10,24 @@ class ImageInputBox extends React.Component {
         this.state = { };
     }
     render() {
-        const { source, movePicture, style } = this.props;
-        return <div className='image-input-box' style={style} >
-            <img src={source} onClick={() => { movePicture({x: 5, y: 5}); }} />
+        const { editorState, source, movePicture, style } = this.props;
+        const { top, left, width, height } = editorState;
+        return <div
+            className='image-input-box'
+            style={Object.assign({position: 'relative'}, style)}
+        >
+            <img style={{borderRadius: 60}} src={editorState.resultSource} />
+            <div
+                style={{
+                    position: 'absolute', opacity: 0.5,
+                    width: editorState.image.width,
+                    height: editorState.image.height,
+                    top, left
+                }}
+                onClick={() => { movePicture({x: -5, y: -5}); }}
+            >
+                <img style={{ width: '100%', height: '100%' }} src={editorState.image.src} />
+            </div>
             <div className='edit-button' role='button'>
                 <span className='glyphicon glyphicon-camera'></span>
             </div>

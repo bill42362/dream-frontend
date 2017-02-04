@@ -37,12 +37,18 @@ const movePicture = ({x, y}) => { return (dispatch, getState) => {
 }};
 const updateResultSource = () => { return (dispatch, getState) => {
     const state = getState().pictureEditor;
-    console.log('updateResultSource() state:', state);
     return new Promise((resolve, reject) => {
+        const outputSize = {width: 120, height: 120};
         const canvas = document.createElement('canvas');
+        canvas.width = outputSize.width;
+        canvas.height = outputSize.height;
         const context = canvas.getContext('2d');
         const { image, left, top, width, height } = state;
-        context.drawImage(image, left, top, width, height, 0, 0, image.width, image.height);
+        context.drawImage(
+            image,
+            -left, -top, image.width, image.height,
+            0, 0, image.width, image.height
+        );
         const resultSource = canvas.toDataURL();
         if(0 === resultSource.indexOf('data:image/')) {
             dispatch({type: 'UPDATE_RESULT_SOURCE', resultSource });
