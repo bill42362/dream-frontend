@@ -10,14 +10,17 @@ import App from '../react/App.react.js';
 import Core from '../../../common/core/Core.js';
 import Dream from '../../../common/core/Dream.js';
 import Sitemap from '../../../common/core/Sitemap.js';
+import PictureEditor from './PictureEditor.js';
 
 const reducer = combineReducers({
     animateSquare: AnimateSquare.Reducer,
     siteMap: Sitemap.Reducer,
+    pictureEditor: PictureEditor.Reducer,
 })
 
 const store = createStore(reducer, applyMiddleware(ReduxThunk));
 store.dispatch(Sitemap.Actions.updateLinks());
+store.dispatch(PictureEditor.Actions.updateImageSource('/img/mock_user_icon.jpg'));
 
 for(let i = 0; i < 30; ++i) {
     store.dispatch(AnimateSquare.Actions.addRandomSquare());

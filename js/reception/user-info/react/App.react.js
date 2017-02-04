@@ -8,6 +8,8 @@ import URLSafe from 'urlsafe-base64';
 import Postcodes from '../../../common/core/TaiwanPostcodes.js';
 import Header from '../../../common/react/Header.react.js';
 import ConnectedAnimateSquare from './ConnectedAnimateSquare.react.js';
+import PictureEditor from '../core/PictureEditor.js';
+import ImageInputBox from './ImageInputBox.react.js';
 import BootstrapInput from '../../../common/react/BootstrapInput.react.js';
 import BootstrapRadios from '../../../common/react/BootstrapRadios.react.js';
 import BootstrapDateInput from '../../../common/react/BootstrapDateInput.react.js';
@@ -16,6 +18,12 @@ import Footer from '../../../common/react/Footer.react.js';
 
 const cities = Object.keys(Postcodes);
 const ConnectedFooter = connect(state => { return {links: state.siteMap}; })(Footer);
+const ConnectedImageInputBox = connect(
+    state => { return {source: state.pictureEditor.resultSource}; },
+    dispatch => { return {
+        movePicture: vector => { return dispatch(PictureEditor.Actions.movePicture(vector)); },
+    }; },
+)(ImageInputBox);
 
 class App extends React.Component {
     constructor(props) {
@@ -112,12 +120,7 @@ class App extends React.Component {
             <h1 className='user-info-title'>使用者資訊</h1>
             <div className='user-info-panel'>
                 <div className='user-image-section' style={{position: 'relative'}}>
-                    <div className='image-input-box' style={{zIndex: '1'}}>
-                        <img src={userPicture} />
-                        <div className='edit-button' role='button'>
-                            <span className='glyphicon glyphicon-camera'></span>
-                        </div>
-                    </div>
+                    <ConnectedImageInputBox style={{zIndex: '1'}} />
                     <ConnectedAnimateSquare canvasProps={{style: {
                         position: 'absolute',
                         width: '100%', height: '100%',
