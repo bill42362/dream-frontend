@@ -30,8 +30,8 @@ const updateImageSource = (source) => { return (dispatch, getState) => {
 }};
 const movePicture = ({x, y}) => { return (dispatch, getState) => {
     const state = getState().pictureEditor;
-    const top = state.top + x;
-    const left = state.left + y;
+    const top = state.top + y;
+    const left = state.left + x;
     dispatch({type: 'UPDATE_POSITION', position: { top, left }});
     return dispatch(updateResultSource());
 }};

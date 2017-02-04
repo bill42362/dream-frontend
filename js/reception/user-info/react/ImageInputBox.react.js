@@ -2,12 +2,17 @@
 'use strict'
 import React from 'react';
 import ClassNames from 'classnames';
+import MouseTracker from './MouseTracker.react.js';
 
 class ImageInputBox extends React.Component {
     constructor(props) {
         super(props);
-        this.staticStrings = { };
-        this.state = { };
+        this.onDrag = this.onDrag.bind(this);
+    }
+    onDrag(mouseState) {
+        const { movePicture } = this.props;
+        const { move } = mouseState;
+        movePicture && movePicture({x: 0.5*move.x, y: 0.5*move.y});
     }
     render() {
         const { editorState, source, movePicture, style } = this.props;
@@ -22,11 +27,12 @@ class ImageInputBox extends React.Component {
                     position: 'absolute', opacity: 0.5,
                     width: editorState.image.width,
                     height: editorState.image.height,
+                    cursor: 'move',
                     top, left
                 }}
-                onClick={() => { movePicture({x: -5, y: -5}); }}
             >
                 <img style={{ width: '100%', height: '100%' }} src={editorState.image.src} />
+                <MouseTracker onMouseDrag={this.onDrag} />
             </div>
             <div className='edit-button' role='button'>
                 <span className='glyphicon glyphicon-camera'></span>
