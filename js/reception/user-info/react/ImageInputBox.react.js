@@ -3,6 +3,7 @@
 import React from 'react';
 import MouseTracker from './MouseTracker.react.js';
 
+const moverSize = {width: 1280, height: 720};
 const defaultAction = {
     type: '',
     stretchFilter: {x: 0, y: 0},
@@ -32,9 +33,9 @@ class ImageInputBox extends React.Component {
     onMouseMove(mouseState) {
         if(this.state.action.type) { return; }
         const { x, y } = mouseState.axis;
-        const { top, left, image } = this.props.editorState;
+        const { top, left } = this.props.editorState;
         const { isOnLeft, isOnRight, isOnTop, isOnBottom } = this.checkMouseOnEdge(
-            {x: x - left - image.width + 60, y: y - top - image.height + 60},
+            {x: x - left - moverSize.width + 60, y: y - top - moverSize.height + 60},
             this.refs.fullImageView
         );
         let mouseCursor = 'move';
@@ -46,9 +47,9 @@ class ImageInputBox extends React.Component {
     }
     onMouseDown(mouseState) {
         const { x, y } = mouseState.axis;
-        const { top, left, image } = this.props.editorState;
+        const { top, left } = this.props.editorState;
         const { isOnLeft, isOnRight, isOnTop, isOnBottom } = this.checkMouseOnEdge(
-            {x: x - left - image.width + 60, y: y - top - image.height + 60},
+            {x: x - left - moverSize.width + 60, y: y - top - moverSize.height + 60},
             this.refs.fullImageView
         );
         if(!isOnLeft && !isOnRight && !isOnTop && !isOnBottom) {
@@ -89,7 +90,8 @@ class ImageInputBox extends React.Component {
                 ref='fullImageView'
                 style={{
                     position: 'absolute', opacity: 0.5,
-                    width, height, top, left
+                    border: '2px dashed black',
+                    top, left, width, height
                 }}
                 src={image.src}
             />
@@ -97,12 +99,11 @@ class ImageInputBox extends React.Component {
             <div
                 style={{
                     position: 'absolute',
-                    border: '2px dashed black',
-                    width: 2*image.width,
-                    height: 2*image.height,
+                    width: 2*moverSize.width,
+                    height: 2*moverSize.height,
                     cursor: mouseCursor,
-                    top: -image.height + 60,
-                    left: -image.width + 60
+                    top: -moverSize.height + 60,
+                    left: -moverSize.width + 60
                 }}
             >
                 <MouseTracker
