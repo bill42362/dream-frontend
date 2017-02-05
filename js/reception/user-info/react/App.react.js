@@ -22,6 +22,7 @@ const ConnectedImageInputBox = connect(
     state => { return {editorState: state.pictureEditor}; },
     dispatch => { return {
         movePicture: vector => { return dispatch(PictureEditor.Actions.movePicture(vector)); },
+        stretchPicture: vector => { return dispatch(PictureEditor.Actions.stretchPicture(vector)); },
     }; },
 )(ImageInputBox);
 
