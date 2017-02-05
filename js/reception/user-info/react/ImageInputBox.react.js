@@ -6,8 +6,7 @@ import MouseTracker from './MouseTracker.react.js';
 const moverSize = {width: 1280, height: 720};
 const defaultAction = {
     type: '',
-    stretchFilter: {x: 0, y: 0},
-    moveFilter: {x: 0, y: 0},
+    stretchFunction: () => ({stretch: {x: 0, y: 0}, move: {x: 0, y: 0}}),
 };
 
 class ImageInputBox extends React.Component {
@@ -56,26 +55,66 @@ class ImageInputBox extends React.Component {
             this.setState({action: Object.assign({}, defaultAction, {type: 'move'})});
         } else {
             const action = Object.assign({}, defaultAction, {type: 'stretch'});
-            const { stretchFilter, moveFilter } = action;
-            if(isOnRight) { stretchFilter.x = 1; }
-            if(isOnLeft) { stretchFilter.x = -1; moveFilter.x = 1; }
-            if(isOnBottom) { stretchFilter.y = 1; }
-            if(isOnTop) { stretchFilter.y = -1; moveFilter.y = 1; }
+            const { image } = this.props.editorState;
+            const imageAspect = image.width/image.height;
+            if(isOnRight) {
+                action.stretchFunction = (move) => ({
+                    stretch: {x: move.x, y: 0}, move: {x: 0, y: 0},
+                });
+            }
+            if(isOnLeft) {
+                action.stretchFunction = (move) => ({
+                    stretch: {x: -move.x, y: 0}, move: {x: move.x, y: 0},
+                });
+            }
+            if(isOnBottom) {
+                action.stretchFunction = (move) => ({
+                    stretch: {x: 0, y: move.y}, move: {x: 0, y: 0},
+                });
+            }
+            if(isOnTop) {
+                action.stretchFunction = (move) => ({
+                    stretch: {x: 0, y: -move.y}, move: {x: 0, y: move.y},
+                });
+            }
+            if(isOnBottom && isOnRight) {
+                action.stretchFunction = (move) => ({
+                    stretch: {x: move.x, y: move.x/imageAspect},
+                    move: {x: 0, y: 0},
+                });
+            }
+            if(isOnBottom && isOnLeft) {
+                action.stretchFunction = (move) => ({
+                    stretch: {x: -move.x, y: -move.x/imageAspect},
+                    move: {x: move.x, y: 0},
+                });
+            }
+            if(isOnTop && isOnRight) {
+                action.stretchFunction = (move) => ({
+                    stretch: {x: move.x, y: move.x/imageAspect},
+                    move: {x: 0, y: -move.x/imageAspect},
+                });
+            }
+            if(isOnTop && isOnLeft) {
+                action.stretchFunction = (move) => ({
+                    stretch: {x: -move.x, y: -move.x/imageAspect},
+                    move: {x: move.x, y: move.x/imageAspect},
+                });
+            }
             this.setState({ action });
         }
     }
     onMouseUp(mouseState) { this.setState({action: Object.assign({}, defaultAction)}); }
     onDrag(mouseState) {
         const { action } = this.state;
-        const { move } = mouseState;
         if('move' === action.type) {
             const { movePicture } = this.props;
-            movePicture(move);
+            movePicture(mouseState.move);
         } else if('stretch' === action.type) {
-            const { stretchFilter, moveFilter } = action;
             const { movePicture, stretchPicture } = this.props;
-            stretchPicture({x: move.x*stretchFilter.x, y: move.y*stretchFilter.y});
-            movePicture({x: move.x*moveFilter.x, y: move.y*moveFilter.y});
+            const { stretch, move } = action.stretchFunction(mouseState.move);
+            stretchPicture(stretch);
+            movePicture(move);
         }
     }
     render() {
