@@ -53,10 +53,15 @@ class App extends React.Component {
     }
     cancel() { history.back(); }
     submit() {
-        const state = this.state;
-        if(window.PBPlusDream && state.userSapId) {
+        const { userImageState } = this.props;
+        const userProfile = Object.assign(
+            {},
+            this.state.userProfile,
+            {pictureSrc: userImageState.resultSource}
+        );
+        if(window.PBPlusDream && this.state.userSapId) {
             PBPlusDream.saveProfiles(
-                state.userProfile,
+                userProfile,
                 this.onAjaxError,
                 response => { Toastr.success('儲存成功'); }
             );

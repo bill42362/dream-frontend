@@ -34,9 +34,12 @@ const onReactDOMRendered = function() {
     window.requestAnimationFrame(goNextStep);
 }
 
-const ConnectedApp = connect(undefined, dispatch => { return {
-    updateUserImageSource: source => { return dispatch(PictureEditor.Actions.updateImageSource(source)); },
-}})(App);
+const ConnectedApp = connect(
+    state => ({userImageState: state.pictureEditor}),
+    dispatch => { return { updateUserImageSource: source => {
+        return dispatch(PictureEditor.Actions.updateImageSource(source));
+    }}}
+)(App);
 
 var onReadyStateChange = function() {
     if(document.readyState == 'complete') {
