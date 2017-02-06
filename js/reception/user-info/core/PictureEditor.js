@@ -1,9 +1,11 @@
 // PictureEditor.js
 'use strict';
 
+const initedImage = new Image();
+initedImage.crossOrigin="anonymous";
 const defaultState = {
     top: 0, left: 0, width: 120, height: 120,
-    image: new Image(), resultSource: '',
+    image: initedImage, resultSource: '',
 };
 
 const Reducer = (state = defaultState, action) => {

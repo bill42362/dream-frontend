@@ -75,7 +75,7 @@ PBPlus.Dream.prototype.cancelOrder = function(tradeNumber, errorCallback, succes
 PBPlus.Dream.prototype.reformProfile = function(profile) {
     return {
         userPK: profile.userPK,
-        pictureSrc: profile.picture,
+        pictureSrc: profile.src,
         nickname: profile.nickname,
         name: profile.name,
         gender: profile.gender,
