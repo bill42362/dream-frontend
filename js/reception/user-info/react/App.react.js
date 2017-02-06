@@ -8,6 +8,8 @@ import URLSafe from 'urlsafe-base64';
 import Postcodes from '../../../common/core/TaiwanPostcodes.js';
 import Header from '../../../common/react/Header.react.js';
 import ConnectedAnimateSquare from './ConnectedAnimateSquare.react.js';
+import PictureEditor from '../core/PictureEditor.js';
+import ImageInputBox from './ImageInputBox.react.js';
 import BootstrapInput from '../../../common/react/BootstrapInput.react.js';
 import BootstrapRadios from '../../../common/react/BootstrapRadios.react.js';
 import BootstrapDateInput from '../../../common/react/BootstrapDateInput.react.js';
@@ -16,6 +18,14 @@ import Footer from '../../../common/react/Footer.react.js';
 
 const cities = Object.keys(Postcodes);
 const ConnectedFooter = connect(state => { return {links: state.siteMap}; })(Footer);
+const ConnectedImageInputBox = connect(
+    state => { return {editorState: state.pictureEditor}; },
+    dispatch => { return {
+        movePicture: vector => { return dispatch(PictureEditor.Actions.movePicture(vector)); },
+        stretchPicture: vector => { return dispatch(PictureEditor.Actions.stretchPicture(vector)); },
+        updateImageSource: source => { return dispatch(PictureEditor.Actions.updateImageSource(source)); },
+    }; },
+)(ImageInputBox);
 
 class App extends React.Component {
     constructor(props) {
@@ -44,10 +54,15 @@ class App extends React.Component {
     }
     cancel() { history.back(); }
     submit() {
-        const state = this.state;
-        if(window.PBPlusDream && state.userSapId) {
+        const { userImageState } = this.props;
+        const userProfile = Object.assign(
+            {},
+            this.state.userProfile,
+            {pictureSrc: userImageState.resultSource}
+        );
+        if(window.PBPlusDream && this.state.userSapId) {
             PBPlusDream.saveProfiles(
-                state.userProfile,
+                userProfile,
                 this.onAjaxError,
                 response => { Toastr.success('儲存成功'); }
             );
@@ -72,6 +87,9 @@ class App extends React.Component {
             Object.keys(stateUserProfile).forEach(key => {
                 newUserProfile[key] = stateUserProfile[key] || userProfile[key] || '';
             });
+            if(newUserProfile.pictureSrc) {
+                this.props.updateUserImageSource(newUserProfile.pictureSrc);
+            }
             this.setState({userProfile: newUserProfile});
         }
     }
@@ -112,12 +130,7 @@ class App extends React.Component {
             <h1 className='user-info-title'>使用者資訊</h1>
             <div className='user-info-panel'>
                 <div className='user-image-section' style={{position: 'relative'}}>
-                    <div className='image-input-box' style={{zIndex: '1'}}>
-                        <img src={userPicture} />
-                        <div className='edit-button' role='button'>
-                            <span className='glyphicon glyphicon-camera'></span>
-                        </div>
-                    </div>
+                    <ConnectedImageInputBox style={{zIndex: '1'}} />
                     <ConnectedAnimateSquare canvasProps={{style: {
                         position: 'absolute',
                         width: '100%', height: '100%',
