@@ -17,6 +17,10 @@ class ImageInputBox extends React.Component {
             mouseCursor: 'move',
             action: defaultAction,
         };
+        this.imageType = /^image\//;
+        this.selectFile = this.selectFile.bind(this);
+        this.onFileChange = this.onFileChange.bind(this);
+        this.onDrop = this.onDrop.bind(this);
         this.onDrag = this.onDrag.bind(this);
         this.onMouseMove = this.onMouseMove.bind(this);
         this.onMouseDown = this.onMouseDown.bind(this);
@@ -29,6 +33,33 @@ class ImageInputBox extends React.Component {
             isOnLeft: offset > Math.abs(x), isOnRight: offset > Math.abs(width - x),
             isOnTop: offset > Math.abs(y), isOnBottom: offset > Math.abs(height - y),
         };
+    }
+    cancelEventActions(e) { e.stopPropagation(); e.preventDefault(); }
+    selectFile(e) {
+        const enableSelectFile = e.target.getAttribute('data-enable_select_file');
+        if(!enableSelectFile) { return ;}
+        const input = this.refs.fileSelector;
+        if(input) {
+            const event = new MouseEvent('click', {
+                'view': window, 'bubbles': false, 'cancelable': true
+            });
+            input.dispatchEvent(event);
+        }
+    }
+    onFileChange(e) {
+        var files = e.target.files;
+        if(files[0] && files[0].type && this.imageType.test(files[0].type)) {
+            let url = URL.createObjectURL(files[0]);
+            this.props.updateImageSource(url);
+        }
+    }
+    onDrop(e) {
+        this.cancelEventActions(e);
+        var files = e.dataTransfer.files;
+        if(files[0] && files[0].type && this.imageType.test(files[0].type)) {
+            let url = URL.createObjectURL(files[0]);
+            this.props.updateImageSource(url);
+        }
     }
     onMouseMove(mouseState) {
         if(this.state.action.type) { return; }
@@ -126,7 +157,13 @@ class ImageInputBox extends React.Component {
         const { top, left, width, height, image } = editorState;
         return <div
             className='image-input-box'
-            style={Object.assign({position: 'relative'}, style)}
+            style={Object.assign({position: 'relative', cursor: 'pointer'}, style)}
+            title='拖曳圖片至此或點這裡選擇檔案'
+            data-enable_select_file={true}
+            onClick={this.selectFile}
+            onDragEnter={this.cancelEventActions}
+            onDragOver={this.cancelEventActions}
+            onDrop={this.onDrop}
         >
             {isEditing && <img
                 ref='fullImageView'
@@ -137,7 +174,10 @@ class ImageInputBox extends React.Component {
                 }}
                 src={image.src}
             />}
-            <img style={{borderRadius: 60}} src={editorState.resultSource} />
+            <img
+                style={{borderRadius: 60}} src={editorState.resultSource}
+                data-enable_select_file={true}
+            />
             {isEditing && <div
                 style={{
                     position: 'absolute',
@@ -155,11 +195,16 @@ class ImageInputBox extends React.Component {
                     onMouseDown={this.onMouseDown}
                 />
             </div>}
+            <input
+                type='file' ref='fileSelector' style={{display: 'none'}}
+                accept='image/*' multiple={false}
+                onChange={this.onFileChange} aria-label='file-selector'
+            />
             <div
                 className='edit-button' role='button'
-                onClick={() => { this.setState({isEditing: !isEditing}); }}
+                onClick={(e) => { e.stopPropagation(); this.setState({isEditing: !isEditing}); }}
             >
-                <span className='glyphicon glyphicon-camera'></span>
+                <span className='glyphicon glyphicon-scissors'></span>
             </div>
         </div>;
     }
