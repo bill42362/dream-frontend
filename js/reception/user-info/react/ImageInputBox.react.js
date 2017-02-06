@@ -13,6 +13,7 @@ class ImageInputBox extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            isEditing: false,
             mouseCursor: 'move',
             action: defaultAction,
         };
@@ -37,6 +38,7 @@ class ImageInputBox extends React.Component {
             {x: x - left - moverSize.width + 60, y: y - top - moverSize.height + 60},
             this.refs.fullImageView
         );
+        // Change mouse cursor while not actioning.
         let mouseCursor = 'move';
         if(isOnLeft || isOnRight) { mouseCursor = 'ew-resize'; }
         if(isOnTop || isOnBottom) { mouseCursor = 'ns-resize'; }
@@ -51,6 +53,7 @@ class ImageInputBox extends React.Component {
             {x: x - left - moverSize.width + 60, y: y - top - moverSize.height + 60},
             this.refs.fullImageView
         );
+        // Setup action properties.
         if(!isOnLeft && !isOnRight && !isOnTop && !isOnBottom) {
             this.setState({action: Object.assign({}, defaultAction, {type: 'move'})});
         } else {
@@ -118,14 +121,14 @@ class ImageInputBox extends React.Component {
         }
     }
     render() {
-        const { mouseCursor } = this.state;
+        const { isEditing, mouseCursor } = this.state;
         const { editorState, source, style } = this.props;
         const { top, left, width, height, image } = editorState;
         return <div
             className='image-input-box'
             style={Object.assign({position: 'relative'}, style)}
         >
-            <img
+            {isEditing && <img
                 ref='fullImageView'
                 style={{
                     position: 'absolute', opacity: 0.5,
@@ -133,9 +136,9 @@ class ImageInputBox extends React.Component {
                     top, left, width, height
                 }}
                 src={image.src}
-            />
+            />}
             <img style={{borderRadius: 60}} src={editorState.resultSource} />
-            <div
+            {isEditing && <div
                 style={{
                     position: 'absolute',
                     width: 2*moverSize.width,
@@ -151,8 +154,11 @@ class ImageInputBox extends React.Component {
                     onMouseUp={this.onMouseUp}
                     onMouseDown={this.onMouseDown}
                 />
-            </div>
-            <div className='edit-button' role='button'>
+            </div>}
+            <div
+                className='edit-button' role='button'
+                onClick={() => { this.setState({isEditing: !isEditing}); }}
+            >
                 <span className='glyphicon glyphicon-camera'></span>
             </div>
         </div>;

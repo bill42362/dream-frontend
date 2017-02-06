@@ -2,7 +2,7 @@
 'use strict'
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import ReduxThunk from 'redux-thunk';
-import { Provider } from 'react-redux';
+import { Provider, connect } from 'react-redux';
 import AnimateSquare from 'animate-square';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -34,12 +34,16 @@ const onReactDOMRendered = function() {
     window.requestAnimationFrame(goNextStep);
 }
 
+const ConnectedApp = connect(undefined, dispatch => { return {
+    updateUserImageSource: source => { return dispatch(PictureEditor.Actions.updateImageSource(source)); },
+}})(App);
+
 var onReadyStateChange = function() {
     if(document.readyState == 'complete') {
         window.PBPlusDream = new Dream();
         ReactDOM.render(
             <Provider store={store} >
-                <App />
+                <ConnectedApp />
             </Provider>,
             document.getElementById('app-root'),
             onReactDOMRendered

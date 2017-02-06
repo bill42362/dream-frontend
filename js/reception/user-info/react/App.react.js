@@ -81,6 +81,9 @@ class App extends React.Component {
             Object.keys(stateUserProfile).forEach(key => {
                 newUserProfile[key] = stateUserProfile[key] || userProfile[key] || '';
             });
+            if(newUserProfile.pictureSrc) {
+                this.props.updateUserImageSource(newUserProfile.pictureSrc);
+            }
             this.setState({userProfile: newUserProfile});
         }
     }
