@@ -6,10 +6,12 @@ const Express = require('express');
 const BodyParser = require('body-parser');
 const Session = require('express-session');
 const Request = require('request');
+const RP = require('request-promise');
 const URLSafe = require('urlsafe-base64');
 const atob = require('atob');
 
 const config = JSON.parse(Fs.readFileSync('./config.json', 'utf8'));
+const apiBase = config.API_BASE || 'http://localhost:3000';
 const App = function() {};
 App.goLoginPage = function(request, response, next) {
     let ref = '&ref=' + request.query.location || '';
@@ -49,12 +51,14 @@ App.expressStaticRoutes = [
     {path: '/fonts/', serverPath: '/dist/fonts'},
     {path: '/img/', serverPath: '/dist/img'},
     {path: '/pay(/:id)?', serverPath: '/dist/html/reception/pay.html'},
-    {path: '/project(/:id)?', serverPath: '/dist/html/reception/project.html'},
-    {path: '/message(/:id)?', serverPath: '/dist/html/reception/project-message.html'},
-    {path: '/timeline(/:id)?', serverPath: '/dist/html/reception/project-timeline.html'},
     {path: '/userinfo', serverPath: '/dist/html/reception/user-info.html'},
-    {path: '/:id', serverPath: '/dist/html/reception/project.html'},
-    {path: '/', serverPath: '/dist/html/reception'},
+    {path: '/', serverPath: '/dist/html/reception/'},
+];
+App.expressRenderRoutes = [
+    {path: '/project(/:id)?', ejs: 'project.ejs'},
+    {path: '/message(/:id)?', ejs: 'project-message.ejs'},
+    {path: '/timeline(/:id)?', ejs: 'project-timeline.ejs'},
+    {path: '/:id', ejs: 'project.ejs'},
 ];
 App.prototype.server = Express();
 App.prototype.run = function() {
@@ -78,8 +82,40 @@ App.prototype.run = function() {
     server.get('/login', App.goLoginPage);
     server.get('/token', App.token);
     server.get('/logout', App.logout)
+
     App.expressStaticRoutes.forEach(function(route) {
         server.use(route.path, Express.static(__dirname + route.serverPath));
+    });
+
+    server.set('view engine', 'ejs'); 
+    server.set('views', __dirname + '/ejs');
+    App.expressRenderRoutes.forEach(function(route) {
+        server.get(route.path, function(request, response) {
+            const id = request.params.id || request.query.p;
+            const options = {
+                url: `${apiBase}/read/${id}`, json: true,
+                transform: function(response) {
+                    if(200 === response.status && response.message[0]) { return response.message[0]; }
+                    else { return undefined; }
+                },
+            };
+            RP(options)
+            .then(function(result) {
+                return response.render(route.ejs, {
+                    description: result.description,
+                    og: {
+                        url: `https://dream.pbplus.me/${id}`,
+                        title: result.project_name,
+                        description: result.description,
+                        image: result.picture_src,
+                    },
+                });
+            })
+            .catch(function(error) {
+                console.log('render() error:', error, ', id:', request.params.id);
+                return response.render('index.ejs');
+            });
+        });
     });
     server.listen(3000);
 };
