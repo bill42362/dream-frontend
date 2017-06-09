@@ -5,18 +5,27 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
+    <meta name="description" content="<%= description %>">
+    <meta property="og:url"           content="<%= og.url %>" />
+    <meta property="og:type"          content="website" />
+    <meta property="og:title"         content="<%= og.title %>" />
+    <meta property="og:description"   content="<%= og.description %>" />
+    <meta property="og:image"         content="<%= og.image %>" />
     <link rel="icon" href="img/favicon.ico">
 
     <title>圓夢加</title>
 
     <link rel="stylesheet" href="/css/lib.css">
-    <link rel="stylesheet" href="/css/reception/pay.css">
+    <link rel="stylesheet" href="/css/reception/project-message.css">
 
     <script type='text/javascript' src="/js/compiledLib.js" ></script>
     <script type='text/javascript' src="/js/lib.js" ></script>
-    <script type='text/javascript' src="/js/reception/pay.js" ></script>
-    <script type='text/javascript' src="/js/reception/pay.react.js" ></script>
+    <script type='text/javascript' src="/js/reception/project-message.js" ></script>
+    <script type='text/javascript' src="/js/reception/project-message.react.js" ></script>
+    <script type='text/javascript'>
+        const NODE = {};
+        NODE.USER_ID = 'user_id';
+    </script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -24,8 +33,7 @@
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
-<body id="body">
+<body>
     <div id="app-root"></div>
-    <div id="payment-form"></div>
 </body>
 </html>
