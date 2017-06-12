@@ -1,8 +1,9 @@
 // Slide.react.js
 'use strict'
+import { Component } from 'react';
 import ClassNames from 'classnames';
 
-class Slide extends React.Component {
+class Slide extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -45,7 +46,7 @@ class Slide extends React.Component {
         this.updateContentZoneTop();
         if(this.refs.image) { this.updateImageLeft(); }
     }
-    componentDidUpdate() { this.updateContentZoneTop(); }
+    //componentDidUpdate() { this.updateContentZoneTop(); }
     componentWillUnmount() { document.removeEventListener('scroll', this.onWindowScroll, false); }
     render() {
         const {props, state} = this;

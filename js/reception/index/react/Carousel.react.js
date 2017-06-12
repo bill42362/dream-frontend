@@ -1,8 +1,9 @@
 // Carousel.react.js
 'use strict'
+import { Component } from 'react';
 import ClassNames from 'classnames';
 
-class Carousel extends React.Component {
+class Carousel extends Component {
     constructor(props) {
         super(props);
         const mockIconPool = [

@@ -1,20 +1,9 @@
 @import "./utils.less";
+@import "./base.less";
 @import "./project-header.less";
 @themeBackground: rgb(238, 22, 106);
-@themeForeground: rgb(190, 136, 247);
-@headerHeight: 60px;
-@footerHeight: 4em;
 @mobileTimelinePaddingLeft: 2em;
-html {
-    position: relative;
-    min-height: 100%;
-}
 body {
-    a {
-        text-decoration: none;
-        &:hover { text-decoration: none; }
-        &:focus { text-decoration: none; }
-    }
     & > div#app-root div#wrapper {
         & > header#header > nav.navbar {
             display: flex;

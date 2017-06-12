@@ -225,6 +225,7 @@ gulp.task('js-lib', function() {
 
 gulp.task('fonts-lib', function() {
     gulp.src([
+        './fonts/*.*',
         './node_modules/font-awesome/fonts/*.*',
         './node_modules/bootstrap/dist/fonts/*.*'
     ])
