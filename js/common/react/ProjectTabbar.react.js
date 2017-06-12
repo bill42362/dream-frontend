@@ -15,7 +15,6 @@ class ProjectTabbar extends React.Component {
             app_id: '446900555688362',
             method: 'share',
             href: location.href,
-            hashtag: 'pb+運動平台',
         }, function(response) {
             console.log('FB sharing response:', response);
         });
