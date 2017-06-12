@@ -46,7 +46,7 @@ class Slide extends Component {
         this.updateContentZoneTop();
         if(this.refs.image) { this.updateImageLeft(); }
     }
-    componentDidUpdate() { this.updateContentZoneTop(); }
+    //componentDidUpdate() { this.updateContentZoneTop(); }
     componentWillUnmount() { document.removeEventListener('scroll', this.onWindowScroll, false); }
     render() {
         const {props, state} = this;
