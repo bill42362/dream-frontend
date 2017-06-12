@@ -1,9 +1,10 @@
 // Slide.react.js
 'use strict'
+import { Component } from 'react';
 import ClassNames from 'classnames';
 import ProjectSlide from './ProjectSlide.react.js';
 
-class Slide extends React.Component {
+class Slide extends Component {
     constructor(props) {
         super(props);
         this.state = {
