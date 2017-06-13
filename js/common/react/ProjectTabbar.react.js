@@ -20,12 +20,23 @@ class ProjectTabbar extends React.Component {
         });
         return;
     }
-    loadFBSDKScript(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) {return;}
-        js = d.createElement(s); js.id = id;
-        js.src = "//connect.facebook.net/en_US/sdk.js";
-        fjs.parentNode.insertBefore(js, fjs);
+    shareLine() {
+        const url = encodeURIComponent(location.href);
+        const returnUrl = 'https://timeline.line.me' + encodeURIComponent(`/social-plugin/share?url=${url}`);
+        const redirect_uri = encodeURIComponent(`https://timeline.line.me/webauth/auth?returnUrl=${returnUrl}`);
+        const href = `https://access.line.me/dialog/oauth/weblogin?response_type=code&client_id=1341209950&state=674581db8e8451f182c5740b5fdf59452ab2047665ee915814027f7ea54e0986&redirect_uri=${redirect_uri}`;
+        const strWindowFeatures = 'location=yes,height=570,width=520,scrollbars=yes,status=yes';
+        window.open(href, '_blank', strWindowFeatures);
+        return;
+    }
+    loadJSScript({ id, src, attributes }) {
+        let jsElement, firstJsElement = document.getElementsByTagName('script')[0];
+        if(document.getElementById(id)) { return; }
+        jsElement = document.createElement('script');
+        jsElement.id = id;
+        jsElement.src = src;
+        Object.keys(attributes || {}).forEach(key => { jsElement[key] = attributes[key]; });
+        firstJsElement.parentNode.insertBefore(jsElement, firstJsElement);
     }
     componentDidMount() {
         window.fbAsyncInit = function() {
@@ -37,30 +48,25 @@ class ProjectTabbar extends React.Component {
             });
             FB.AppEvents.logPageView();
         };
-        this.loadFBSDKScript(document, 'script', 'facebook-jssdk');
+        this.loadJSScript({id: 'facebook-jssdk', src: '//connect.facebook.net/en_US/sdk.js'});
     }
     render() {
         const tabs = this.props.tabs;
         let sharingIcons = [
             {
                 key: 'facebook', liClassname: 'facebook',
-                component: <i className="fa fa-facebook"></i>,
+                component: <i className='fa fa-facebook'></i>,
                 href: 'facebook.com', onClick: this.shareFacebook,
             },
             {
-                key: 'googlePlus', liClassname: 'google-plus',
-                component: <i className="fa fa-google-plus"></i>,
-                href: 'plus.google.com'
-            },
-            {
                 key: 'twitter', liClassname: 'twitter',
-                component: <i className="fa fa-twitter"></i>,
+                component: <i className='fa fa-twitter'></i>,
                 href: 'twitter.com'
             },
             {
-                key: 'tumblr', liClassname: 'tumblr',
-                component: <i className="fa fa-tumblr"></i>,
-                href: 'tumblr.com'
+                key: 'line', liClassname: 'line',
+                component: <img src='/img/line_icon_round.svg'></img>,
+                href: 'timeline.line.me', onClick: this.shareLine,
             },
         ];
         return <div className='project-tabbar row' ref='base'>
