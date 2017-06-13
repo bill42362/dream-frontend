@@ -37,6 +37,14 @@ class ProjectTabbar extends React.Component {
         window.open(href, '_blank', strWindowFeatures);
         return;
     }
+    shareGmail() {
+        const url = encodeURIComponent(location.href);
+        const body = encodeURIComponent(`<a href="${location.href}"></a>`);
+        const href = `https://mail.google.com/mail/u/0/?view=cm&fs=1&body=${url}&ui=2&tf=1&pli=1`;
+        const strWindowFeatures = 'location=yes,height=570,width=520,scrollbars=yes,status=yes';
+        window.open(href, '_blank', strWindowFeatures);
+        return;
+    }
     loadJSScript({ id, src, attributes }) {
         let jsElement, firstJsElement = document.getElementsByTagName('script')[0];
         if(document.getElementById(id)) { return; }
@@ -76,6 +84,13 @@ class ProjectTabbar extends React.Component {
                 component: <img src='/img/line_icon_round.svg'></img>,
                 href: 'timeline.line.me', onClick: this.shareLine,
             },
+            /*
+            {
+                key: 'gmail', liClassname: 'gmail',
+                component: <i className='fa fa-share'></i>,
+                href: 'gmail.com', onClick: this.shareGmail,
+            },
+             */
         ];
         return <div className='project-tabbar row' ref='base'>
             <ul className='project-tabbar-tabs col-md-8'>
