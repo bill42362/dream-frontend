@@ -214,6 +214,7 @@ PBPlus.Dream.prototype.reformProject = (project) => {
             id: project.cover_img, name: project.picture_name,
             title: project.picture_title, src: project.picture_src, file: '',
         },
+        videoUrl: project.video_url,
         id: project.pid,
         type: PBPlus.Dream.projectTypeDictionary[project.type],
         title: project.project_name,

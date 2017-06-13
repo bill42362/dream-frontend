@@ -10,19 +10,30 @@ class ProjectHeader extends React.Component {
         this.state = { };
     }
     render() {
-        const { newsfeeds = [], userProfiles = {} } = this.props;
-        let banner = {
-            type: 'image', title: '新城國小',
-            src: "http://dream.pbplus.me/wp-content/uploads/2016/03/DSCN8334.jpg",
-        };
-        banner = Object.assign(banner, this.props.banner);
+        const { newsfeeds = [], userProfiles = {}, project } = this.props;
+        let banner = Object.assign(
+            {type: 'image', title: '', src: ''},
+            this.props.banner
+        );
+        let bannerElement = <img className='project-banner-image' src={banner.src} title={banner.title} />;
+        if(project.videoUrl) {
+            const videoUrl = project.videoUrl;
+            const videoSrcMatch = videoUrl.match(/^.*(?:youtube).*=(.*)$/) || videoUrl.match(/^.*(?:youtu\.be)\/(.*)$/);
+            if(videoSrcMatch) {
+                bannerElement = <iframe
+                    className='project-banner-youtube'
+                    src={`https://www.youtube.com/embed/${videoSrcMatch[1]}`}
+                    frameBorder='0' allowFullScreen
+                ></iframe>;
+            }
+        }
         let data = {
             title: '...', subtitle: '...', description: '...',
             foundTarget: 0, currentFound: 0, founderCount: 0,
             startTimestamp: Date.now()/1000, dueTimestamp: Date.now()/1000,
             awares: [],
         };
-        data = Object.assign(data, this.props.project);
+        data = Object.assign(data, project);
         let leftDays = (data.dueTimestamp - (Date.now()/1000))/86400;
         if(10 > leftDays) { leftDays = Math.round(10*leftDays)/10; }
         else { leftDays = Math.round(leftDays); }
@@ -48,11 +59,8 @@ class ProjectHeader extends React.Component {
                 <div className='content-section row'>
                     <div className='col-md-8'>
                         <div className='banner'>
-                            <div className='project-banner-image-container'>
-                                <img
-                                    className='project-banner-image'
-                                    src={banner.src} title={banner.title}
-                                />
+                            <div className='project-banner-container'>
+                                {bannerElement}
                             </div>
                         </div>
                     </div>
