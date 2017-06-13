@@ -20,6 +20,14 @@ class ProjectTabbar extends React.Component {
         });
         return;
     }
+    shareTwitter() {
+        const url = encodeURIComponent(location.href);
+        const hashtags = encodeURIComponent('pbplus,圓夢加');
+        const href = `https://twitter.com/share?url=${url}&hashtags=${hashtags}`;
+        const strWindowFeatures = 'location=yes,height=570,width=520,scrollbars=yes,status=yes';
+        window.open(href, '_blank', strWindowFeatures);
+        return;
+    }
     shareLine() {
         const url = encodeURIComponent(location.href);
         const returnUrl = 'https://timeline.line.me' + encodeURIComponent(`/social-plugin/share?url=${url}`);
@@ -61,7 +69,7 @@ class ProjectTabbar extends React.Component {
             {
                 key: 'twitter', liClassname: 'twitter',
                 component: <i className='fa fa-twitter'></i>,
-                href: 'twitter.com'
+                href: 'twitter.com', onClick: this.shareTwitter,
             },
             {
                 key: 'line', liClassname: 'line',
