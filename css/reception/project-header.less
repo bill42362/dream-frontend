@@ -58,7 +58,7 @@
                         div.founder-count { font-size: 3em; }
                         div.left-days { font-size: 3em; }
                         div.footnote {
-                            margin-top: -0.6em;
+                            margin-top: -5px;
                             font-weight: 400;
                             color: gray;
                         }
@@ -66,14 +66,14 @@
                 }
                 div.recent-events {
                     flex: none;
-                    margin-top: 1em;
+                    margin: 1em 0px;
                     overflow: hidden;
                     .carousel(3.5em);
                 }
                 div.awares {
                     flex: none;
                     border-left: 4px solid rgb(204, 204, 204);
-                    margin-top: 2em;
+                    margin-top: 1em;
                     padding-left: 1em;
                     color: rgb(104, 104, 104);
                 }
@@ -84,12 +84,17 @@
 
 @media (max-width: 991px) {
     .project-header {
+        padding-bottom: 0px;
         div.content-section-container {
             div.content-section {
                 display: block;
                 & > div { padding-right: 0px; }
                 div.main-content {
                     padding: 0 15px;
+                    div.awares {
+                        margin-top: 0em;
+                        margin-bottom: 1em;
+                    }
                 }
             }
         }
