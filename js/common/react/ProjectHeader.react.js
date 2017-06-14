@@ -93,11 +93,11 @@ class ProjectHeader extends React.Component {
                                     </div>
                                 )}
                             </div>
-                            <div className='awares'>
+                            {!!data.awares.length && <div className='awares'>
                                 {data.awares.map((aware, index) =>
                                     <div className='aware' key={index}>{aware}</div>
                                 )}
-                            </div>
+                            </div>}
                         </div>
                     </div>
                 </div>
