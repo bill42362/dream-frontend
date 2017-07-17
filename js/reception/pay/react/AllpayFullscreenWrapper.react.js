@@ -27,15 +27,19 @@ class AllpayFullscreenWrapper extends React.Component {
         const { closeAllpayIframe, expireTimestamp } = this.props;
         const offset = 0.1*(Date.now()%1000);
         return <div className='allpay-fullscreen-wrapper'>
+            {!!expireTimestamp && <div className='allpay-payment-countdown'>
+                {`請於 ${Math.floor((expireTimestamp - Date.now())/1000)} 秒內完成結帳`}
+            </div>}
             <div className='allpay-iframe-container' style={{overflow: 'hidden'}}>
-                {!!expireTimestamp && <div style={{
-                    position: 'absolute', 
-                    background: `repeating-linear-gradient(`
-                        + `to left, crimson ${offset}px, tomato ${offset + 50}px, crimson ${offset + 100}px`
-                    + `)`, 
-                    borderRadius: '10px 10px 0 0',
-                    height: 5, width: `${100*progress}%`
-                }}></div>}
+                {!!expireTimestamp && <div
+                    className='allpay-payment-countdown-bar'
+                    style={{
+                        background: `repeating-linear-gradient(`
+                            + `to left, crimson ${offset}px, tomato ${offset + 50}px, crimson ${offset + 100}px`
+                        + `)`, 
+                        width: `${100*progress}%`
+                    }}
+                ></div>}
                 <iframe className='allpay-iframe' name='allpay_iframe'/>
             </div>
             <div
