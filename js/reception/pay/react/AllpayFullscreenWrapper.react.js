@@ -6,7 +6,7 @@ import ClassNames from 'classnames';
 class AllpayFullscreenWrapper extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { initTimestamp: Date.now(), progress: 1.0, };
+        this.state = { initTimestamp: Date.now(), progress: 1.0, frameRequest: 0 };
         this.updateCountdownBar = this.updateCountdownBar.bind(this);
     }
     updateCountdownBar() {
@@ -16,21 +16,26 @@ class AllpayFullscreenWrapper extends React.Component {
         this.setState({progress});
         if(0 < progress) { window.requestAnimationFrame(this.updateCountdownBar); }
     }
-    componentDidMount() { window.requestAnimationFrame(this.updateCountdownBar); }
+    componentDidMount() {
+        if(!!this.props.expireTimestamp) {
+            this.setState({frameRequest: window.requestAnimationFrame(this.updateCountdownBar)});
+        }
+    }
+    componentWillUnmount() { window.cancelAnimationFrame(this.state.frameRequest); }
     render() {
         const { progress } = this.state;
         const { closeAllpayIframe, expireTimestamp } = this.props;
         const offset = 0.1*(Date.now()%1000);
         return <div className='allpay-fullscreen-wrapper'>
             <div className='allpay-iframe-container' style={{overflow: 'hidden'}}>
-                <div style={{
+                {!!expireTimestamp && <div style={{
                     position: 'absolute', 
                     background: `repeating-linear-gradient(`
                         + `to left, crimson ${offset}px, tomato ${offset + 50}px, crimson ${offset + 100}px`
                     + `)`, 
                     borderRadius: '10px 10px 0 0',
                     height: 5, width: `${100*progress}%`
-                }}></div>
+                }}></div>}
                 <iframe className='allpay-iframe' name='allpay_iframe'/>
             </div>
             <div
