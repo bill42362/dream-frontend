@@ -95,15 +95,23 @@ class App extends React.Component {
         let allpayFullscreenWrapperDock = document.createElement('div');
         body.appendChild(allpayFullscreenWrapperDock);
 
+        let expireTimestamp = undefined;
+        let shouldCountDownPayment = 'Credit' === state.paymentData.paymentMethod;
+        if(shouldCountDownPayment) {
+            expireTimestamp = Date.now() + item.creditcardPaymentExpireMinutes*60*1000;
+        }
+
         ReactDOM.render(
             <AllpayFullscreenWrapper
-                expireTimestamp={Date.now() + item.creditcardPaymentExpireMinutes*60*1000}
+                expireTimestamp={expireTimestamp}
                 closeAllpayIframe={this.closeAllpayIframe}
             />,
             allpayFullscreenWrapperDock,
             () => {
                 document.getElementById('_allpayForm').submit();
-                window.setTimeout(this.closeAllpayIframe, item.creditcardPaymentExpireMinutes*60*1000);
+                if(shouldCountDownPayment) {
+                    window.setTimeout(this.closeAllpayIframe, item.creditcardPaymentExpireMinutes*60*1000);
+                }
             }
         );
         this.setState({ tradeNumber, formDiv, allpayFullscreenWrapperDock });
