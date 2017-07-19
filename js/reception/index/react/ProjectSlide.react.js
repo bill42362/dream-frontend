@@ -20,8 +20,10 @@ class Slide extends Component {
         const minContentZoneTop = Math.min(0.5*baseRect.height, maxContentZoneTop);
         const offsetRatio = Math.max(-baseRect.top/(baseRect.height - 50));
         const contentZoneTopRange = maxContentZoneTop - minContentZoneTop;
-        let newZoneTop = Math.min(minContentZoneTop + offsetRatio*contentZoneTopRange, maxContentZoneTop);
-        if(newZoneTop != this.state.contentZoneTop) { this.setState({contentZoneTop: newZoneTop}); }
+        const newZoneTop = Math.min(minContentZoneTop + offsetRatio*contentZoneTopRange, maxContentZoneTop);
+        if(!+this.state.contentZoneTop || 1 < Math.abs(newZoneTop - this.state.contentZoneTop)) {
+            this.setState({contentZoneTop: newZoneTop});
+        }
     }
     updateImageTop() {
         if(this.refs.image) {
@@ -45,7 +47,7 @@ class Slide extends Component {
         this.updateContentZoneTop();
         if(this.refs.image) { this.updateImageLeft(); }
     }
-    //componentDidUpdate() { this.updateContentZoneTop(); }
+    componentDidUpdate() { this.updateContentZoneTop(); }
     componentWillUnmount() { document.removeEventListener('scroll', this.onWindowScroll, false); }
     render() {
         const {props, state} = this;
