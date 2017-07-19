@@ -9,7 +9,6 @@ class Slide extends Component {
         this.state = {
             contentZoneTop: '50%',
             imageTop: 0, imageLeft: 0,
-            isProjectButtonHovered: false,
         };
         this.onWindowScroll = this.onWindowScroll.bind(this);
         this.updateImageLeft = this.updateImageLeft.bind(this);
@@ -57,37 +56,26 @@ class Slide extends Component {
         else { leftDays = Math.round(leftDays); }
         let projectButtonUrl = `/project?p=${project.id}`;
         if('outer' === project.type) { projectButtonUrl = project.relateUrl; }
-        return <div className="project-slide" ref='base' style={{height: '100%'}} >
-            <div
-                className='slide-image-container' ref='imageContainer'
-                style={{position: 'relative', height: '100%', backgroundColor: 'rgb(250, 130, 160)'}}
-            >
+        return <div className="project-slide" ref='base' >
+            <div className='slide-image-container' ref='imageContainer' >
                 {project.bannerData && <img
                     className="slide-image" ref='image'
-                    style={{
-                        position: 'absolute',
-                        left: this.state.imageLeft, top: this.state.imageTop,
-                        width: '100%', minWidth: '800px'
-                    }}
+                    style={{left: this.state.imageLeft, top: this.state.imageTop}}
                     src={project.bannerData.src}
                     onLoad={this.updateImageLeft}
                 />}
             </div>
             <div
                 className="slide-content-zone row" ref='contentZone'
-                style={{
-                    position: 'absolute', width: '60%', left: '20%',
-                    top: this.state.contentZoneTop
-                }}
+                style={{top: this.state.contentZoneTop}}
             >
-                <div
-                    className="slide-texts col-md-8"
-                    style={{color: 'rgb(240, 240, 240)', textShadow: 'black 1px 1px 10px'}}
-                >
-                    <h1 style={{margin: '0em 0em 1em'}}>{project.title || '...'}</h1>
-                    <h3 style={{margin: '0em 0em 3em'}}>{project.subtitle || '...'}</h3>
-                    <h4>
-                        <span className='left-days-label' style={{marginRight: '2em'}}>
+                <div className="slide-texts col-md-8" >
+                    <h1 className='slide-texts-title'>{project.title || '...'}</h1>
+                    <h3 className='slide-texts-subtitle'>
+                        {project.subtitle || '...'}
+                    </h3>
+                    <h4 className='slide-texts-progress'>
+                        <span className='left-days-label'>
                             <i className='fa fa-clock-o' aria-hidden='true'></i>
                             {(0 < leftSeconds) && ` 還剩 ${leftDays} 天`}
                             {(0 >= leftSeconds) && ` 募資結束`}
@@ -109,26 +97,9 @@ class Slide extends Component {
                         </span>}
                     </h4>
                 </div>
-                <div className="project-button-container col-md-4" style={{textAlign: 'center'}}>
-                    <a href={projectButtonUrl} style={{textDecoration: 'none', color: 'white'}}>
-                        <span
-                            className="project-button" role='button'
-                            style={Object.assign({
-                                display: 'inline-block',
-                                backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                                borderRadius: '0.5em',
-                                padding: '1em 2em',
-                                color: 'white',
-                                fontWeight: '200',
-                                transition: 'all .5s ease'
-                            }, state.isProjectButtonHovered && {
-                                backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                                cursor: 'pointer',
-                                color: 'rgb(250, 130, 160)'
-                            })}
-                            onMouseEnter={() => {this.setState({isProjectButtonHovered: true})}}
-                            onMouseLeave={() => {this.setState({isProjectButtonHovered: false})}}
-                        >進一步了解</span>
+                <div className="project-button-container col-md-4">
+                    <a href={projectButtonUrl} >
+                        <span className="project-button" role='button' >進一步了解</span>
                     </a>
                 </div>
             </div>
