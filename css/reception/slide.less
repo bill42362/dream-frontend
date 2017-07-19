@@ -1,0 +1,45 @@
+@import "./utils.less";
+@import "./base.less";
+
+div#slide {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    div.slide-swipe-zone {
+        position: absolute;
+        width: 10%; height: 100%;
+        min-width: 75px; max-width: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1;
+        &.swipe-right { right: 0px; }
+        &:hover {
+            cursor: pointer;
+            span.slide-swipe-icon {
+                background-color: rgba(255, 255, 255, 0.2);
+                color: rgba(255, 255, 255, 0.8);
+            }
+        }
+        span.slide-swipe-icon {
+            border-radius: 0.7em;
+            width: 1.4em; height: 1.4em;
+            font-size: 2em;
+            line-height: 1.4em;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.0);
+            color: rgba(255, 255, 255, 0.0);
+            transition: all .5s ease;
+        }
+    }
+    div.project-slide-container {
+        position: absolute;
+        width: 100%; height: 100%;
+        top: 0px;
+        &.previous { .animation(fadeout, .5s); }
+    }
+}
+
+@media (max-width: 767px) {
+    div#slide { max-height: 450px; }
+}
