@@ -321,7 +321,7 @@ PBPlus.Dream.prototype.getProject = function(projectId, errorCallback, successCa
                 response.stories = (response.progress || [])
                     .filter(progress => 'story' === progress.type)
                     .map(this.reformStory);
-                response.items = response.options
+                response.items = (response.options || [])
                     .map(this.reformOption);
                 response.timelineItems = (response.progress || [])
                     .filter(progress => 'timeline' === progress.type)
