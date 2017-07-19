@@ -199,6 +199,10 @@ body {
                         text-align: center;
                         color: white;
                         &.primary { background-color: @themeForeground; }
+                        &.fetching {
+                            background-color: lighten(@themeForeground, 10%);
+                            cursor: not-allowed;
+                        }
                     }
                 }
             }

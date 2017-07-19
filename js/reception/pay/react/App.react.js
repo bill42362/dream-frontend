@@ -12,6 +12,7 @@ import BootstrapRadios from '../../../common/react/BootstrapRadios.react.js';
 import Footer from '../../../common/react/Footer.react.js';
 import AllpayFullscreenWrapper from './AllpayFullscreenWrapper.react.js';
 
+const STAR_COLOR = '#e132b1';
 const ConnectedFooter = connect(state => { return {links: state.siteMap}; })(Footer);
 
 class App extends React.Component {
@@ -183,7 +184,9 @@ class App extends React.Component {
             receipt: { type: this.refs.receiptType.getValue(), number: '', title: '', },
             remark: this.refs.remark.getValue(),
         };
-        if(this.refs.receiptNumber) { paymentData.receipt.number = this.refs.receiptNumber.getValue(); }
+        if(this.refs.receiptNumber) {
+            paymentData.receipt.number = this.refs.receiptNumber.getValue().slice(0, 8);
+        }
         if(this.refs.receiptTitle) { paymentData.receipt.title = this.refs.receiptTitle.getValue(); }
         this.setState({paymentData: paymentData});
     }
@@ -261,7 +264,8 @@ class App extends React.Component {
                         <div className='row'>
                             <BootstrapInput
                                 ref='name' gridWidth={'12'}
-                                label={'姓名*'} title={'姓名'} autoFocus={true}
+                                label={<span>姓名<span style={{color: STAR_COLOR}}>*</span></span>}
+                                title={'姓名'} autoFocus={true}
                                 value={userData.name} onChange={this.onChange}
                             />
                         </div>
@@ -275,24 +279,29 @@ class App extends React.Component {
                         <div className='row'>
                             <BootstrapInput
                                 ref='email' gridWidth={'12'} type={'email'}
-                                label={'電子郵件*'} title={'電子郵件'}
+                                label={<span>電子郵件<span style={{color: STAR_COLOR}}>*</span></span>}
+                                title={'電子郵件'}
                                 value={userData.email} onChange={this.onChange}
                             />
                         </div>
                         <div className='row'>
                             <BootstrapInput
                                 ref='postcode' gridWidth={'3'} type={'number'}
-                                label={'郵遞區號*'} title={'郵遞區號'}
+                                label={<span>郵遞區號<span style={{color: STAR_COLOR}}>*</span></span>}
+                                title={'郵遞區號'}
                                 value={userData.postcode} onChange={this.onChange}
                             />
                             <BootstrapInput
-                                ref='address' gridWidth={'9'} label={'地址*'} title={'地址'}
+                                ref='address' gridWidth={'9'}
+                                label={<span>地址<span style={{color: STAR_COLOR}}>*</span></span>}
+                                title={'地址'}
                                 value={userData.address} onChange={this.onChange}
                             />
                         </div>
                         <div className='row'>
                             <BootstrapRadios
-                                ref='receiptType' gridWidth={'12'} label={'發票種類*'}
+                                ref='receiptType' gridWidth={'12'}
+                                label={<span>發票種類<span style={{color: STAR_COLOR}}>*</span></span>}
                                 options={[
                                     {key: 'two', display: '電子發票'},
                                     {key: 'three', display: '三聯式發票'}
@@ -303,12 +312,14 @@ class App extends React.Component {
                         {'three' === receipt.type && <div className='row'>
                             <BootstrapInput
                                 ref='receiptNumber' gridWidth={'4'}
-                                label={'統一編號*'} title={'統一編號'}
+                                label={<span>統一編號<span style={{color: STAR_COLOR}}>*</span></span>}
+                                title={'統一編號'}
                                 value={receipt.number} onChange={this.onChange}
                             />
                             <BootstrapInput
                                 ref='receiptTitle' gridWidth={'8'}
-                                label={'公司名稱*'} title={'公司名稱'}
+                                label={<span>公司名稱<span style={{color: STAR_COLOR}}>*</span></span>}
+                                title={'公司名稱'}
                                 value={receipt.title} onChange={this.onChange}
                             />
                         </div>}
@@ -323,10 +334,10 @@ class App extends React.Component {
                     <hr />
                     <div className='payment-form-buttons row'>
                         <div
-                            className='payment-form-button primary col-md-4 col-md-offset-1'
                             className={ClassNames(
                                 'payment-form-button col-md-4 col-md-offset-1',
-                                {'primary': this.isFormComplete()}
+                                {'primary': this.isFormComplete() && !state.tradeNumber},
+                                {'fetching': state.tradeNumber}
                             )}
                             role='button' onClick={this.submit}
                         >前往付款</div>
