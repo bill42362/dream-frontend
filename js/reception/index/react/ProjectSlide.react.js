@@ -82,15 +82,11 @@ class Slide extends Component {
                             {(0 < leftSeconds) && ` 還剩 ${leftDays} 天`}
                             {(0 >= leftSeconds) && ` 募資結束`}
                         </span>
-                        {!!+project.founderCount && <span
-                            className='funder-count-label' style={{marginRight: '2em'}}
-                        >
+                        {!!+project.founderCount && <span className='funder-count-label' >
                             <i className='fa fa-user-circle-o' aria-hidden='true'></i>
                             {` ${project.founderCount} 人贊助`}
                         </span>}
-                        {!!+project.currentFound && <span
-                            className='fund-target-label' style={{marginRight: '2em'}}
-                        >
+                        {!!+project.currentFound && <span className='fund-target-label' >
                             <i className='fa fa-flag-checkered' aria-hidden='true'></i>
                             {
                                 ` $${Core.addNumberComma(project.currentFound)} 

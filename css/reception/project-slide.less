@@ -12,8 +12,9 @@ div.project-slide {
         background-color: lightgray;
         img.slide-image {
             position: absolute;
-            width: 100%;
-            min-width: 800px;
+            min-width: 100%;
+            min-height: 100%;
+            max-height: 110%;
         }
     }
     div.slide-content-zone {
@@ -31,6 +32,7 @@ div.project-slide {
             }
             h4.slide-texts-progress {
                 margin-right: 2em;
+                span { margin-right: 1.5em; }
             }
         }
         div.project-button-container {
@@ -38,17 +40,13 @@ div.project-slide {
             a {
                 span.project-button {
                     display: inline-block;
-                    background-color: rgba(255, 255, 255, 0.2);
                     border-radius: 0.5em;
                     padding: 1em 2em;
-                    color: white;
+                    background-color: rgba(255, 255, 255, 0.9);
+                    color: rgb(250, 130, 160);
                     font-weight: 200;
                     cursor: pointer;
                     transition: all .5s ease;
-                    &:hover {
-                        background-color: rgba(255, 255, 255, 0.9);
-                        color: rgb(250, 130, 160);
-                    }
                 }
             }
         }
