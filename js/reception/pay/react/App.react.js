@@ -183,7 +183,9 @@ class App extends React.Component {
             receipt: { type: this.refs.receiptType.getValue(), number: '', title: '', },
             remark: this.refs.remark.getValue(),
         };
-        if(this.refs.receiptNumber) { paymentData.receipt.number = this.refs.receiptNumber.getValue(); }
+        if(this.refs.receiptNumber) {
+            paymentData.receipt.number = this.refs.receiptNumber.getValue().slice(0, 8);
+        }
         if(this.refs.receiptTitle) { paymentData.receipt.title = this.refs.receiptTitle.getValue(); }
         this.setState({paymentData: paymentData});
     }
