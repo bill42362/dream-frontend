@@ -184,9 +184,12 @@ class App extends React.Component {
                 postcode: Math.abs(this.refs.postcode.getValue()),
                 address: this.refs.address.getValue(),
             },
-            receipt: { type: this.refs.receiptType.getValue(), number: '', title: '', },
+            receipt: { type: '', number: '', title: '', },
             remark: this.refs.remark.getValue(),
         };
+        if(this.refs.receiptType) {
+            paymentData.receipt.type = this.refs.receiptType.getValue();
+        }
         if(this.refs.receiptNumber) {
             paymentData.receipt.number = this.refs.receiptNumber.getValue().slice(0, 8);
         }
