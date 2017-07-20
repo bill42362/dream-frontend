@@ -178,7 +178,7 @@ class App extends React.Component {
                 name: this.refs.name.getValue(),
                 phoneNumber: this.refs.phoneNumber.getValue(),
                 email: this.refs.email.getValue(),
-                postcode: this.refs.postcode.getValue(),
+                postcode: Math.abs(this.refs.postcode.getValue()),
                 address: this.refs.address.getValue(),
             },
             receipt: { type: this.refs.receiptType.getValue(), number: '', title: '', },
