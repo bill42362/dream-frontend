@@ -50,13 +50,15 @@ class App extends React.Component {
     }
     cancel() { history.back(); }
     isFormComplete() {
-        const { paymentData } = this.state;
+        const { project, paymentData } = this.state;
         const { userData, receipt } = paymentData;
         let result = false;
         result = (
             userData.name && userData.phoneNumber && userData.email && userData.postcode && userData.address
         ) && (
-            'two' === receipt.type || ('three' === receipt.type && receipt.number && receipt.title)
+            !project.willIssueInvoice
+            || 'two' === receipt.type
+            || ('three' === receipt.type && receipt.number && receipt.title)
         );
         return result;
     }
@@ -73,6 +75,7 @@ class App extends React.Component {
         }
     }
     closeAllpayIframe() {
+        if(false === confirm('確定要取消訂單嗎?')) { return; }
         const { tradeNumber, formDiv, allpayFullscreenWrapperDock } = this.state;
         let body = document.getElementById('body');
         body.removeChild(formDiv);
@@ -181,9 +184,12 @@ class App extends React.Component {
                 postcode: Math.abs(this.refs.postcode.getValue()),
                 address: this.refs.address.getValue(),
             },
-            receipt: { type: this.refs.receiptType.getValue(), number: '', title: '', },
+            receipt: { type: '', number: '', title: '', },
             remark: this.refs.remark.getValue(),
         };
+        if(this.refs.receiptType) {
+            paymentData.receipt.type = this.refs.receiptType.getValue();
+        }
         if(this.refs.receiptNumber) {
             paymentData.receipt.number = this.refs.receiptNumber.getValue().slice(0, 8);
         }
@@ -298,7 +304,7 @@ class App extends React.Component {
                                 value={userData.address} onChange={this.onChange}
                             />
                         </div>
-                        <div className='row'>
+                        {!!state.project.willIssueInvoice && <div className='row'>
                             <BootstrapRadios
                                 ref='receiptType' gridWidth={'12'}
                                 label={<span>發票種類<span style={{color: STAR_COLOR}}>*</span></span>}
@@ -308,8 +314,8 @@ class App extends React.Component {
                                 ]}
                                 value={receipt.type} onChange={this.onChange}
                             />
-                        </div>
-                        {'three' === receipt.type && <div className='row'>
+                        </div>}
+                        {'three' === receipt.type && !!state.project.willIssueInvoice && <div className='row'>
                             <BootstrapInput
                                 ref='receiptNumber' gridWidth={'4'}
                                 label={<span>統一編號<span style={{color: STAR_COLOR}}>*</span></span>}
