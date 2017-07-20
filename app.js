@@ -82,6 +82,13 @@ App.prototype.run = function() {
     server.get('/login', App.goLoginPage);
     server.get('/token', App.token);
     server.get('/logout', App.logout)
+    if('production' === process.env.NODE_ENV) {
+        server.get('*', function(req, res) {
+            if('http' === req.protocol) {
+                res.redirect('https://' + req.headers.host + req.url);
+            }
+        })
+    }
 
     App.expressStaticRoutes.forEach(function(route) {
         server.use(route.path, Express.static(__dirname + route.serverPath));
