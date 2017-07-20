@@ -119,7 +119,7 @@ PBPlus.Dream.prototype.readProfiles = function(sapIds, errorCallback, successCal
 }
 
 PBPlus.Dream.prototype.saveProfiles = function(profile, errorCallback, successCallback) {
-    let url = 'https://gax2gdkur9.execute-api.ap-southeast-2.amazonaws.com/dev/updateProfile';
+    let url = this.apiBase + '/updateProfile';
     let payload = Object.assign({token: this.userToken}, this.conformProfile(profile));
     Request.post(
         {url: url, json: payload,},
