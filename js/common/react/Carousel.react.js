@@ -71,4 +71,3 @@ class Carousel extends Component {
     }
 }
 module.exports = Carousel;
-

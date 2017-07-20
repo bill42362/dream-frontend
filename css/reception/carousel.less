@@ -4,6 +4,8 @@
     position: relative;
     height: @height;
     div.carousel-items {
+        height: @height;
+        overflow: hidden;
         div.carousel-item {
             position: relative;
             display: inline-block;
@@ -15,10 +17,13 @@
                 position: relative;
                 border-radius: 0.5*@height;
                 overflow: hidden;
-                background-color: darkcyan;
-                color: white;
-                transition: background-color .6s ease;
-                &:hover { background-color: steelblue; }
+                background-color: #c7c7c7;
+                color: #182537;
+                transition: background-color .6s ease, color .6s ease;
+                &:hover {
+                    background-color: #182537;
+                    color: white;
+                }
                 img.carousel-item-image {
                     position: absolute;
                     height: 100%; width: auto;
@@ -37,7 +42,7 @@
         position: absolute;
         border-radius: 4px;
         padding: 8px;
-        background-color: steelblue;
+        background-color: #182537;
         color: white;
         z-index: 1;
     }
