@@ -113,7 +113,7 @@ class App extends React.Component {
             birthday: this.refs.birthday.getValue(),
             phoneNumber: this.refs.phoneNumber.getValue(),
             email: this.refs.email.getValue(),
-            postcode: this.refs.postcode.getValue(),
+            postcode: Math.abs(this.refs.postcode.getValue()),
             //city: this.refs.city.getValue(),
             city: '',
             address: this.refs.address.getValue(),
