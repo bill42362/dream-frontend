@@ -2,6 +2,8 @@
 'use strict';
 import Request from 'request';
 
+const apiBase = process.env.API_BASE || 'http://localhost';
+
 const Reducer = (state = [], action) => {
     switch(action.type) {
         case 'UPDATE_LINLS':
@@ -13,7 +15,7 @@ const Reducer = (state = [], action) => {
 
 const Actions = {
     updateLinks: () => { return (dispatch) => {
-        let url = 'https://g46grc5kd1.execute-api.ap-southeast-2.amazonaws.com/testing/readSitemap';
+        let url = `${apiBase}/readSitemap`;
         Request.get({url}, (err, httpResponse, body) => {
             if(err) { return; }
             else {

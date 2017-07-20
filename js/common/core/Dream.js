@@ -4,8 +4,7 @@ var EventCenter = require('./EventCenter.js');
 
 if(undefined === window.PBPlus) { window.PBPlus = function() {}; };
 PBPlus.Dream = function() {
-    this.apiBase = 'https://g46grc5kd1.execute-api.ap-southeast-2.amazonaws.com/';
-    this.apiStage = 'testing/';
+    this.apiBase = process.env.API_BASE || 'http://localhost';
     this.userToken = '';
     this.userSapId = '';
     this.getUserSapId();
@@ -28,7 +27,7 @@ PBPlus.Dream.prototype.getProjectIdFromUrl = function() {
 }
 
 PBPlus.Dream.prototype.createPayment = function(projectId, itemId, paymentData, errorCallback, successCallback) {
-    let url = this.apiBase + this.apiStage + 'createPayment';
+    let url = this.apiBase + '/createPayment';
     let payload = {
         token: this.userToken,
         pid: projectId,
@@ -59,7 +58,7 @@ PBPlus.Dream.prototype.createPayment = function(projectId, itemId, paymentData, 
 }
 
 PBPlus.Dream.prototype.cancelOrder = function(tradeNumber, errorCallback, successCallback) {
-    let url = this.apiBase + this.apiStage + 'cancelOrder/' + tradeNumber;
+    let url = this.apiBase + '/cancelOrder/' + tradeNumber;
     let payload = { token: this.userToken };
     Request.put(
         {url: url, json: payload,},
@@ -103,7 +102,7 @@ PBPlus.Dream.prototype.conformProfile = function(profile) {
 }
 
 PBPlus.Dream.prototype.readProfiles = function(sapIds, errorCallback, successCallback) {
-    let url = this.apiBase + this.apiStage + 'readProfile';
+    let url = this.apiBase + '/readProfile';
     let payload = {token: this.userToken, uid: sapIds};
     Request.post(
         {url: url, json: payload,},
@@ -136,7 +135,7 @@ PBPlus.Dream.prototype.saveProfiles = function(profile, errorCallback, successCa
 }
 
 PBPlus.Dream.prototype.postMessage = function(message, errorCallback, successCallback) {
-    let url = this.apiBase + this.apiStage + 'createMessage';
+    let url = this.apiBase + '/createMessage';
     let payload = Object.assign(message, {token: this.userToken});
     Request.post(
         {url: url, json: payload,},
@@ -148,7 +147,7 @@ PBPlus.Dream.prototype.postMessage = function(message, errorCallback, successCal
 }
 
 PBPlus.Dream.prototype.postNewsfeed = function(message, projectId, errorCallback, successCallback) {
-    let url = this.apiBase + this.apiStage + 'createNewsfeed';
+    let url = this.apiBase + '/createNewsfeed';
     let payload = {
         token: this.userToken, projectId: projectId,
         type: 'message', message: message,
@@ -163,7 +162,7 @@ PBPlus.Dream.prototype.postNewsfeed = function(message, projectId, errorCallback
 }
 
 PBPlus.Dream.prototype.readNewsfeed = function(projectId, errorCallback, successCallback) {
-    let url = this.apiBase + this.apiStage + 'readNewsfeed';
+    let url = this.apiBase + '/readNewsfeed';
     if(projectId) { url += `/${projectId}`; }
     Request.get(
         {url: url, json: undefined,},
@@ -312,7 +311,7 @@ PBPlus.Dream.prototype.reformMessage = (message) => {
 };
 
 PBPlus.Dream.prototype.getProject = function(projectId, errorCallback, successCallback) {
-    let url = this.apiBase + this.apiStage + 'read/' + projectId;
+    let url = this.apiBase + '/read/' + projectId;
     Request.get({url: url}, (err, httpResponse, body) => {
         if(err) { errorCallback && errorCallback(err); }
         else if(body) {
@@ -355,7 +354,7 @@ PBPlus.Dream.prototype.getProjects = function(search, offset, limit, errorCallba
     if(!!search) { searchString = '/' + search; }
     searchString += '?offset=' + (offset || '0');
     if(!!limit) { searchString += '&limit=' + limit; }
-    let url = this.apiBase + this.apiStage + 'read' + searchString;
+    let url = this.apiBase + '/read' + searchString;
     Request.get({url: url}, (err, httpResponse, body) => {
         if(err) { errorCallback && errorCallback(err); }
         else {
