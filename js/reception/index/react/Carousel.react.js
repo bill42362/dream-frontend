@@ -14,10 +14,24 @@ class Carousel extends Component {
         ];
         this.state = {
             mockIcons: mockIconPool.sort(() => { return Math.floor(2*Math.random()) - 1; }),
+            detailBoxIndex: 0,
+            detailBoxPosition: {x: 0, y: 60},
+            shouldShowDetailBox: false,
         };
+        this.updateDetailBoxState = this.updateDetailBoxState.bind(this);
+    }
+    updateDetailBoxState({ index, isEnter, targetElement }) {
+        const { detailBoxIndex, shouldShowDetailBox } = this.state;
+        const baseRect = this.refs.base.getBoundingClientRect();
+        const itemRect = targetElement.getBoundingClientRect();
+        const detailBoxPosition = {
+            x: itemRect.left - baseRect.left,
+            y: itemRect.bottom - baseRect.top + 4,
+        };
+        this.setState({ detailBoxPosition, shouldShowDetailBox: isEnter, detailBoxIndex: index});
     }
     render() {
-        const { mockIcons } = this.state;
+        const { mockIcons, detailBoxIndex, shouldShowDetailBox, detailBoxPosition } = this.state;
         const { newsfeeds, userProfiles } = this.props;
         let carouselItems = newsfeeds.map(newsfeed => {
             let nickname = 'pb+ 會員';
@@ -32,23 +46,27 @@ class Carousel extends Component {
                 text: newsfeed.message,
             };
         });
-        return <div id="carousel">
-            {carouselItems.map((item, index) =>
-                <div className='carousel-item' key={index}>
-                    <div className='carousel-item-image-wrapper'>
-                        {item.imageSrc && <img className='carousel-item-image' src={item.imageSrc} />}
-                        {!item.imageSrc && <div
-                            className='carousel-mock-image'
-                            style={{
-                                width: '100%', height: '100%',
-                                color: 'darkorchid', fontWeight: '600',
-                                textAlign: 'center', lineHeight: '4em'
-                            }}
-                        >{mockIcons[index]}</div>}
+        return <div id="carousel" ref='base' >
+            <div className='carousel-items'>
+                {carouselItems.map((item, index) =>
+                   <div
+                       className='carousel-item' key={index}
+                       onMouseEnter={(e) => { this.updateDetailBoxState({ index, isEnter: true, targetElement: e.target}); }}
+                       onMouseLeave={(e) => { this.updateDetailBoxState({ index, isEnter: false, targetElement: e.target}); }}
+                   >
+                        <div className='carousel-item-image-wrapper'>
+                            {item.imageSrc && <img className='carousel-item-image' src={item.imageSrc} />}
+                            {!item.imageSrc && <div className='carousel-mock-image' >{mockIcons[index]}</div>}
+                        </div>
                     </div>
-                    <div className='carousel-item-text'>{`${item.text} ..................`}</div>
-                </div>
-            )}
+                )}
+            </div>
+            {shouldShowDetailBox && !!carouselItems[detailBoxIndex] && <div
+                className='carousel-item-detail-box'
+                style={{left: detailBoxPosition.x, top: detailBoxPosition.y}}
+            >
+                {carouselItems[detailBoxIndex].text}
+            </div>}
         </div>;
     }
 }
