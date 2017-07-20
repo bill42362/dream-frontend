@@ -82,9 +82,10 @@ App.prototype.run = function() {
     server.get('/login', App.goLoginPage);
     server.get('/token', App.token);
     server.get('/logout', App.logout)
+    server.get('/health_check', function(req, res) { res.json('<3'); })
     if('production' === process.env.NODE_ENV) {
         server.get('*', function(req, res) {
-            if('http' === req.protocol) {
+            if('http' === req.protocol && !req.url.match('health_check')) {
                 res.redirect('https://' + req.headers.host + req.url);
             }
         })
