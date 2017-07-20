@@ -75,6 +75,7 @@ class App extends React.Component {
         }
     }
     closeAllpayIframe() {
+        if(false === confirm('確定要取消訂單嗎?')) { return; }
         const { tradeNumber, formDiv, allpayFullscreenWrapperDock } = this.state;
         let body = document.getElementById('body');
         body.removeChild(formDiv);
