@@ -8,8 +8,8 @@ import ContentEditable from './ContentEditable.react.js';
 class Header extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            userSapId: '', userNickname: '', userEmail: '',
+        this.state = { 
+            userSapId: '', userNickname: '', userEmail: '', userIconSrc: '/img/mock_user_icon.jpg',
             isEditingSearchText: false, searchText: '',
             isUserPanelCollapsed: true, isUserPanelHidden: true,
         };
@@ -41,7 +41,11 @@ class Header extends React.Component {
         this.setState({userSapId: sapId});
     }
     onReadUserProfileSuccess(profiles) {
-        this.setState({userNickname: profiles[0].nickname, userEmail: profiles[0].email});
+        this.setState({
+            userNickname: profiles[0].nickname,
+            userEmail: profiles[0].email,
+            userIconSrc: profiles[0].pictureSrc,
+        });
     }
     onWindowScroll() {
         const baseRect = this.refs.base.getBoundingClientRect();
@@ -84,7 +88,7 @@ class Header extends React.Component {
                     {this.state.userSapId && <img
                         className="user-icon"
                         aria-label="user profile icon" role='button' 
-                        src='/img/mock_user_icon.jpg' onClick={this.switchUserPanel}
+                        src={this.state.userIconSrc} onClick={this.switchUserPanel}
                     />}
                     {!this.state.userSapId && <a href={'/login?location=' + locationBase64} >
                         <span
@@ -101,7 +105,7 @@ class Header extends React.Component {
             )}>
                 <div className='user-panel-profile'>
                     <div className='user-panel-profile-picture-wrapper'>
-                        <img className='user-panel-picture' src='/img/mock_user_icon.jpg'/>
+                        <img className='user-panel-picture' src={this.state.userIconSrc}/>
                     </div>
                     <div className='user-panel-profile-texts'>
                         <div className='user-panel-nickname'>{this.state.userNickname || '設一下暱稱，糗糗泥!'}</div>
