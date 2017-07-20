@@ -114,7 +114,8 @@ class App extends React.Component {
             phoneNumber: this.refs.phoneNumber.getValue(),
             email: this.refs.email.getValue(),
             postcode: this.refs.postcode.getValue(),
-            city: this.refs.city.getValue(),
+            //city: this.refs.city.getValue(),
+            city: '',
             address: this.refs.address.getValue(),
         };
         this.setState({ userProfile });
@@ -190,12 +191,12 @@ class App extends React.Component {
                                 label={'郵遞區號'} title={'郵遞區號'}
                                 value={userProfile.postcode} onChange={this.onChange}
                             />
-                            <BootstrapSelect
+                            {false && <BootstrapSelect
                                 ref='city' gridWidth={'3'} label={'縣市'} title={'縣市'}
                                 options={cities} value={userProfile.city} onChange={this.onChange}
-                            />
+                            />}
                             <BootstrapInput
-                                ref='address' gridWidth={'6'} label={'地址'} title={'地址'}
+                                ref='address' gridWidth={'9'} label={'地址'} title={'地址'}
                                 value={userProfile.address} onChange={this.onChange}
                             />
                         </div>
