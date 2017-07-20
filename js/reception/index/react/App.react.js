@@ -4,7 +4,7 @@ import React from 'react';
 import ClassNames from 'classnames';
 import Header from '../../../common/react/Header.react.js';
 import Slide from './Slide.react.js';
-import Carousel from './Carousel.react.js';
+import Carousel from '../../../common/react/Carousel.react.js';
 import ProjectCard from '../../../common/react/ProjectCard.react.js';
 import ConnectedFooter from '../../../common/react/ConnectedFooter.react.js';
 

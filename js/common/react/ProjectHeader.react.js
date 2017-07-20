@@ -2,6 +2,7 @@
 'use strict'
 import React from 'react';
 import ClassNames from 'classnames';
+import Carousel from './Carousel.react.js';
 
 class ProjectHeader extends React.Component {
     constructor(props) {
@@ -37,19 +38,6 @@ class ProjectHeader extends React.Component {
         let leftDays = (data.dueTimestamp - (Date.now()/1000))/86400;
         if(10 > leftDays) { leftDays = Math.round(10*leftDays)/10; }
         else { leftDays = Math.round(leftDays); }
-        let eventItems = newsfeeds.map(newsfeed => {
-            let nickname = 'pb+ 會員';
-            let imageSrc = '/img/mock_user_icon.jpg';
-            if(userProfiles[newsfeed.userPK]) {
-                nickname = userProfiles[newsfeed.userPK].nickname || nickname;
-                imageSrc = userProfiles[newsfeed.userPK].src || imageSrc;
-            }
-            return {
-                nickname, imageSrc,
-                type: newsfeed.type,
-                text: newsfeed.message,
-            };
-        });
         return <div className='project-header'>
             <div className='title-section'>
                 <h2 className='project-title'>{data.title}</h2>
@@ -84,14 +72,7 @@ class ProjectHeader extends React.Component {
                                 </div>}
                             </div>
                             <div className='recent-events'>
-                                {eventItems.map((item, index) =>
-                                    <div className='carousel-item' key={index}>
-                                        <div className='carousel-item-image-wrapper'>
-                                            <img className='carousel-item-image' src={item.imageSrc} title={item.nickname}/>
-                                        </div>
-                                        <div className='carousel-item-text'>{`${item.text} ...............`}</div>
-                                    </div>
-                                )}
+                                <Carousel newsfeeds={newsfeeds} userProfiles={userProfiles} />
                             </div>
                             {!!data.awares.length && <div className='awares'>
                                 {data.awares.map((aware, index) =>

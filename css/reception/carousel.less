@@ -1,38 +1,49 @@
 @themeBackground: rgb(250, 130, 160);
 @themeForeground: rgb(190, 136, 247);
 .carousel(@height: 4em) {
-    display: flex;
+    position: relative;
     height: @height;
-    overflow-x: auto;
-    div.carousel-item {
-        flex: none;
-        display: flex;
-        border-radius: 0.5*@height;
-        margin-right: 0.8em;
-        max-width: @height;
-        transition: background-color .5s ease, max-width .5s ease;
-        div.carousel-item-image-wrapper {
+    div.carousel-items {
+        height: @height;
+        overflow: hidden;
+        div.carousel-item {
             position: relative;
-            flex: 0 0 @height;
+            display: inline-block;
             border-radius: 0.5*@height;
-            margin-right: 0.5em;
-            overflow: hidden;
-            background-color: skyblue;
-            img.carousel-item-image {
-                position: absolute;
-                height: 100%; width: auto;
+            margin-right: 0.8em;
+            width: @height;
+            cursor: default;
+            div.carousel-item-image-wrapper {
+                position: relative;
+                border-radius: 0.5*@height;
+                overflow: hidden;
+                background-color: #c7c7c7;
+                color: #182537;
+                transition: background-color .6s ease, color .6s ease;
+                &:hover {
+                    background-color: #182537;
+                    color: white;
+                }
+                img.carousel-item-image {
+                    position: absolute;
+                    height: 100%; width: auto;
+                }
+                div.carousel-mock-image {
+                    display: block;
+                    width: 100%;
+                    height: 100%;
+                    text-align: center;
+                    line-height: 4em;
+                }
             }
         }
-        div.carousel-item-text {
-            flex: 1;
-            color: white;
-            line-height: @height;
-            word-break: break-all;
-            overflow: hidden;
-        }
-        &:hover {
-            background-color: darken(@themeBackground, 10%);
-            max-width: 20*@height;
-        }
+    }
+    div.carousel-item-detail-box {
+        position: absolute;
+        border-radius: 4px;
+        padding: 8px;
+        background-color: #182537;
+        color: white;
+        z-index: 1;
     }
 }
