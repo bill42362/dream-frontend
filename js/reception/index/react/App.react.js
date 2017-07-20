@@ -32,19 +32,6 @@ class App extends React.Component {
     }
     onGetProjectsSuccess(projects) { this.setState({projects: projects}); }
     onReadNewsfeedSuccess(newsfeeds = []) {
-        const userProfiles = this.state.userProfiles;
-        const oldNewsfeeds = this.state.newsfeeds;
-        oldNewsfeeds.forEach(oldNewsfeed => {
-            const existedNewsFeed = newsfeeds.filter(newsfeed => { return oldNewsfeeds.id === newsfeeds.id; })[0];
-            if(!existedNewsFeed) { newsfeeds.push(oldNewsfeed); }
-        });
-        const noProfileNewsfeeds = newsfeeds.filter(newsfeed => {
-            return !userProfiles[newsfeed.userPK];
-        });
-        if(0 < noProfileNewsfeeds.length) {
-            let userPKs = noProfileNewsfeeds.map(noProfileNewsfeed => { return noProfileNewsfeed.userPK; });
-            PBPlusDream.readProfiles(userPKs, undefined, this.onReadUserProfilesSuccess);
-        }
         this.setState({newsfeeds});
     }
     onReadUserProfilesSuccess(profiles = []) {
@@ -73,7 +60,7 @@ class App extends React.Component {
         return <div id='wrapper' ref='base'>
             <Header fixed={true} isOnTop={headerOnTop} />
             <Slide projects={slideStates} slideInterval={5000} />
-            <Carousel newsfeeds={newsfeeds} userProfiles={userProfiles} />
+            <Carousel newsfeeds={newsfeeds} />
             <div className='project-cards row'>
                 {listStates.map((project, index) => {
                     return <div className='col-sm-4' key={index}>

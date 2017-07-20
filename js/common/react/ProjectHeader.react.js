@@ -72,7 +72,7 @@ class ProjectHeader extends React.Component {
                                 </div>}
                             </div>
                             <div className='recent-events'>
-                                <Carousel newsfeeds={newsfeeds} userProfiles={userProfiles} />
+                                <Carousel newsfeeds={newsfeeds} />
                             </div>
                             {!!data.awares.length && <div className='awares'>
                                 {data.awares.map((aware, index) =>

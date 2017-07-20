@@ -32,40 +32,28 @@ class Carousel extends Component {
     }
     render() {
         const { mockIcons, detailBoxIndex, shouldShowDetailBox, detailBoxPosition } = this.state;
-        const { newsfeeds, userProfiles } = this.props;
-        let carouselItems = newsfeeds.map(newsfeed => {
-            let nickname = 'pb+ 會員';
-            let imageSrc = '';
-            if(userProfiles[newsfeed.userPK]) {
-                nickname = userProfiles[newsfeed.userPK].nickname || nickname;
-                imageSrc = userProfiles[newsfeed.userPK].src || imageSrc;
-            }
-            return {
-                nickname, imageSrc,
-                type: newsfeed.type,
-                text: newsfeed.message,
-            };
-        });
+        const { newsfeeds } = this.props;
+        console.table(newsfeeds);
         return <div id="carousel" ref='base' >
             <div className='carousel-items'>
-                {carouselItems.map((item, index) =>
+                {newsfeeds.map((item, index) =>
                    <div
                        className='carousel-item' key={index}
                        onMouseEnter={(e) => { this.updateDetailBoxState({ index, isEnter: true, targetElement: e.target}); }}
                        onMouseLeave={(e) => { this.updateDetailBoxState({ index, isEnter: false, targetElement: e.target}); }}
                    >
                         <div className='carousel-item-image-wrapper'>
-                            {item.imageSrc && <img className='carousel-item-image' src={item.imageSrc} />}
-                            {!item.imageSrc && <div className='carousel-mock-image' >{mockIcons[index]}</div>}
+                            {item.src && <img className='carousel-item-image' src={item.src} />}
+                            {!item.src && <div className='carousel-mock-image' >{mockIcons[index]}</div>}
                         </div>
                     </div>
                 )}
             </div>
-            {shouldShowDetailBox && !!carouselItems[detailBoxIndex] && <div
+            {shouldShowDetailBox && !!newsfeeds[detailBoxIndex] && <div
                 className='carousel-item-detail-box'
                 style={{left: detailBoxPosition.x, top: detailBoxPosition.y}}
             >
-                {carouselItems[detailBoxIndex].text}
+                {`${newsfeeds[detailBoxIndex].nickname} ${newsfeeds[detailBoxIndex].message}`}
             </div>}
         </div>;
     }
