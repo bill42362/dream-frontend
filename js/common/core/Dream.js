@@ -228,6 +228,7 @@ PBPlus.Dream.prototype.reformProject = (project) => {
         awares: JSON.parse(project.awares || '[]').slice(0, 6),
         positions: JSON.parse(project.positions || '[]'),
         relateUrl: project.relate_url,
+        willIssueInvoice: !!project.is_invoice,
     };
 };
 

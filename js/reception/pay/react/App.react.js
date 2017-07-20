@@ -50,13 +50,15 @@ class App extends React.Component {
     }
     cancel() { history.back(); }
     isFormComplete() {
-        const { paymentData } = this.state;
+        const { project, paymentData } = this.state;
         const { userData, receipt } = paymentData;
         let result = false;
         result = (
             userData.name && userData.phoneNumber && userData.email && userData.postcode && userData.address
         ) && (
-            'two' === receipt.type || ('three' === receipt.type && receipt.number && receipt.title)
+            !project.willIssueInvoice
+            || 'two' === receipt.type
+            || ('three' === receipt.type && receipt.number && receipt.title)
         );
         return result;
     }
@@ -298,7 +300,7 @@ class App extends React.Component {
                                 value={userData.address} onChange={this.onChange}
                             />
                         </div>
-                        <div className='row'>
+                        {!!state.project.willIssueInvoice && <div className='row'>
                             <BootstrapRadios
                                 ref='receiptType' gridWidth={'12'}
                                 label={<span>發票種類<span style={{color: STAR_COLOR}}>*</span></span>}
@@ -308,8 +310,8 @@ class App extends React.Component {
                                 ]}
                                 value={receipt.type} onChange={this.onChange}
                             />
-                        </div>
-                        {'three' === receipt.type && <div className='row'>
+                        </div>}
+                        {'three' === receipt.type && !!state.project.willIssueInvoice && <div className='row'>
                             <BootstrapInput
                                 ref='receiptNumber' gridWidth={'4'}
                                 label={<span>統一編號<span style={{color: STAR_COLOR}}>*</span></span>}
