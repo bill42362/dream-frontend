@@ -33,7 +33,6 @@ class Carousel extends Component {
     render() {
         const { mockIcons, detailBoxIndex, shouldShowDetailBox, detailBoxPosition } = this.state;
         const { newsfeeds } = this.props;
-        console.table(newsfeeds);
         return <div id="carousel" ref='base' >
             <div className='carousel-items'>
                 {newsfeeds.map((item, index) =>
