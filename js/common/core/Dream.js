@@ -111,7 +111,7 @@ PBPlus.Dream.prototype.readProfiles = function(sapIds, errorCallback, successCal
             if(err) { errorCallback && errorCallback(err); }
             else {
                 if(200 === body.status) {
-                    let profiles = body.message.map(this.reformProfile);
+                    let profiles = (body.message || []).map(this.reformProfile);
                     successCallback && successCallback(profiles);
                 } else { errorCallback && errorCallback('Not found.'); }
             }
