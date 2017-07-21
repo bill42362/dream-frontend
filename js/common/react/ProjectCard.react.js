@@ -42,6 +42,7 @@ class ProjectCard extends React.Component {
         else { leftDays = Math.round(leftDays); }
         let href = `/project/${project.id}`;
         if('outer' === project.type) { href = project.relateUrl; }
+        const projectProgress = 100*project.currentFound/project.foundTarget || 0;
         return <a className="project-card" href={href} ref='base'>
             <div className='ratio-fixer'>
                 <img
@@ -56,11 +57,19 @@ class ProjectCard extends React.Component {
                         <div className='project-description'>{project.description}</div>
                     </div>
                     <div className='project-content-footer'>
-                        <div className='project-progress-line'> ---------- </div>
+                        {!!projectProgress && <div className='project-progress-bar'>
+                            <div className='project-progress-line-wrapper'>
+                                <div className='project-progress-line' style={{width: `${projectProgress}%`}}></div>
+                                <div className='project-progress-shell' style={{left: `${projectProgress}%`}}></div>
+                                <div className='project-progress-light' style={{left: `${projectProgress}%`}}></div>
+                                <div className='project-progress-ball' style={{left: `${projectProgress}%`}}></div>
+                            </div>
+                        </div>}
+                        {!projectProgress && <div className='project-progress-bar-empty'></div>}
                         <div className='project-content-footer-texts'>
                             <span className='project-proposer'>{proposer.title}</span>
                             <span className='project-progress'>
-                                {!!+project.currentFound && <span className='project-progress-text'>
+                                {!!+project.foundTarget && <span className='project-progress-text'>
                                     {`$${Core.addNumberComma(project.currentFound)}`}
                                     <span style={{margin: '0 0.5em', color: 'lightgray'}}>/</span>
                                     {`$${Core.addNumberComma(project.foundTarget)}`}
