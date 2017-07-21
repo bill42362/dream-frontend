@@ -52,7 +52,7 @@ class Carousel extends Component {
                 className='carousel-item-detail-box'
                 style={{left: detailBoxPosition.x, top: detailBoxPosition.y}}
             >
-                {`${newsfeeds[detailBoxIndex].nickname} ${newsfeeds[detailBoxIndex].message}`}
+                {`${newsfeeds[detailBoxIndex].nickname || 'pb+會員'} ${newsfeeds[detailBoxIndex].message}`}
             </div>}
         </div>;
     }
