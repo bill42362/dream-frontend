@@ -1,0 +1,87 @@
+// project-slide.less
+
+div.project-slide {
+    height: 100%;
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+    div.slide-image-container {
+        position: relative;
+        height: 100%;
+        background-color: lightgray;
+        img.slide-image {
+            position: absolute;
+            min-width: 100%;
+            min-height: 100%;
+            max-height: 110%;
+        }
+    }
+    div.slide-content-zone {
+        position: absolute;
+        width: 60%;
+        left: 20%;
+        div.slide-texts {
+            color: rgb(240, 240, 240);
+            text-shadow: black 1px 1px 10px;
+            h1.slide-texts-title {
+                margin: 0em 0em 1em;
+            }
+            h3.slide-texts-subtitle {
+                margin: 0em 0em 3em;
+            }
+            h4.slide-texts-progress {
+                margin-right: 2em;
+                span { margin-right: 1.5em; }
+            }
+        }
+        div.project-button-container {
+            text-align: center;
+            a {
+                span.project-button {
+                    display: inline-block;
+                    border-radius: 0.5em;
+                    padding: 1em 2em;
+                    background-color: rgba(255, 255, 255, 0.9);
+                    color: rgb(250, 130, 160);
+                    font-weight: 200;
+                    cursor: pointer;
+                    transition: all .5s ease;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    div.project-slide {
+        div.slide-content-zone {
+            div.slide-texts {
+                h1.slide-texts-title {
+                    margin-bottom: 0.5em;
+                    font-size: 8vw;
+                }
+                h3.slide-texts-subtitle {
+                    display: none;
+                    font-size: 5vw;
+                }
+                h4.slide-texts-progress {
+                    font-size: 3vw;
+                    margin-bottom: 2em;
+                    span {
+                        margin-bottom: 0.5em;
+                        display: block;
+                    }
+                }
+            }
+            div.project-button-container {
+                a {
+                    span.project-button {
+                        background-color: rgba(255, 255, 255, 0.9);
+                        color: rgb(250, 130, 160);
+                    }
+                }
+            }
+        }
+    }
+}
