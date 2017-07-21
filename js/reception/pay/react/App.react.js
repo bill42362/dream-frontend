@@ -220,7 +220,7 @@ class App extends React.Component {
             itemPaymentMethods = item.paymentMethods;
         }
         return <div id='wrapper'>
-            <Header fixed={false} />
+            <Header fixed={false} iconSrc='/img/brand_icon_black.png' />
             <h1 className='pay-title'>訂單付款資訊</h1>
             <div className='company-info'>
                 <a className='site' href='http://pcgbros.com/' title='寶悍運動平台'>寶悍運動平台</a>

@@ -119,7 +119,7 @@ class App extends React.Component {
             count: state.comments.length, href: '/message?p=' + state.project.id
         });
         return <div id='wrapper'>
-            <Header fixed={false} />
+            <Header fixed={false} iconSrc='/img/brand_icon_black.png' />
             <ProjectHeader
                 project={this.state.project} banner={this.state.pictures[this.state.project.bannerId]}
                 newsfeeds={state.newsfeeds} userProfiles={state.userProfiles}
