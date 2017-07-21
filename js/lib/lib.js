@@ -22,3 +22,5 @@ window.AnimateSquare = AnimateSquare;
 
 let MersenneTwister = require('mersenne-twister');
 window.MersenneTwister = MersenneTwister;
+
+require('es6-promise').polyfill();
