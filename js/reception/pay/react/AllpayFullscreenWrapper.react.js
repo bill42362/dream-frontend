@@ -43,7 +43,10 @@ class AllpayFullscreenWrapper extends React.Component {
                 <iframe className='allpay-iframe' name='allpay_iframe'/>
             </div>
             <div
-                className='allpay-cancel-button' role='button' onClick={closeAllpayIframe}
+                className='allpay-cancel-button' role='button'
+                onClick={() => {
+                    if(true === confirm('確定要取消訂單嗎?')) { closeAllpayIframe(); }
+                }}
             >取 消</div>
         </div>;
     }
