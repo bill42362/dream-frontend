@@ -127,7 +127,7 @@ class App extends React.Component {
         let userPicture = '/img/mock_user_icon.jpg';
         if(userProfile) { userPicture = userProfile.pictureSrc || userPicture; }
         return <div id='wrapper'>
-            <Header fixed={false} />
+            <Header fixed={false} iconSrc='/img/brand_icon_black.png' />
             <h1 className='user-info-title'>使用者資訊</h1>
             <div className='user-info-panel'>
                 <div className='user-image-section' style={{position: 'relative'}}>

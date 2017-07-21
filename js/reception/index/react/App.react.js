@@ -58,7 +58,7 @@ class App extends React.Component {
         const slideStates = projects.filter(project => { return -1 != project.positions.indexOf('slide'); });
         const listStates = projects.filter(project => { return -1 != project.positions.indexOf('list'); });
         return <div id='wrapper' ref='base'>
-            <Header fixed={true} isOnTop={headerOnTop} />
+            <Header fixed={true} isOnTop={headerOnTop} iconSrc='/img/brand_icon_white.png' />
             <Slide projects={slideStates} slideInterval={5000} />
             <Carousel newsfeeds={newsfeeds} />
             <div className='project-cards row'>

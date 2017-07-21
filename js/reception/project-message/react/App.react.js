@@ -196,7 +196,7 @@ class App extends React.Component {
             userNickname = state.userProfiles[state.userSapId].nickname;
         }
         return <div id='wrapper'>
-            <Header fixed={false} />
+            <Header fixed={false} iconSrc='/img/brand_icon_black.png' />
             <ProjectHeader
                 project={state.project} banner={state.pictures[state.project.bannerId]}
                 newsfeeds={state.newsfeeds} userProfiles={state.userProfiles}
