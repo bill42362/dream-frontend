@@ -32,7 +32,11 @@ div.project-slide {
             }
             h4.slide-texts-progress {
                 margin-right: 2em;
-                span { margin-right: 1.5em; }
+                span {
+                    display: inline-block;
+                    margin-right: 1.5em;
+                    margin-bottom: 0.5em;
+                }
             }
         }
         div.project-button-container {
@@ -56,10 +60,12 @@ div.project-slide {
 @media (max-width: 767px) {
     div.project-slide {
         div.slide-content-zone {
+            width: 80%;
+            left: 10%;
             div.slide-texts {
                 h1.slide-texts-title {
                     margin-bottom: 0.5em;
-                    font-size: 8vw;
+                    font-size: 6vw;
                 }
                 h3.slide-texts-subtitle {
                     display: none;
@@ -68,10 +74,7 @@ div.project-slide {
                 h4.slide-texts-progress {
                     font-size: 3vw;
                     margin-bottom: 2em;
-                    span {
-                        margin-bottom: 0.5em;
-                        display: block;
-                    }
+                    span { display: block; }
                 }
             }
             div.project-button-container {
