@@ -32,11 +32,11 @@ class ProjectMessage extends React.Component {
         return <div className='project-message' ref='base' >
             <img
                 className='project-message-author-image'
-                src={authorProfile.src || 'img/mock_user_icon.jpg'}
-                title={authorProfile.nickname}
+                src={authorProfile.pictureSrc || 'img/mock_user_icon.jpg'}
+                title={authorProfile.nickname || 'pb+會員'}
             />
             <div className='project-message-texts' >
-                <h5 className='project-message-author'>{authorProfile.nickname || ''}</h5>
+                <h5 className='project-message-author'>{authorProfile.nickname || 'pb+會員'}</h5>
                 <span className='project-message-date-string'>
                     {Core.getDateStringWithFormat(message.timestamp, 'YYYY-MM-DD hh:mm:ss')}
                 </span>

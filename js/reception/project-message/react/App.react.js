@@ -192,7 +192,7 @@ class App extends React.Component {
         });
         let userImageSrc = '', userNickname = '';
         if(state.userSapId && state.userProfiles[state.userSapId]) {
-            userImageSrc = state.userProfiles[state.userSapId].src;
+            userImageSrc = state.userProfiles[state.userSapId].pictureSrc;
             userNickname = state.userProfiles[state.userSapId].nickname;
         }
         return <div id='wrapper'>
