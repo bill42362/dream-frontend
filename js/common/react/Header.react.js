@@ -67,7 +67,7 @@ class Header extends React.Component {
                 <NavbarMenu currentItemKey={'home'} items={navbarMenuItems} />
                 <div id="brand-icon-container">
                     <a href='/'>
-                        <img className="brand-icon" src="/img/brand_icon_white.png" />
+                        <img className="brand-icon" src={this.props.iconSrc} />
                     </a>
                 </div>
                 <div id="navbar-buttons">
