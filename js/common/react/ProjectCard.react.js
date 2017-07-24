@@ -42,7 +42,7 @@ class ProjectCard extends React.Component {
         else { leftDays = Math.round(leftDays); }
         let href = `/project/${project.id}`;
         if('outer' === project.type) { href = project.relateUrl; }
-        const projectProgress = 100*project.currentFound/project.foundTarget || 0;
+        const projectProgress = Math.min(100*project.currentFound/project.foundTarget, 100) || 0;
         return <a className="project-card" href={href} ref='base'>
             <div className='ratio-fixer'>
                 <img
