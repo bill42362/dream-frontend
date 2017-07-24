@@ -1,10 +1,11 @@
 // PictureEditor.js
 'use strict';
 
+const DEFAULT_SIZE = 120;
 const initedImage = new Image();
 initedImage.crossOrigin="anonymous";
 const defaultState = {
-    top: 0, left: 0, width: 120, height: 120,
+    top: 0, left: 0, width: DEFAULT_SIZE, height: DEFAULT_SIZE,
     image: initedImage, resultSource: '',
 };
 
@@ -26,7 +27,13 @@ const updateImageSource = (source) => { return (dispatch, getState) => {
         const { image } = getState().pictureEditor;
         image.onload = () => {
             const { width, height } = image;
-            dispatch({type: 'UPDATE_SIZE', size: { width, height }});
+            const targetZoom = DEFAULT_SIZE/Math.min(width, height);
+            const targetSize = {width: width*targetZoom, height: height*targetZoom};
+            dispatch({type: 'UPDATE_SIZE', size: targetSize});
+            dispatch({type: 'UPDATE_POSITION', position: {
+                left: -0.5*targetSize.width + 0.5*DEFAULT_SIZE,
+                top: -0.5*targetSize.height + 0.5*DEFAULT_SIZE,
+            }});
             dispatch(updateResultSource())
             .then(resolve)
             .catch(reject);
@@ -51,7 +58,7 @@ const stretchPicture = ({x, y}) => { return (dispatch, getState) => {
 const updateResultSource = () => { return (dispatch, getState) => {
     const state = getState().pictureEditor;
     return new Promise((resolve, reject) => {
-        const outputSize = {width: 120, height: 120};
+        const outputSize = {width: DEFAULT_SIZE, height: DEFAULT_SIZE};
         const canvas = document.createElement('canvas');
         canvas.width = outputSize.width;
         canvas.height = outputSize.height;
