@@ -1,0 +1,166 @@
+@import "./utils.less";
+@import "./base.less";
+@themeBackground: rgb(225, 50, 177);
+
+header#header {
+    nav.navbar {
+        display: flex;
+        margin-bottom: 0;
+        height: @headerHeight;
+        background-color: #f8f8f8;
+        border-radius: 0;
+        div#navbar-menu {
+            flex: 1;
+            display: inline-block;
+            padding: 5px 0;
+            color: white;
+            span.menu-icon {
+                font-size: 2em;
+                margin: 0px 10px 0px 30px;
+                line-height: @headerHeight - 10;
+            }
+            span.menu-display { font-size: 1.5em; }
+        }
+        div#brand-icon-container {
+            flex: auto;
+            text-align: center;
+            img.brand-icon {
+                margin-top: 10px;
+                height: 3em;
+            }
+        }
+        div#navbar-buttons {
+            flex: 1;
+            text-align: right;
+            div.navbar-search-container {
+                display: inline-block;
+                height: 100%;
+                padding: 5px 0 5px 5px;
+                div.navbar-search {
+                    display: flex;
+                    border-radius: 1em;
+                    height: 100%;
+                    width: 3.5em;
+                    transition: width .5s ease, background-color .5s ease;
+                    &.editing {
+                        background-color: @themeBackground;
+                        width: 20em;
+                    }
+                    span.navbar-icon {
+                        flex: 0;
+                        margin-right: 10px;
+                    }
+                    span.navbar-search-text {
+                        flex: auto;
+                        margin: 10px 10px 10px 0;
+                        color: white;
+                        font-size: 1.5em;
+                        text-align: left;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        outline-style: none;
+                    }
+                }
+            }
+            span.navbar-icon {
+                margin: 0px 20px 0px 10px;
+                color: black;
+                font-size: 2em;
+                line-height: @headerHeight - 10;
+            }
+            img.user-icon {
+                margin: 0px 20px 0px 10px;
+                height: 2.2em; width: 2.2em;
+                vertical-align: baseline;
+                border-radius: 1.1em;
+                object-fit: cover;
+            }
+        }
+    }
+    div.user-panel {
+        position: fixed;
+        border: 1px solid rgb(221, 221, 221);
+        border-radius: 0 0 0 5px;
+        padding: 10px;
+        top: @headerHeight; right: 0px;
+        max-width: 250px;
+        background-color: white;
+        text-align: center;
+        z-index: 2;
+        .animation(fadein, .5s);
+        &.collapse {
+            display: block;
+            .animation(fadeout, .5s);
+        }
+        div.user-panel-profile {
+            display: flex;
+            div.user-panel-profile-picture-wrapper {
+                flex: 0;
+                margin-right: 5px;
+                img.user-panel-picture {
+                    display: inline-block;
+                    width: 3em; height: 3em;
+                }
+            }
+            div.user-panel-profile-texts {
+                flex: auto;
+                text-align: left;
+                overflow: hidden;
+                div.user-panel-nickname {
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: hidden;
+                }
+                div.user-panel-email {
+                    font-size: small;
+                    color: gray;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    overflow: hidden;
+                }
+            }
+        }
+        hr.user-panel-seperator { margin: 10px -10px; }
+        div.user-panel-buttons {
+            text-align: left;
+            a.user-panel-button {
+                margin-top: 5px;
+                display: block;
+            }
+        }
+    }
+}
+@media (max-width: 767px) {
+    header#header {
+        nav.navbar {
+            div#navbar-menu {
+                span.menu-icon { margin: 0px 10px 0px 20px; }
+                span.menu-display { display: none; }
+            }
+            div#brand-icon-container { }
+            div#navbar-buttons {
+                div.navbar-search-container { display: none; }
+                span.navbar-icon { margin-top: 5px; }
+                img.user-icon { margin-top: 5px; }
+            }
+        }
+        div.user-panel {
+            &.collapse { }
+            div.user-panel-profile {
+                div.user-panel-profile-picture-wrapper {
+                    img.user-panel-picture { }
+                }
+                div.user-panel-profile-texts {
+                    div.user-panel-nickname {
+                    }
+                    div.user-panel-email {
+                    }
+                }
+            }
+            hr.user-panel-seperator { }
+            div.user-panel-buttons {
+                a.user-panel-button { }
+            }
+        }
+    }
+}
