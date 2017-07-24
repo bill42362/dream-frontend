@@ -21,7 +21,7 @@
     0% { .transparent(1); }
     100% { .transparent(0); }
 });
-.animation(@name, @duration: 3s, @delay: 0s, @ease: ease-out, @fillMode: forwards, @iterationCount: infinite) {
+.animation(@name, @duration: 3s, @delay: 0s, @ease: ease-out, @fillMode: forwards, @iterationCount: 1) {
     -webkit-animation: @name @duration @ease @delay @iterationCount normal @fillMode;
     -moz-animation:    @name @duration @ease @delay @iterationCount normal @fillMode;
     -ms-animation:     @name @duration @ease @delay @iterationCount normal @fillMode;
