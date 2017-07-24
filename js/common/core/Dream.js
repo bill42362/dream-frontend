@@ -1,5 +1,6 @@
 var Core = require('./Core.js');
 var Request = require('request');
+var RP = require('request-promise');
 var EventCenter = require('./EventCenter.js');
 
 if(undefined === window.PBPlus) { window.PBPlus = function() {}; };
