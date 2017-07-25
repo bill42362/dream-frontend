@@ -22,54 +22,45 @@ body {
                     background-color: rgb(210, 210, 210);
                     padding: 0.8em;
                     font-size: 16px;
-                    font-weight: 600;
+                    font-weight: 400;
                     text-align: center;
                 }
                 div.pay-history-content {
+                    display: flex;
                     padding: 25px 50px 0px;
-                    div.pay-history-content-row {
-                        display: flex;
+                    div.pay-history-content-column {
+                        flex: 1;
+                        margin-right: 25px;
+                        &:last-of-type { margin-right: 0px; }
                         div.pay-history-content-item {
-                            flex: 0.5;
                             display: flex;
+                            align-items: center;
+                            position: relative;
                             border-bottom: 1px dashed lightgray;
-                            margin-right: 25px;
-                            &:last-of-type { margin-right: 0px; }
+                            min-height: 4em;
                             div.pay-history-content-item-title {
                                 flex: none;
-                                padding: 1em 2em;
-                                min-width: 8em;
+                                padding: 0em 2em;
+                                width: 8em;
                                 color: rgb(142, 142, 142);
                             }
                             div.pay-history-content-item-content {
                                 flex: auto;
-                                padding: 1em;
+                                margin: 0.5em 0px;
                             }
-                        }
-                    }
-                }
-                hr {
-                    border: none;
-                    border-top: 1px dashed lightgray;
-                    color: white;
-                    background-color: white;
-                    height: 1px;
-                    max-width: 650px;
-                }
-                div.payment-form-buttons {
-                    max-width: 600px;
-                    margin: 15px auto 20px auto;
-                    div.payment-form-button {
-                        border-radius: 5px;
-                        margin-top: 15px;
-                        padding: 8px 0;
-                        background-color: lightgray;
-                        text-align: center;
-                        color: white;
-                        &.primary { background-color: @themeForeground; }
-                        &.fetching {
-                            background-color: lighten(@themeForeground, 10%);
-                            cursor: not-allowed;
+                            div.pay-history-content-item-button {
+                                display: inline-block;
+                                border-radius: 5px;
+                                margin-left: 2em;
+                                padding: 8px;
+                                background-color: @themeForeground;
+                                text-align: center;
+                                color: white;
+                                &.fetching {
+                                    background-color: lighten(@themeForeground, 10%);
+                                    cursor: not-allowed;
+                                }
+                            }
                         }
                     }
                 }
@@ -79,15 +70,20 @@ body {
     }
 }
 
-@media (max-width: 991px) {
-    body {
-        & > div#app-root div#wrapper {
-        }
-    }
-}
 @media (max-width: 767px) {
     body {
         & > div#app-root div#wrapper {
+            div.pay-histories {
+                div.pay-history {
+                    div.pay-history-content {
+                        display: block;
+                        padding: 5px 5vw 0px;
+                        div.pay-history-content-column {
+                            margin-right: 0px;
+                        }
+                    }
+                }
+            }
         }
     }
 }

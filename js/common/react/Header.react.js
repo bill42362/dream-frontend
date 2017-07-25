@@ -119,6 +119,10 @@ class Header extends React.Component {
                         href={'/userinfo'}
                     >使用者資訊</a>
                     <a
+                        className='user-panel-button pay-history' role='button'
+                        href={'/payhistory'}
+                    >贊助紀錄</a>
+                    <a
                         className='user-panel-button logout' role='button'
                         href={'/logout?location=' + locationBase64}
                     >登出</a>
