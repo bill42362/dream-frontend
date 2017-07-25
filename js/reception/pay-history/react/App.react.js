@@ -9,6 +9,12 @@ import Header from '../../../common/react/Header.react.js';
 import Footer from '../../../common/react/Footer.react.js';
 
 const ConnectedFooter = connect(state => { return {links: state.siteMap}; })(Footer);
+const payHistoryStatusDictionary = {
+    ERROR: '狀態異常',
+    NOT_PAY_YET: '尚未付款',
+    PAIED: '已付款',
+    CANCELED: '已取消',
+};
 
 class App extends React.Component {
     constructor(props) {
@@ -57,19 +63,73 @@ class App extends React.Component {
     componentDidMount() { }
     componentWillUnmount() { }
     render() {
-        const state = this.state;
-        const { userProfiles, userSapId } = state;
+        const { payHistories } = this.props;
         return <div id='wrapper'>
             <Header fixed={false} iconSrc='/img/brand_icon_black.png' />
-            <h1 className='pay-history-title'>訂單記錄</h1>
-            <div className='payment-panel'>
-                <div className='payment-form'>
-                    <div className='payment-form-inputs'>
-                        <div className='row'>
+            <h1 className='pay-history-title'>贊助記錄</h1>
+            <div className='pay-histories'>
+                {payHistories.map((payHistory, index) => {
+                    return <div className='pay-history' key={index}>
+                        <div className='pay-history-project-title'>{payHistory.projectTitle}</div>
+                        <div className='pay-history-content'>
+                            <div className='pay-history-content-row'>
+                                <div className='pay-history-content-item'>
+                                    <div className='pay-history-content-item-title'>訂單項目</div>
+                                    <div className='pay-history-content-item-content'>{payHistory.itemTitle}</div>
+                                </div>
+                                <div className='pay-history-content-item'>
+                                    <div className='pay-history-content-item-title'>訂單編號</div>
+                                    <div className='pay-history-content-item-content'>{payHistory.id}</div>
+                                </div>
+                            </div>
+                            <div className='pay-history-content-row'>
+                                <div className='pay-history-content-item'>
+                                    <div className='pay-history-content-item-title'>贊助金額</div>
+                                    <div className='pay-history-content-item-content'>{payHistory.price}</div>
+                                </div>
+                                <div className='pay-history-content-item'>
+                                    <div className='pay-history-content-item-title'>繳費代碼</div>
+                                    <div className='pay-history-content-item-content'>{payHistory.paymentNumber}</div>
+                                </div>
+                            </div>
+                            <div className='pay-history-content-row'>
+                                <div className='pay-history-content-item'>
+                                    <div className='pay-history-content-item-title'>付款方式</div>
+                                    <div className='pay-history-content-item-content'>{payHistory.paymentMethod}</div>
+                                </div>
+                                <div className='pay-history-content-item'>
+                                    <div className='pay-history-content-item-title'>繳費期限</div>
+                                    <div className='pay-history-content-item-content'>
+                                        {Core.getDateStringWithFormat(payHistory.expireTimestamp, 'YYYY/MM/DD hh:mm:ss')}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='pay-history-content-row'>
+                                <div className='pay-history-content-item'>
+                                    <div className='pay-history-content-item-title'>付款狀態</div>
+                                    <div className='pay-history-content-item-content'>
+                                        {payHistoryStatusDictionary[payHistory.status] || payHistoryStatusDictionary.ERROR}
+                                    </div>
+                                </div>
+                                <div className='pay-history-content-item'>
+                                    <div className='pay-history-content-item-title'>收件姓名</div>
+                                    <div className='pay-history-content-item-content'>{payHistory.addressee}</div>
+                                </div>
+                            </div>
+                            <div className='pay-history-content-row'>
+                                <div className='pay-history-content-item'>
+                                    <div className='pay-history-content-item-title'>備註</div>
+                                    <div className='pay-history-content-item-content'>{payHistory.comment}</div>
+                                </div>
+                                <div className='pay-history-content-item'>
+                                    <div className='pay-history-content-item-title'>收件地址</div>
+                                    <div className='pay-history-content-item-content'>{payHistory.zipcode + payHistory.address}</div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <div className='paper-shadow'></div>
+                        <div className='paper-shadow'></div>
+                    </div>;
+                })}
             </div>
             <ConnectedFooter />
         </div>;

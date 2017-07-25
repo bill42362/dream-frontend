@@ -2,39 +2,46 @@
 'use strict'
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import ReduxThunk from 'redux-thunk';
-import { Provider } from 'react-redux';
+import { connect, Provider } from 'react-redux';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from '../react/App.react.js';
 import Core from '../../../common/core/Core.js';
 import Dream from '../../../common/core/Dream.js';
+import PayHistory from './PayHistory.js';
 import Sitemap from '../../../common/core/Sitemap.js';
 
+const PBPlusDream = new Dream();
+window.PBPlusDream = PBPlusDream;
+
 const reducer = combineReducers({
+    payHistories: PayHistory.Reducer,
     siteMap: Sitemap.Reducer,
 })
 
 const store = createStore(reducer, applyMiddleware(ReduxThunk));
 store.dispatch(Sitemap.Actions.updateLinks());
-
-for(let i = 0; i < 30; ++i) {
-    store.dispatch(AnimateSquare.Actions.addRandomSquare());
+if(!!PBPlusDream) {
+    PBPlusDream.getUserSapIdPromise()
+    .then(({ token }) => {
+        return PBPlusDream.getPayHistory({userToken: token});
+    })
+    .then(payHistories => {
+        return store.dispatch(PayHistory.Actions.updatePayHistories({ payHistories }));
+    })
+    .catch(error => { console.log('getPayHistory() error:', error); });
 }
 
-const onReactDOMRendered = function() {
-    let goNextStep = () => {
-        store.dispatch(AnimateSquare.Actions.goNextStep());
-        window.requestAnimationFrame(goNextStep);
-    }
-    window.requestAnimationFrame(goNextStep);
-}
+const ConnectedApp = connect(
+    state => ({payHistories: state.payHistories})
+)(App);
 
+const onReactDOMRendered = () => {};
 var onReadyStateChange = function() {
     if(document.readyState == 'complete') {
-        window.PBPlusDream = new Dream();
         ReactDOM.render(
             <Provider store={store} >
-                <App />
+                <ConnectedApp />
             </Provider>,
             document.getElementById('app-root'),
             onReactDOMRendered

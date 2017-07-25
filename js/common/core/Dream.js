@@ -351,6 +351,15 @@ PBPlus.Dream.prototype.getUserSapId = function(errorCallback, successCallback) {
     });
 }
 
+PBPlus.Dream.prototype.getUserSapIdPromise = function() {
+    let url = location.protocol + '//' + location.host + '/token';
+    const options = {
+        url: `${location.protocol}//${location.host}/token`,
+        json: true,
+    };
+    return RP(options);
+}
+
 PBPlus.Dream.prototype.getProjects = function(search, offset, limit, errorCallback, successCallback) {
     var searchString = '';
     if(!!search) { searchString = '/' + search; }
@@ -370,6 +379,18 @@ PBPlus.Dream.prototype.getProjects = function(search, offset, limit, errorCallba
             }
         }
     });
+}
+
+PBPlus.Dream.prototype.getPayHistory = function({ userToken }) {
+    const options = {
+        url: `${this.apiBase}/readOrder`, json: true,
+        method: 'post', body: {token: this.userToken},
+        transform: function(response) {
+            if(200 === response.status) { return response.message; }
+            else { throw new Error('Not Found.'); }
+        },
+    };
+    return RP(options);
 }
 
 module.exports = PBPlus.Dream;
