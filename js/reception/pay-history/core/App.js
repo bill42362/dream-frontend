@@ -2,7 +2,7 @@
 'use strict'
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import ReduxThunk from 'redux-thunk';
-import { connect, Provider } from 'react-redux';
+import { Provider } from 'react-redux';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from '../react/App.react.js';
@@ -32,16 +32,12 @@ if(!!PBPlusDream) {
     .catch(error => { console.log('getPayHistory() error:', error); });
 }
 
-const ConnectedApp = connect(
-    state => ({payHistories: state.payHistories})
-)(App);
-
 const onReactDOMRendered = () => {};
 var onReadyStateChange = function() {
     if(document.readyState == 'complete') {
         ReactDOM.render(
             <Provider store={store} >
-                <ConnectedApp />
+                <App />
             </Provider>,
             document.getElementById('app-root'),
             onReactDOMRendered

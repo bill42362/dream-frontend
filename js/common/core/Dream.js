@@ -64,10 +64,10 @@ PBPlus.Dream.prototype.cancelOrder = function(tradeNumber, errorCallback, succes
     let payload = { token: this.userToken };
     Request.put(
         {url: url, json: payload,},
-        (err, httpResponse, body) => {
+        (err, httpResponse, response) => {
             if(err) { errorCallback && errorCallback(err); }
-            else if(200 === body.status) {
-                successCallback && successCallback(body);
+            else if(200 === response.status) {
+                successCallback && successCallback(response);
             } else { errorCallback && errorCallback({status: 500, message: 'Not Found.'}); }
         }
     );
