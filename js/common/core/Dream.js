@@ -5,6 +5,7 @@ var EventCenter = require('./EventCenter.js');
 
 if(undefined === window.PBPlus) { window.PBPlus = function() {}; };
 PBPlus.Dream = function() {
+    this.commonBaseUrl = process.env.COMMON_BASE_URL || 'http://localhost';
     this.apiBase = process.env.API_BASE || 'http://localhost';
     this.profileApiBase = process.env.PROFILE_API_BASE || 'http://localhost';
     this.userToken = '';
@@ -16,6 +17,17 @@ PBPlus.Dream = function() {
 PBPlus.Dream.projectTypeDictionary = {
     '0': 'fund', '1': 'bid', '2': 'outer',
     'fund': '0', 'bid': '1', 'outer': '2',
+};
+
+PBPlus.Dream.prototype.getHeaderNavs = function() {
+    var options = {
+        url: this.commonBaseUrl + '/menu/header', json: true,
+        transform: function(response) {
+            if(200 === response.status) { return response.message; }
+            else { return []; }
+        },
+    };
+    return RP(options);
 };
 
 PBPlus.Dream.prototype.getProjectIdFromUrl = function() {

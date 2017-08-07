@@ -17,6 +17,12 @@ import BootstrapSelect from '../../../common/react/BootstrapSelect.react.js';
 import Footer from '../../../common/react/Footer.react.js';
 
 const cities = Object.keys(Postcodes);
+const ConnectedHeader = connect(
+    state => { return {
+        headerNavs: state.navigations.header || [],
+    }; },
+    dispatch => ({ })
+)(Header);
 const ConnectedFooter = connect(state => { return {links: state.siteMap}; })(Footer);
 const ConnectedImageInputBox = connect(
     state => { return {editorState: state.pictureEditor}; },
@@ -127,7 +133,7 @@ class App extends React.Component {
         let userPicture = '/img/mock_user_icon.jpg';
         if(userProfile) { userPicture = userProfile.pictureSrc || userPicture; }
         return <div id='wrapper'>
-            <Header fixed={false} iconSrc='/img/brand_icon_black.png' />
+            <ConnectedHeader fixed={false} iconSrc='/img/brand_icon_black.png' />
             <h1 className='user-info-title'>使用者資訊</h1>
             <div className='user-info-panel'>
                 <div className='user-image-section' style={{position: 'relative'}}>

@@ -1,5 +1,6 @@
 // App.react.js
 'use strict'
+import { connect } from 'react-redux';
 import React from 'react';
 import ClassNames from 'classnames';
 import Header from '../../../common/react/Header.react.js';
@@ -7,6 +8,13 @@ import ProjectHeader from '../../../common/react/ProjectHeader.react.js';
 import ProjectTabbar from '../../../common/react/ProjectTabbar.react.js';
 import ProjectTimeline from './ProjectTimeline.react.js';
 import ConnectedFooter from '../../../common/react/ConnectedFooter.react.js';
+
+const ConnectedHeader = connect(
+    state => { return {
+        headerNavs: state.navigations.header || [],
+    }; },
+    dispatch => ({ })
+)(Header);
 
 class App extends React.Component {
     constructor(props) {
@@ -117,7 +125,7 @@ class App extends React.Component {
             count: state.comments.length, href: '/message?p=' + state.project.id
         });
         return <div id='wrapper'>
-            <Header fixed={false} iconSrc='/img/brand_icon_black.png' />
+            <ConnectedHeader fixed={false} iconSrc='/img/brand_icon_black.png' />
             <ProjectHeader
                 project={state.project} banner={state.pictures[state.project.bannerId]}
                 newsfeeds={state.newsfeeds} userProfiles={state.userProfiles}

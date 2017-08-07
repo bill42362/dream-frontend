@@ -2,4 +2,4 @@
 import { connect } from 'react-redux';
 import Footer from './Footer.react.js';
 
-export default connect(state => { return {links: state}; })(Footer);
+export default connect(state => { return {links: state.sitemap}; })(Footer);
