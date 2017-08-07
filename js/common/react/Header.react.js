@@ -48,7 +48,6 @@ class Header extends React.Component {
         if(userSapId) {
             userButton = <div data-submenu_button={true} data-submenu_key='profile'>
                 <img src={userIconSrc} style={{height: '1.8em', borderRadius: '0.9em'}}/>
-                <span>{userNickname}</span>
             </div>;
         }
         return <header id="header" ref='base'>
@@ -77,7 +76,8 @@ class Header extends React.Component {
                 ><img src='/img/line.svg'/></a>
                 {userButton}
                 <div data-submenu_item={true}  data-submenu_key='profile' data-submenu_position='header'>
-                    <span style={{color: 'rgb(24, 155, 202)'}}>{userEmail}</span>
+                    <div style={{color: 'rgb(24, 155, 202)'}}>{userNickname}</div>
+                    <div style={{color: 'rgb(24, 155, 202)'}}>{userEmail}</div>
                 </div>
                 <div data-submenu_item={true}  data-submenu_key='profile' data-submenu_position='body'>
                     <a href='/userinfo' title='User Info'>使用者資訊</a>
