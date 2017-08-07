@@ -9,6 +9,12 @@ import Header from '../../../common/react/Header.react.js';
 import PayHistories from './PayHistories.react.js';
 import Footer from '../../../common/react/Footer.react.js';
 
+const ConnectedHeader = connect(
+    state => { return {
+        headerNavs: state.navigations.header || [],
+    }; },
+    dispatch => ({ })
+)(Header);
 const ConnectedFooter = connect(state => { return {links: state.siteMap}; })(Footer);
 const ConnectedPayHistories = connect(state => { return {payHistories: state.payHistories}; })(PayHistories);
 
@@ -51,7 +57,7 @@ class App extends React.Component {
     componentWillUnmount() { }
     render() {
         return <div id='wrapper'>
-            <Header fixed={false} iconSrc='/img/brand_icon_black.png' />
+            <ConnectedHeader fixed={false} iconSrc='/img/brand_icon_black.png' />
             <h1 className='pay-history-title'>贊助記錄</h1>
             <ConnectedPayHistories />
             <ConnectedFooter />

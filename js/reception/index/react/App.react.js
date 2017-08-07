@@ -1,5 +1,6 @@
 // App.react.js
 'use strict'
+import { connect } from 'react-redux';
 import React from 'react';
 import ClassNames from 'classnames';
 import Header from '../../../common/react/Header.react.js';
@@ -7,6 +8,13 @@ import Slide from './Slide.react.js';
 import Carousel from '../../../common/react/Carousel.react.js';
 import ProjectCard from '../../../common/react/ProjectCard.react.js';
 import ConnectedFooter from '../../../common/react/ConnectedFooter.react.js';
+
+const ConnectedHeader = connect(
+    state => { return {
+        headerNavs: state.navigations.header || [],
+    }; },
+    dispatch => ({ })
+)(Header);
 
 class App extends React.Component {
     constructor(props) {
@@ -58,7 +66,7 @@ class App extends React.Component {
         const slideStates = projects.filter(project => { return -1 != project.positions.indexOf('slide'); });
         const listStates = projects.filter(project => { return -1 != project.positions.indexOf('list'); });
         return <div id='wrapper' ref='base'>
-            <Header fixed={true} isOnTop={headerOnTop} iconSrc='/img/brand_icon_white.png' />
+            <ConnectedHeader fixed={true} isOnTop={headerOnTop} iconSrc='/img/brand_icon_white.png' />
             <Slide projects={slideStates} slideInterval={5000} />
             <Carousel newsfeeds={newsfeeds} />
             <div className='project-cards row'>

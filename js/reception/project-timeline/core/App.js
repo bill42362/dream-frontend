@@ -1,6 +1,6 @@
 // App.js
 'use strict'
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
 import ReduxThunk from 'redux-thunk';
 import { connect, Provider } from 'react-redux';
 import ReactDOM from 'react-dom';
@@ -8,18 +8,29 @@ import App from '../react/App.react.js';
 import Core from '../../../common/core/Core.js';
 import Dream from '../../../common/core/Dream.js';
 import Sitemap from '../../../common/core/Sitemap.js';
+import Navigations from '../../../common/core/Navigations.js';
 
-const sitemapStore = createStore(Sitemap.Reducer, applyMiddleware(ReduxThunk));
-sitemapStore.dispatch(Sitemap.Actions.updateLinks());
+window.PBPlusDream = new Dream();
 
-var onReactDOMRendered = function() {
-}
+const reducer = combineReducers({
+    navigations: Navigations.Reducer,
+    sitemap: Sitemap.Reducer,
+})
+const store = createStore(reducer, applyMiddleware(ReduxThunk));
+store.dispatch(Sitemap.Actions.updateLinks());
 
+PBPlusDream.getHeaderNavs()
+.then(navs => {
+    store.dispatch(Navigations.Actions.updateNavigations({key: 'header', navigations: navs}));
+    return new Promise(resolve => { resolve(navs); });
+})
+.catch(error => { console.log(error); });
+
+var onReactDOMRendered = function() { }
 var onReadyStateChange = function() {
     if(document.readyState == 'complete') {
-        window.PBPlusDream = new Dream();
         ReactDOM.render(
-            <Provider store={sitemapStore} >
+            <Provider store={store} >
                 <App />
             </Provider>,
             document.getElementById('app-root'),
