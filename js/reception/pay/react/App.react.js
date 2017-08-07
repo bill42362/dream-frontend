@@ -13,6 +13,12 @@ import Footer from '../../../common/react/Footer.react.js';
 import AllpayFullscreenWrapper from './AllpayFullscreenWrapper.react.js';
 
 const STAR_COLOR = '#e132b1';
+const ConnectedHeader = connect(
+    state => { return {
+        headerNavs: state.navigations.header || [],
+    }; },
+    dispatch => ({ })
+)(Header);
 const ConnectedFooter = connect(state => { return {links: state.siteMap}; })(Footer);
 
 class App extends React.Component {
@@ -219,7 +225,7 @@ class App extends React.Component {
             itemPaymentMethods = item.paymentMethods;
         }
         return <div id='wrapper'>
-            <Header fixed={false} iconSrc='/img/brand_icon_black.png' />
+            <ConnectedHeader fixed={false} iconSrc='/img/brand_icon_black.png' />
             <h1 className='pay-title'>訂單付款資訊</h1>
             <div className='company-info'>
                 <a className='site' href='http://pcgbros.com/' title='寶悍運動平台'>寶悍運動平台</a>

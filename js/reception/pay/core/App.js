@@ -6,12 +6,16 @@ import { Provider } from 'react-redux';
 import AnimateSquare from 'animate-square';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Navigations from '../../../common/core/Navigations.js';
 import App from '../react/App.react.js';
 import Core from '../../../common/core/Core.js';
 import Dream from '../../../common/core/Dream.js';
 import Sitemap from '../../../common/core/Sitemap.js';
 
+window.PBPlusDream = new Dream();
+
 const reducer = combineReducers({
+    navigations: Navigations.Reducer,
     animateSquare: AnimateSquare.Reducer,
     siteMap: Sitemap.Reducer,
 })
@@ -23,6 +27,13 @@ for(let i = 0; i < 30; ++i) {
     store.dispatch(AnimateSquare.Actions.addRandomSquare());
 }
 
+PBPlusDream.getHeaderNavs()
+.then(navs => {
+    store.dispatch(Navigations.Actions.updateNavigations({key: 'header', navigations: navs}));
+    return new Promise(resolve => { resolve(navs); });
+})
+.catch(error => { console.log(error); });
+
 const onReactDOMRendered = function() {
     let goNextStep = () => {
         store.dispatch(AnimateSquare.Actions.goNextStep());
@@ -33,7 +44,6 @@ const onReactDOMRendered = function() {
 
 var onReadyStateChange = function() {
     if(document.readyState == 'complete') {
-        window.PBPlusDream = new Dream();
         ReactDOM.render(
             <Provider store={store} >
                 <App />

@@ -8,6 +8,7 @@ import ReactDOM from 'react-dom';
 import App from '../react/App.react.js';
 import Core from '../../../common/core/Core.js';
 import Dream from '../../../common/core/Dream.js';
+import Navigations from '../../../common/core/Navigations.js';
 import PayHistory from './PayHistory.js';
 import Sitemap from '../../../common/core/Sitemap.js';
 
@@ -15,6 +16,7 @@ const PBPlusDream = new Dream();
 window.PBPlusDream = PBPlusDream;
 
 const reducer = combineReducers({
+    navigations: Navigations.Reducer,
     payHistories: PayHistory.Reducer,
     siteMap: Sitemap.Reducer,
 })
@@ -31,6 +33,13 @@ if(!!PBPlusDream) {
     })
     .catch(error => { console.log('getPayHistory() error:', error); });
 }
+
+PBPlusDream.getHeaderNavs()
+.then(navs => {
+    store.dispatch(Navigations.Actions.updateNavigations({key: 'header', navigations: navs}));
+    return new Promise(resolve => { resolve(navs); });
+})
+.catch(error => { console.log(error); });
 
 const onReactDOMRendered = () => {};
 var onReadyStateChange = function() {

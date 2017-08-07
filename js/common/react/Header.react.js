@@ -36,7 +36,7 @@ class Header extends React.Component {
     componentWillUnmount() { }
     render() {
         const state = this.state;
-        const { fixed, isOnTop } = this.props;
+        const { headerNavs, fixed, isOnTop } = this.props;
         const { userSapId, userNickname, userEmail, userIconSrc } = this.state;
         const locationBase64 = URLSafe.encode(btoa(location.pathname + location.search));
         const position = fixed ? 'fixed' : 'relative';
@@ -58,7 +58,11 @@ class Header extends React.Component {
                 menuCloser={{ src:'/img/icon_x.svg', title:'Close menu' }}
             >
                 <a href='//tw.pbplus.me' target='_self' data-logo={true}><img src='/img/logo.svg' title='Home'/></a>
-                <a href='//localhost' data-nav={true} data-color='goldenrod' data-match='local(.*)'>nav-link-2</a>
+                {headerNavs.map((nav, index) => {
+                    return <a key={index} href={nav.url} data-nav={true} data-color={nav.color} data-match={nav.url} >
+                        {nav.display}
+                    </a>;
+                })}
                 <a
                     href='//www.facebook.com/pbplus.me/' target='_blank'
                     data-subnav={true} data-color='rgb(62, 86, 155)'
