@@ -1,6 +1,7 @@
 // Header.react.js
 import React from 'react';
 import ClassNames from 'classnames';
+import HeaderBar from 'header-bar';
 import URLSafe from 'urlsafe-base64';
 import NavbarMenu from './NavbarMenu.react.js';
 import ContentEditable from './ContentEditable.react.js';
@@ -10,16 +11,9 @@ class Header extends React.Component {
         super(props);
         this.state = { 
             userSapId: '', userNickname: '', userEmail: '', userIconSrc: '/img/mock_user_icon.jpg',
-            isEditingSearchText: false, searchText: '',
-            isUserPanelCollapsed: true, isUserPanelHidden: true,
         };
-        this.switchUserPanel = this.switchUserPanel.bind(this);
-        this.startEditSearchText = this.startEditSearchText.bind(this);
-        this.stopEditSearchText = this.stopEditSearchText.bind(this);
-        this.onSearchTextChange = this.onSearchTextChange.bind(this);
         this.onGetUserSapIdSuccess = this.onGetUserSapIdSuccess.bind(this);
         this.onReadUserProfileSuccess = this.onReadUserProfileSuccess.bind(this);
-        this.onWindowScroll = this.onWindowScroll.bind(this);
         if(window.PBPlusDream) {
             this.state.userSapId = PBPlusDream.userSapId;
             if(!PBPlusDream.userSapId) {
@@ -27,15 +21,6 @@ class Header extends React.Component {
             }
         }
     }
-    switchUserPanel() {
-        this.setState({
-            isUserPanelCollapsed: !this.state.isUserPanelCollapsed,
-            isUserPanelHidden: false,
-        });
-    }
-    startEditSearchText() { this.setState({ isEditingSearchText: true }); }
-    stopEditSearchText() { this.setState({ isEditingSearchText: false }); }
-    onSearchTextChange(text) { this.setState({searchText: text}); }
     onGetUserSapIdSuccess(sapId) {
         if(sapId) { PBPlusDream.readProfiles([sapId], undefined, this.onReadUserProfileSuccess); }
         this.setState({userSapId: sapId});
@@ -47,87 +32,59 @@ class Header extends React.Component {
             userIconSrc: profiles[0].pictureSrc,
         });
     }
-    onWindowScroll() {
-        const baseRect = this.refs.base.getBoundingClientRect();
-        if(0 != baseRect.top && !this.state.isUserPanelCollapsed) {
-            this.setState({isUserPanelCollapsed: true});
-        }
-    }
-    componentDidMount() { document.addEventListener('scroll', this.onWindowScroll, false); }
-    componentWillUnmount() { document.removeEventListener('scroll', this.onWindowScroll, false); }
+    componentDidMount() { }
+    componentWillUnmount() { }
     render() {
         const state = this.state;
+        const { fixed, isOnTop } = this.props;
+        const { userSapId, userNickname, userEmail, userIconSrc } = this.state;
         const locationBase64 = URLSafe.encode(btoa(location.pathname + location.search));
-        let navbarMenuItems = [];
-        return <header id="header" className={ClassNames({'on-top': this.props.isOnTop})} ref='base'>
-            <nav className={ClassNames(
-                'navbar', {'navbar-fixed-top': this.props.fixed},
-                {'navbar-user-panel-shown': !state.isUserPanelCollapsed}
-            )}>
-                <NavbarMenu currentItemKey={'home'} items={navbarMenuItems} />
-                <div id="brand-icon-container">
-                    <a href='/'>
-                        <img className="brand-icon" src={this.props.iconSrc} />
-                    </a>
+        const position = fixed ? 'fixed' : 'relative';
+        let backgroundColor = '';
+        if(fixed && isOnTop) { backgroundColor = 'rgba(255, 255, 255, 0)'; }
+        let userButton = <div data-submenu_button={true} data-submenu_key='login'>
+            <a href={`/login?location=${locationBase64}`} title='login' style={{color: 'white'}}>登入</a>
+        </div>;
+        if(userSapId) {
+            userButton = <div data-submenu_button={true} data-submenu_key='profile'>
+                <img src={userIconSrc} style={{height: '1.8em', borderRadius: '0.9em'}}/>
+                <span>{userNickname}</span>
+            </div>;
+        }
+        return <header id="header" ref='base'>
+            <HeaderBar
+                style={{position, zIndex: 2, backgroundColor, transition: 'background-color .6s ease'}}
+                hamburger={{ src:'/img/hamburger.svg', title:'Menu' }}
+                menuCloser={{ src:'/img/icon_x.svg', title:'Close menu' }}
+            >
+                <a href='//tw.pbplus.me' target='_self' data-logo={true}><img src='/img/logo.svg' title='Home'/></a>
+                <a href='//localhost' data-nav={true} data-color='goldenrod' data-match='local(.*)'>nav-link-2</a>
+                <a
+                    href='//www.facebook.com/pbplus.me/' target='_blank'
+                    data-subnav={true} data-color='rgb(62, 86, 155)'
+                ><img src='/img/facebook.svg'/></a>
+                <a
+                    href='//www.youtube.com/channel/UCgoWlpZfUggQ3CLzrTqtkGw' target='_blank'
+                    data-subnav={true} data-color='rgb(229, 26, 0)'
+                ><img src='/img/youtube.svg'/></a>
+                <a
+                    href='https://line.me/R/ti/p/%40kav1208b' target='_blank'
+                    data-subnav={true} data-color='rgb(0, 181, 9)'
+                ><img src='/img/line.svg'/></a>
+                {userButton}
+                <div data-submenu_item={true}  data-submenu_key='profile' data-submenu_position='header'>
+                    <span style={{color: 'rgb(24, 155, 202)'}}>{userEmail}</span>
                 </div>
-                <div id="navbar-buttons">
-                    <div className='navbar-search-container' style={{visibility: 'hidden'}}>
-                        <div className={ClassNames('navbar-search', {'editing': this.state.isEditingSearchText})}>
-                            <span
-                                className="navbar-icon glyphicon glyphicon-search" aria-label="search"
-                                role='button' onClick={this.startEditSearchText}
-                            ></span>
-                            {this.state.isEditingSearchText && <ContentEditable
-                                className="navbar-search-text" role='input'
-                                value={this.state.searchText} autoFocus={true}
-                                onChange={this.onSearchTextChange}
-                                onBlur={this.stopEditSearchText}
-                            />}
-                        </div>
-                    </div>
-                    {this.state.userSapId && <img
-                        className="user-icon"
-                        aria-label="user profile icon" role='button' 
-                        src={this.state.userIconSrc} onClick={this.switchUserPanel}
-                    />}
-                    {!this.state.userSapId && <a href={'/login?location=' + locationBase64} >
-                        <span
-                            className="navbar-icon glyphicon glyphicon-user"
-                            aria-label="login button" role='button'
-                        ></span>
-                    </a>}
+                <div data-submenu_item={true}  data-submenu_key='profile' data-submenu_position='body'>
+                    <a href='/userinfo' title='User Info'>使用者資訊</a>
                 </div>
-            </nav>
-            <div className={ClassNames(
-                'user-panel',
-                {'collapse': this.state.isUserPanelCollapsed},
-                {'hidden': this.state.isUserPanelHidden}
-            )}>
-                <div className='user-panel-profile'>
-                    <div className='user-panel-profile-picture-wrapper'>
-                        <img className='user-panel-picture' src={this.state.userIconSrc}/>
-                    </div>
-                    <div className='user-panel-profile-texts'>
-                        <div className='user-panel-nickname'>{this.state.userNickname || '設一下暱稱，糗糗泥!'}</div>
-                        <div className='user-panel-email'>{this.state.userEmail}</div>
-                    </div>
+                <div data-submenu_item={true}  data-submenu_key='profile' data-submenu_position='body'>
+                    <a href='/payhistory' title='Pay history'>贊助紀錄</a>
                 </div>
-                <hr className='user-panel-seperator' />
-                <div className='user-panel-buttons'>
-                    <a
-                        className='user-panel-button user-info' role='button'
-                        href={'/userinfo'}
-                    >使用者資訊</a>
-                    <a
-                        className='user-panel-button pay-history' role='button'
-                        href={'/payhistory'}
-                    >贊助紀錄</a>
-                    <a
-                        className='user-panel-button logout' role='button'
-                        href={'/logout?location=' + locationBase64}
-                    >登出</a>
+                <div data-submenu_item={true}  data-submenu_key='profile' data-submenu_position='footer'>
+                    <a href={`/logout?location=${locationBase64}`} title='Logout'>登出</a>
                 </div>
-            </div>
+            </HeaderBar>
         </header>;
     }
 }

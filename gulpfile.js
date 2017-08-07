@@ -239,6 +239,7 @@ gulp.task('css-lib', function() {
         './node_modules/bootstrap/dist/css/bootstrap.css',
         './node_modules/font-awesome/css/font-awesome.css',
         './node_modules/toastr/build/toastr.css',
+        './node_modules/header-bar/lib/css/index.css',
         './css/lib/*.css',
     ])
     .pipe(concat('lib.css'));
