@@ -67,7 +67,7 @@ class ProjectMessageBox extends React.Component {
             <div className='project-message-box-author-image-container'>
                 <img
                     className='project-message-box-author-image'
-                    src={authorImageSrc || '/img/mock_user_icon.jpg'}
+                    src={authorImageSrc || '/img/mock_user_icon.png'}
                     title={author}
                 />
             </div>

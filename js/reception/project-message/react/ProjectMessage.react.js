@@ -32,7 +32,7 @@ class ProjectMessage extends React.Component {
         return <div className='project-message' ref='base' >
             <img
                 className='project-message-author-image'
-                src={authorProfile.pictureSrc || 'img/mock_user_icon.jpg'}
+                src={authorProfile.pictureSrc || 'img/mock_user_icon.png'}
                 title={authorProfile.nickname || 'pb+會員'}
             />
             <div className='project-message-texts' >

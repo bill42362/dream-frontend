@@ -24,7 +24,7 @@ const reducer = combineReducers({
 
 const store = createStore(reducer, applyMiddleware(ReduxThunk));
 store.dispatch(Sitemap.Actions.updateLinks());
-store.dispatch(PictureEditor.Actions.updateImageSource('/img/mock_user_icon.jpg'));
+store.dispatch(PictureEditor.Actions.updateImageSource('/img/mock_user_icon.png'));
 
 for(let i = 0; i < 30; ++i) {
     store.dispatch(AnimateSquare.Actions.addRandomSquare());

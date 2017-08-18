@@ -10,7 +10,7 @@ class Header extends React.Component {
     constructor(props) {
         super(props);
         this.state = { 
-            userSapId: '', userNickname: '', userEmail: '', userIconSrc: '/img/mock_user_icon.jpg',
+            userSapId: '', userNickname: '', userEmail: '', userIconSrc: '/img/mock_user_icon.png',
         };
         this.onGetUserSapIdSuccess = this.onGetUserSapIdSuccess.bind(this);
         this.onReadUserProfileSuccess = this.onReadUserProfileSuccess.bind(this);
@@ -29,7 +29,7 @@ class Header extends React.Component {
         this.setState({
             userNickname: profiles[0].nickname,
             userEmail: profiles[0].email,
-            userIconSrc: profiles[0].pictureSrc,
+            userIconSrc: profiles[0].pictureSrc || this.state.userIconSrc,
         });
     }
     componentDidMount() { }
