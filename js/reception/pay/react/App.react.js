@@ -215,7 +215,7 @@ class App extends React.Component {
         const { userProfiles, userSapId } = state;
         const { paymentMethod, userData, receipt, remark } = state.paymentData;
         const userProfile = userProfiles[userSapId];
-        let userPicture = '/img/mock_user_icon.jpg';
+        let userPicture = '/img/mock_user_icon.png';
         if(userProfile) { userPicture = userProfile.pictureSrc || userPicture; }
         const item = state.items.filter((item) => { return '' + item.id === state.itemId; })[0];
         let itemTitle = '', itemPrice = 0, itemPaymentMethods = ['Credit'];

@@ -130,7 +130,7 @@ class App extends React.Component {
     componentWillUnmount() { }
     render() {
         const { userProfile } = this.state;
-        let userPicture = '/img/mock_user_icon.jpg';
+        let userPicture = '/img/mock_user_icon.png';
         if(userProfile) { userPicture = userProfile.pictureSrc || userPicture; }
         return <div id='wrapper'>
             <ConnectedHeader fixed={false} iconSrc='/img/brand_icon_black.png' />
