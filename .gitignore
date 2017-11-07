@@ -6,4 +6,4 @@ ssl/
 logs/
 dist/
 img/
-config.json
+*config.json
