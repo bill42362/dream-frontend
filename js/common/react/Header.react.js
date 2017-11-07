@@ -3,49 +3,30 @@ import React from 'react';
 import ClassNames from 'classnames';
 import HeaderBar from 'header-bar';
 import URLSafe from 'urlsafe-base64';
-import NavbarMenu from './NavbarMenu.react.js';
-import ContentEditable from './ContentEditable.react.js';
 
 class Header extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { 
-            userSapId: '', userNickname: '', userEmail: '', userIconSrc: '/img/mock_user_icon.png',
-        };
-        this.onGetUserSapIdSuccess = this.onGetUserSapIdSuccess.bind(this);
-        this.onReadUserProfileSuccess = this.onReadUserProfileSuccess.bind(this);
-        if(window.PBPlusDream) {
-            this.state.userSapId = PBPlusDream.userSapId;
-            if(!PBPlusDream.userSapId) {
-                PBPlusDream.getUserSapId(undefined, this.onGetUserSapIdSuccess);
-            }
-        }
-    }
-    onGetUserSapIdSuccess(sapId) {
-        if(sapId) { PBPlusDream.readProfiles([sapId], undefined, this.onReadUserProfileSuccess); }
-        this.setState({userSapId: sapId});
-    }
-    onReadUserProfileSuccess(profiles) {
-        this.setState({
-            userNickname: profiles[0].nickname,
-            userEmail: profiles[0].email,
-            userIconSrc: profiles[0].pictureSrc || this.state.userIconSrc,
-        });
+        this.state = { userIconSrc: '/img/mock_user_icon.png' };
     }
     componentDidMount() { }
     componentWillUnmount() { }
     render() {
         const state = this.state;
-        const { headerNavs, fixed, isOnTop } = this.props;
-        const { userSapId, userNickname, userEmail, userIconSrc } = this.state;
+        const {
+            headerNavs, fixed, isOnTop,
+            isUserLoggedIn, displayPbplusMemberCenter,
+            logout, loginEndpoint
+        } = this.props;
+        const { userIconSrc } = this.state;
         const locationBase64 = URLSafe.encode(btoa(location.pathname + location.search));
         const position = fixed ? 'fixed' : 'relative';
         let backgroundColor = '';
         if(fixed && isOnTop) { backgroundColor = 'rgba(255, 255, 255, 0)'; }
         let userButton = <div data-submenu_button={true} data-submenu_key='login'>
-            <a href={`/login?location=${locationBase64}`} title='login' style={{color: 'white'}}>登入</a>
+            <a href={`${loginEndpoint}&location=${locationBase64}`} title='login' style={{color: 'white'}}>登入</a>
         </div>;
-        if(userSapId) {
+        if(isUserLoggedIn) {
             userButton = <div data-submenu_button={true} data-submenu_key='profile'>
                 <img src={userIconSrc} style={{height: '1.8em', borderRadius: '0.9em'}}/>
             </div>;
@@ -76,17 +57,17 @@ class Header extends React.Component {
                 ><img src='/img/line.svg'/></a>
                 {userButton}
                 <div data-submenu_item={true}  data-submenu_key='profile' data-submenu_position='header'>
-                    <div style={{color: 'rgb(24, 155, 202)'}}>{userNickname}</div>
-                    <div style={{color: 'rgb(24, 155, 202)'}}>{userEmail}</div>
+                    <div style={{color: 'rgb(24, 155, 202)'}}>暱稱</div>
+                    <div style={{color: 'rgb(24, 155, 202)'}}>Email</div>
                 </div>
                 <div data-submenu_item={true}  data-submenu_key='profile' data-submenu_position='body'>
-                    <a href='/userinfo' title='User Info'>使用者資訊</a>
+                    <a title='User Info' role='button' onClick={displayPbplusMemberCenter}>使用者中心</a>
                 </div>
                 <div data-submenu_item={true}  data-submenu_key='profile' data-submenu_position='body'>
                     <a href='/payhistory' title='Pay history'>贊助紀錄</a>
                 </div>
                 <div data-submenu_item={true}  data-submenu_key='profile' data-submenu_position='footer'>
-                    <a href={`/logout?location=${locationBase64}`} title='Logout'>登出</a>
+                    <a title='Logout' role='button' onClick={logout}>登出</a>
                 </div>
             </HeaderBar>
         </header>;
