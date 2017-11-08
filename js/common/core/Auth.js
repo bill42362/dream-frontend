@@ -3,12 +3,14 @@
 import 'isomorphic-fetch';
 
 const defaultState = {
+    isLoginStateFetched: false,
     isUserLoggedIn: false,
     loginEndpoint: 'https://api.pbplus.me/page/auth?client_id=8486C5FA991611E790810ACA2C7BEF8A',
 };
 
 const Reducer = (state = defaultState, action) => {
     switch(action.type) {
+        case 'UPDATE_IS_LOGIN_STATE_FETCHED':
         case 'UPDATE_IS_USER_LOGGED_IN':
         case 'UPDATE_LOGIN_ENDPOINT':
             return Object.assign({}, state, action.payload);
@@ -16,6 +18,13 @@ const Reducer = (state = defaultState, action) => {
             return state;
     }
 }
+
+const updateIsLoginStateFetched = ({ isLoginStateFetched }) => { return (dispatch, getState) => {
+    return new Promise((resolve, reject) => {
+        dispatch({ type: 'UPDATE_IS_LOGIN_STATE_FETCHED', payload: { isLoginStateFetched } });
+        resolve({ isLoginStateFetched });
+    });
+}; };
 
 const updateIsUserLoggedIn = ({ isUserLoggedIn }) => { return (dispatch, getState) => {
     return new Promise((resolve, reject) => {
@@ -47,6 +56,7 @@ const fetchLoginState = () => { return (dispatch, getState) => {
     .then(response => {
         return dispatch(updateIsUserLoggedIn({isUserLoggedIn: 200 === response.status}))
         .then(() => dispatch(updateLoginEndpoint({loginEndpoint: response.message.endpoint})))
+        .then(() => dispatch(updateIsLoginStateFetched({isLoginStateFetched: true})))
         .then(() => ({isUserLoggedIn: 200 === response.status}));
     })
     .catch(error => { console.log('fetchLoginState() error:', error); });

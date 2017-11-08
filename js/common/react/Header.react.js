@@ -12,7 +12,6 @@ class Header extends React.Component {
     componentDidMount() { }
     componentWillUnmount() { }
     render() {
-        const state = this.state;
         const {
             headerNavs, fixed, isOnTop,
             isUserLoggedIn, displayPbplusMemberCenter,
@@ -28,7 +27,7 @@ class Header extends React.Component {
         </div>;
         if(isUserLoggedIn) {
             userButton = <div data-submenu_button={true} data-submenu_key='profile'>
-                <img src={user.picture} style={{height: '1.8em', borderRadius: '0.9em'}}/>
+                <img src={user.picture || userIconSrc} style={{height: '1.8em', borderRadius: '0.9em'}}/>
             </div>;
         }
         return <header id="header" ref='base'>

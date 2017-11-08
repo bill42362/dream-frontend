@@ -5,6 +5,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ClassNames from 'classnames';
 import URLSafe from 'urlsafe-base64';
+import PbplusMemberCenter from 'pbplus-member-sdk';
+import Auth from '../../../common/core/Auth.js';
 import Header from '../../../common/react/Header.react.js';
 import ConnectedAnimateSquare from './ConnectedAnimateSquare.react.js';
 import BootstrapInput from '../../../common/react/BootstrapInput.react.js';
@@ -16,8 +18,21 @@ const STAR_COLOR = '#e132b1';
 const ConnectedHeader = connect(
     state => { return {
         headerNavs: state.navigations.header || [],
+        loginEndpoint: `${state.auth.loginEndpoint}&token_id=${state.pbplusMemberCenter.userUuid}`,
+        isUserLoggedIn: state.auth.isUserLoggedIn,
+        user: {
+            nickname: state.pbplusMemberCenter.personalData.nickname,
+            email: state.pbplusMemberCenter.personalData.email,
+            picture: state.pbplusMemberCenter.pictureEditor.resultSource,
+        },
     }; },
-    dispatch => ({ })
+    dispatch => ({
+        logout: () => {
+            dispatch(PbplusMemberCenter.Actions.renewUserUUID());
+            dispatch(Auth.Actions.updateIsUserLoggedIn({isUserLoggedIn: false}));
+        },
+        displayPbplusMemberCenter: () => dispatch(PbplusMemberCenter.Actions.display()),
+    })
 )(Header);
 const ConnectedFooter = connect(state => { return {links: state.siteMap}; })(Footer);
 
@@ -34,11 +49,11 @@ class App extends React.Component {
                 receipt: { type: '', number: '', title: '' },
                 remark: '',
             },
+            redirectTimeout: undefined,
         };
         this.submit = this.submit.bind(this);
         this.closeAllpayIframe = this.closeAllpayIframe.bind(this);
         this.onGetProjectSuccess = this.onGetProjectSuccess.bind(this);
-        this.onGetUserSapIdSuccess = this.onGetUserSapIdSuccess.bind(this);
         this.onReadUserProfilesSuccess = this.onReadUserProfilesSuccess.bind(this);
         this.onCreatePaymentSuccess = this.onCreatePaymentSuccess.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -46,12 +61,6 @@ class App extends React.Component {
         if(window.PBPlusDream) {
             let projectId = PBPlusDream.getProjectIdFromUrl();
             PBPlusDream.getProject(projectId, this.onAjaxError, this.onGetProjectSuccess);
-            this.state.userSapId = PBPlusDream.userSapId;
-            if(!PBPlusDream.userSapId) {
-                PBPlusDream.getUserSapId(undefined, this.onGetUserSapIdSuccess);
-            } else {
-                PBPlusDream.readProfiles([PBPlusDream.userSapId], undefined, this.onReadUserProfilesSuccess);
-            }
         }
     }
     cancel() { history.back(); }
@@ -142,17 +151,6 @@ class App extends React.Component {
             this.onAjaxError(response);
         }
     }
-    onGetUserSapIdSuccess(sapId) {
-        if(sapId) { PBPlusDream.readProfiles([sapId], undefined, this.onReadUserProfilesSuccess); }
-        else {
-            Toastr.warning('您必須登入後才能訂購，5 秒後為您轉至登入頁。');
-            window.setTimeout(() => {
-                let locationBase64 = URLSafe.encode(btoa(location.pathname + location.search));
-                location.href = '/login?location=' + locationBase64;
-            }, 5000);
-        }
-        this.setState({userSapId: sapId});
-    }
     onReadUserProfilesSuccess(profiles) {
         let stateUserProfiles = this.state.userProfiles;
         profiles.forEach(profile => { stateUserProfiles[profile.userPK] = profile; });
@@ -202,6 +200,28 @@ class App extends React.Component {
         this.setState({paymentData: paymentData});
     }
     onWindowUnload() { }
+    componentDidUpdate(prevProps, prevState) {
+        const { redirectTimeout, paymentData } = this.state;
+        const { userData: stateUserData } = paymentData;
+        const { isUserLoggedIn, isLoginStateFetched, loginEndpoint, user } = this.props;
+        const { user: prevUser } = prevProps;
+        if(isLoginStateFetched && !isUserLoggedIn && !redirectTimeout) {
+            Toastr.warning('您必須登入後才能訂購，5 秒後為您轉至登入頁。');
+            const timeout = window.setTimeout(() => {
+                let locationBase64 = URLSafe.encode(btoa(location.pathname + location.search));
+                location.href = `${loginEndpoint}&location=${locationBase64}`;
+            }, 5000);
+            this.setState({redirectTimeout: timeout});
+        }
+        if(prevUser.email !== user.email) {
+            const newUserData = Object.keys(user).reduce((current, userDataKey) => {
+                const assignObject = {};
+                assignObject[userDataKey] = stateUserData[userDataKey] || user[userDataKey];
+                return Object.assign({}, current, assignObject);
+            }, {});
+            this.setState({paymentData: Object.assign({}, paymentData, {userData: newUserData})});
+        }
+    }
     componentDidMount() {
         window.addEventListener('unload', this.onWindowUnload, false);
         window.addEventListener('beforeunload', this.onWindowUnload, false);
@@ -361,6 +381,9 @@ class App extends React.Component {
                 <div className='paper-shadow'></div>
             </div>
             <ConnectedFooter />
+            <div className='pbplus-member-center-container'>
+                <PbplusMemberCenter.Container />
+            </div>
         </div>;
     }
 }
