@@ -30,7 +30,14 @@ PBPlusDream.getHeaderNavs()
 })
 .catch(error => { console.log(error); });
 
-store.dispatch(Auth.Actions.fetchLoginState());
+store.dispatch(Auth.Actions.fetchLoginState())
+.then(({ isUserLoggedIn }) => {
+    if(isUserLoggedIn) {
+        return store.dispatch(PbplusMemberCenter.Actions.updateActiveTab({activeTab: 'personal-data'}));
+    }
+    return {isUserLoggedIn: false};
+})
+.catch(error => { console.log(error); });
 
 var onReactDOMRendered = function() { }
 var onReadyStateChange = function() {

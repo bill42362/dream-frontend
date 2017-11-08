@@ -16,7 +16,7 @@ class Header extends React.Component {
         const {
             headerNavs, fixed, isOnTop,
             isUserLoggedIn, displayPbplusMemberCenter,
-            logout, loginEndpoint
+            user, logout, loginEndpoint
         } = this.props;
         const { userIconSrc } = this.state;
         const locationBase64 = URLSafe.encode(btoa(location.pathname + location.search));
@@ -28,7 +28,7 @@ class Header extends React.Component {
         </div>;
         if(isUserLoggedIn) {
             userButton = <div data-submenu_button={true} data-submenu_key='profile'>
-                <img src={userIconSrc} style={{height: '1.8em', borderRadius: '0.9em'}}/>
+                <img src={user.picture} style={{height: '1.8em', borderRadius: '0.9em'}}/>
             </div>;
         }
         return <header id="header" ref='base'>
@@ -57,8 +57,8 @@ class Header extends React.Component {
                 ><img src='/img/line.svg'/></a>
                 {userButton}
                 <div data-submenu_item={true}  data-submenu_key='profile' data-submenu_position='header'>
-                    <div style={{color: 'rgb(24, 155, 202)'}}>暱稱</div>
-                    <div style={{color: 'rgb(24, 155, 202)'}}>Email</div>
+                    <div style={{color: 'rgb(24, 155, 202)'}}>{user.nickname}</div>
+                    <div style={{color: 'rgb(24, 155, 202)'}}>{user.email}</div>
                 </div>
                 <div data-submenu_item={true}  data-submenu_key='profile' data-submenu_position='body'>
                     <a title='User Info' role='button' onClick={displayPbplusMemberCenter}>使用者中心</a>

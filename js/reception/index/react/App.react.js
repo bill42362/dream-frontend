@@ -16,6 +16,11 @@ const ConnectedHeader = connect(
         headerNavs: state.navigations.header || [],
         loginEndpoint: `${state.auth.loginEndpoint}&token_id=${state.pbplusMemberCenter.userUuid}`,
         isUserLoggedIn: state.auth.isUserLoggedIn,
+        user: {
+            nickname: state.pbplusMemberCenter.personalData.nickname,
+            email: state.pbplusMemberCenter.personalData.email,
+            picture: state.pbplusMemberCenter.pictureEditor.resultSource,
+        },
     }; },
     dispatch => ({
         logout: () => {

@@ -46,7 +46,8 @@ const fetchLoginState = () => { return (dispatch, getState) => {
     })
     .then(response => {
         return dispatch(updateIsUserLoggedIn({isUserLoggedIn: 200 === response.status}))
-        .then(() => dispatch(updateLoginEndpoint({loginEndpoint: response.message.endpoint})));
+        .then(() => dispatch(updateLoginEndpoint({loginEndpoint: response.message.endpoint})))
+        .then(() => ({isUserLoggedIn: 200 === response.status}));
     })
     .catch(error => { console.log('fetchLoginState() error:', error); });
 }; };
