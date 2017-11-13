@@ -41,9 +41,11 @@ store.dispatch(Auth.Actions.fetchLoginState())
 
 const ConnectedApp = connect(
     state => {
+        const { userUuid } = state.pbplusMemberCenter;
         const { nickname } = state.pbplusMemberCenter.personalData;
         const { resultSource: picture } = state.pbplusMemberCenter.pictureEditor;
         return {
+            userUuid,
             isUserLoggedIn: state.auth.isUserLoggedIn,
             user: { nickname, picture },
         };

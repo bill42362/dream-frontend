@@ -158,19 +158,25 @@ class App extends React.Component {
         this.setState({replyMessage: message, replyMessageIndex: index});
     }
     createMessage(message) {
+        const { userUuid } = this.props;
         if(window.PBPlusDream) {
-            PBPlusDream.createMessage(
-                message, this.state.project.id,
-                this.onAjaxError, this.onPostMessageSuccess
-            );
+            PBPlusDream.createMessage({
+                message, userUuid,
+                projectId: this.state.project.id,
+                errorCallback: this.onAjaxError,
+                successCallback: this.onPostMessageSuccess
+            });
         }
     }
-    replyMessage(replyMessage, messageUuid) {
+    replyMessage(message, messageUuid) {
+        const { userUuid } = this.props;
         if(window.PBPlusDream) {
-            PBPlusDream.replyMessage(
-                replyMessage, messageUuid, this.state.project.id,
-                this.onAjaxError, this.onPostMessageSuccess
-            );
+            PBPlusDream.replyMessage({
+                message, messageUuid, userUuid,
+                projectId: this.state.project.id,
+                errorCallback: this.onAjaxError,
+                successCallback: this.onPostMessageSuccess
+            });
         }
     }
     onPostMessageSuccess(response) {
