@@ -49,12 +49,13 @@ store.dispatch(Auth.Actions.fetchLoginState())
 
 const ConnectedApp = connect(
     state => {
+        const { userUuid } = state.pbplusMemberCenter;
+        const { isLoginStateFetched, isUserLoggedIn } = state.auth;
         const {
             name, email, address, mobile: phoneNumber, zipcode: postcode
         } = state.pbplusMemberCenter.personalData;
         return {
-            isLoginStateFetched: state.auth.isLoginStateFetched,
-            isUserLoggedIn: state.auth.isUserLoggedIn,
+            userUuid, isLoginStateFetched, isUserLoggedIn,
             loginEndpoint: `${state.auth.loginEndpoint}&token_id=${state.pbplusMemberCenter.userUuid}`,
             user: { name, phoneNumber, email, postcode, address },
         };

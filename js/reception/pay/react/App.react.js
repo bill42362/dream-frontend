@@ -78,23 +78,28 @@ class App extends React.Component {
         return result;
     }
     submit() {
+        const { userUuid } = this.props;
         const state = this.state;
         if(!this.isFormComplete()) { Toastr.warning('請先填完 * 標記之選項。'); return; }
-        if(window.PBPlusDream && state.project.id && state.userSapId && !state.tradeNumber) {
-            PBPlusDream.createPayment(
-                state.project.id, state.itemId, state.paymentData,
-                (error) => { this.setState({tradeNumber: undefined}); this.onAjaxError(error); },
-                this.onCreatePaymentSuccess
-            );
+        if(window.PBPlusDream && state.project.id && !state.tradeNumber) {
+            PBPlusDream.createPayment({
+                userUuid,
+                projectId: state.project.id,
+                itemId: state.itemId,
+                paymentData: state.paymentData,
+                errorCallback: (error) => { this.setState({tradeNumber: undefined}); this.onAjaxError(error); },
+                successCallback: this.onCreatePaymentSuccess
+            });
             this.setState({tradeNumber: 'lock_submit_button'});
         }
     }
     closeAllpayIframe() {
+        const { userUuid } = this.props;
         const { tradeNumber, formDiv, allpayFullscreenWrapperDock } = this.state;
         let body = document.getElementById('body');
         body.removeChild(formDiv);
         body.removeChild(allpayFullscreenWrapperDock);
-        window.PBPlusDream && PBPlusDream.cancelOrder(tradeNumber);
+        window.PBPlusDream && PBPlusDream.cancelOrder({ userUuid, tradeNumber });
         this.setState({
             tradeNumber: undefined,
             formDiv: undefined, allpayFullscreenWrapperDock: undefined,

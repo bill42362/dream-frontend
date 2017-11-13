@@ -40,10 +40,10 @@ PBPlus.Dream.prototype.getProjectIdFromUrl = function() {
     return projectId;
 }
 
-PBPlus.Dream.prototype.createPayment = function(projectId, itemId, paymentData, errorCallback, successCallback) {
+PBPlus.Dream.prototype.createPayment = function({ userUuid, projectId, itemId, paymentData, errorCallback, successCallback }) {
     let url = this.apiBase + '/createPayment';
     let payload = {
-        token: this.userToken,
+        uuid: userUuid,
         pid: projectId,
         oid: itemId,
         basis: paymentData.paymentMethod,
@@ -71,11 +71,11 @@ PBPlus.Dream.prototype.createPayment = function(projectId, itemId, paymentData, 
     );
 }
 
-PBPlus.Dream.prototype.cancelOrder = function(tradeNumber, errorCallback, successCallback) {
+PBPlus.Dream.prototype.cancelOrder = function({ userUuid, tradeNumber, errorCallback, successCallback }) {
     let url = this.apiBase + '/cancelOrder/' + tradeNumber;
-    let payload = { token: this.userToken };
+    let payload = { uuid: userUuid };
     Request.put(
-        {url: url, json: payload,},
+        {url: url, json: payload},
         (err, httpResponse, response) => {
             if(err) { errorCallback && errorCallback(err); }
             else if(200 === response.status) {
