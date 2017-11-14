@@ -1,5 +1,6 @@
 {
     "NODE_ENV": "develop",
+    "AUTH_URL": "http://localhost",
     "COMMON_BASE_URL": "http://localhost",
     "LOGIN_URL": "http://localhost",
     "API_BASE": "http://localhost",
