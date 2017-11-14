@@ -7,7 +7,6 @@ if(undefined === window.PBPlus) { window.PBPlus = function() {}; };
 PBPlus.Dream = function() {
     this.commonBaseUrl = process.env.COMMON_BASE_URL || 'http://localhost';
     this.apiBase = process.env.API_BASE || 'http://localhost';
-    this.profileApiBase = process.env.PROFILE_API_BASE || 'http://localhost';
     this.userToken = '';
     this.userSapId = '';
     this.getUserSapId();
@@ -127,22 +126,6 @@ PBPlus.Dream.prototype.readProfiles = function(sapIds, errorCallback, successCal
                     let profiles = (body.message || []).map(this.reformProfile);
                     successCallback && successCallback(profiles);
                 } else { errorCallback && errorCallback('Not found.'); }
-            }
-        }
-    );
-}
-
-PBPlus.Dream.prototype.saveProfiles = function(profile, errorCallback, successCallback) {
-    let url = this.profileApiBase + '/updateProfile';
-    let payload = Object.assign({token: this.userToken}, this.conformProfile(profile));
-    Request.post(
-        {url: url, json: payload,},
-        (err, httpResponse, body) => {
-            if(err) { errorCallback && errorCallback(err); }
-            else {
-                if(200 === body.status) {
-                    successCallback && successCallback(body);
-                } else { errorCallback && errorCallback(body.message); }
             }
         }
     );
