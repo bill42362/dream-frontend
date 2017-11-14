@@ -393,10 +393,10 @@ PBPlus.Dream.prototype.getProjects = function(search, offset, limit, errorCallba
     });
 }
 
-PBPlus.Dream.prototype.getPayHistory = function({ userToken }) {
+PBPlus.Dream.prototype.getPayHistory = function({ userUuid }) {
     const options = {
         url: `${this.apiBase}/readOrder`, json: true,
-        method: 'post', body: {token: this.userToken},
+        method: 'post', body: {uuid: userUuid},
         transform: function(response) {
             if(200 === response.status) { return response.message; }
             else { throw new Error('Not Found.'); }
