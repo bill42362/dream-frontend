@@ -3,6 +3,8 @@
 import { connect } from 'react-redux';
 import React from 'react';
 import ClassNames from 'classnames';
+import PbplusMemberCenter from 'pbplus-member-sdk';
+import Auth from '../../../common/core/Auth.js';
 import Header from '../../../common/react/Header.react.js';
 import ProjectHeader from '../../../common/react/ProjectHeader.react.js';
 import ProjectTabbar from '../../../common/react/ProjectTabbar.react.js';
@@ -13,8 +15,21 @@ import ConnectedFooter from '../../../common/react/ConnectedFooter.react.js';
 const ConnectedHeader = connect(
     state => { return {
         headerNavs: state.navigations.header || [],
+        loginEndpoint: `${state.auth.loginEndpoint}&token_id=${state.pbplusMemberCenter.userUuid}`,
+        isUserLoggedIn: state.auth.isUserLoggedIn,
+        user: {
+            nickname: state.pbplusMemberCenter.personalData.nickname,
+            email: state.pbplusMemberCenter.personalData.email,
+            picture: state.pbplusMemberCenter.pictureEditor.resultSource,
+        },
     }; },
-    dispatch => ({ })
+    dispatch => ({
+        logout: () => {
+            dispatch(PbplusMemberCenter.Actions.renewUserUUID());
+            dispatch(Auth.Actions.updateIsUserLoggedIn({isUserLoggedIn: false}));
+        },
+        displayPbplusMemberCenter: () => dispatch(PbplusMemberCenter.Actions.display()),
+    })
 )(Header);
 
 class App extends React.Component {
@@ -160,6 +175,9 @@ class App extends React.Component {
                 </div>
             </div>
             <ConnectedFooter />
+            <div className='pbplus-member-center-container'>
+                <PbplusMemberCenter.Container />
+            </div>
         </div>;
     }
 }

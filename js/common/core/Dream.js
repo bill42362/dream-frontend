@@ -7,7 +7,6 @@ if(undefined === window.PBPlus) { window.PBPlus = function() {}; };
 PBPlus.Dream = function() {
     this.commonBaseUrl = process.env.COMMON_BASE_URL || 'http://localhost';
     this.apiBase = process.env.API_BASE || 'http://localhost';
-    this.profileApiBase = process.env.PROFILE_API_BASE || 'http://localhost';
     this.userToken = '';
     this.userSapId = '';
     this.getUserSapId();
@@ -40,10 +39,10 @@ PBPlus.Dream.prototype.getProjectIdFromUrl = function() {
     return projectId;
 }
 
-PBPlus.Dream.prototype.createPayment = function(projectId, itemId, paymentData, errorCallback, successCallback) {
+PBPlus.Dream.prototype.createPayment = function({ userUuid, projectId, itemId, paymentData, errorCallback, successCallback }) {
     let url = this.apiBase + '/createPayment';
     let payload = {
-        token: this.userToken,
+        uuid: userUuid,
         pid: projectId,
         oid: itemId,
         basis: paymentData.paymentMethod,
@@ -71,11 +70,11 @@ PBPlus.Dream.prototype.createPayment = function(projectId, itemId, paymentData, 
     );
 }
 
-PBPlus.Dream.prototype.cancelOrder = function(tradeNumber, errorCallback, successCallback) {
+PBPlus.Dream.prototype.cancelOrder = function({ userUuid, tradeNumber, errorCallback, successCallback }) {
     let url = this.apiBase + '/cancelOrder/' + tradeNumber;
-    let payload = { token: this.userToken };
+    let payload = { uuid: userUuid };
     Request.put(
-        {url: url, json: payload,},
+        {url: url, json: payload},
         (err, httpResponse, response) => {
             if(err) { errorCallback && errorCallback(err); }
             else if(200 === response.status) {
@@ -132,25 +131,9 @@ PBPlus.Dream.prototype.readProfiles = function(sapIds, errorCallback, successCal
     );
 }
 
-PBPlus.Dream.prototype.saveProfiles = function(profile, errorCallback, successCallback) {
-    let url = this.profileApiBase + '/updateProfile';
-    let payload = Object.assign({token: this.userToken}, this.conformProfile(profile));
-    Request.post(
-        {url: url, json: payload,},
-        (err, httpResponse, body) => {
-            if(err) { errorCallback && errorCallback(err); }
-            else {
-                if(200 === body.status) {
-                    successCallback && successCallback(body);
-                } else { errorCallback && errorCallback(body.message); }
-            }
-        }
-    );
-}
-
-PBPlus.Dream.prototype.postMessage = function(message, errorCallback, successCallback) {
+PBPlus.Dream.prototype.postMessage = function({ message, userUuid, errorCallback, successCallback }) {
     let url = this.apiBase + '/createMessage';
-    let payload = Object.assign(message, {token: this.userToken});
+    let payload = Object.assign(message, {author_uuid: userUuid});
     Request.post(
         {url: url, json: payload,},
         (err, httpResponse, body) => {
@@ -160,10 +143,10 @@ PBPlus.Dream.prototype.postMessage = function(message, errorCallback, successCal
     );
 }
 
-PBPlus.Dream.prototype.postNewsfeed = function(message, projectId, errorCallback, successCallback) {
+PBPlus.Dream.prototype.postNewsfeed = function({ message, userUuid, projectId, errorCallback, successCallback }) {
     let url = this.apiBase + '/createNewsfeed';
     let payload = {
-        token: this.userToken, projectId: projectId,
+        uuid: userUuid, projectId: projectId,
         type: 'message', message: message,
     };
     Request.post(
@@ -194,25 +177,25 @@ PBPlus.Dream.prototype.readNewsfeed = function(projectId, errorCallback, success
     );
 }
 
-PBPlus.Dream.prototype.createMessage = function(message, projectId, errorCallback, successCallback) {
+PBPlus.Dream.prototype.createMessage = function({ message, userUuid, projectId, errorCallback, successCallback }) {
     let payload = {
         id: projectId,
-        message: [{ timestamp: Date.now(), content: message, authorId: this.userSapId, }],
+        message: [{ timestamp: Date.now(), content: message }],
     };
-    this.postMessage(payload, errorCallback, successCallback);
-    this.postNewsfeed(message, projectId);
+    this.postMessage({ userUuid, errorCallback, successCallback, message: payload});
+    this.postNewsfeed({ message, userUuid, projectId });
 }
 
-PBPlus.Dream.prototype.replyMessage = function(message, messageUuid, projectId, errorCallback, successCallback) {
+PBPlus.Dream.prototype.replyMessage = function({ message, messageUuid, userUuid, projectId, errorCallback, successCallback }) {
     this.getProject(projectId, errorCallback, (response) => {
         let replyingMessage = response.messages.filter(message => {
             return message.uuid === messageUuid;
         })[0];
         if(replyingMessage) {
-            let payload = this.conformMessage(replyingMessage);
-            payload.message.push({timestamp: Date.now(), content: message, authorId: this.userSapId});
-            this.postMessage(payload, errorCallback, successCallback);
-            this.postNewsfeed(message, projectId);
+            const payload = this.conformMessage(replyingMessage);
+            payload.message.push({timestamp: Date.now(), content: message});
+            this.postMessage({ userUuid, errorCallback, successCallback, message: payload});
+            this.postNewsfeed({ message, userUuid, projectId });
         } else {
             errorCallback({status: 500, message: '內部錯誤'});
         }
@@ -393,10 +376,10 @@ PBPlus.Dream.prototype.getProjects = function(search, offset, limit, errorCallba
     });
 }
 
-PBPlus.Dream.prototype.getPayHistory = function({ userToken }) {
+PBPlus.Dream.prototype.getPayHistory = function({ userUuid }) {
     const options = {
         url: `${this.apiBase}/readOrder`, json: true,
-        method: 'post', body: {token: this.userToken},
+        method: 'post', body: {uuid: userUuid},
         transform: function(response) {
             if(200 === response.status) { return response.message; }
             else { throw new Error('Not Found.'); }

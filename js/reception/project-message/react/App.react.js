@@ -3,6 +3,8 @@
 import { connect } from 'react-redux';
 import React from 'react';
 import ClassNames from 'classnames';
+import PbplusMemberCenter from 'pbplus-member-sdk';
+import Auth from '../../../common/core/Auth.js';
 import Header from '../../../common/react/Header.react.js';
 import ProjectHeader from '../../../common/react/ProjectHeader.react.js';
 import ProjectTabbar from '../../../common/react/ProjectTabbar.react.js';
@@ -14,8 +16,21 @@ import ConnectedFooter from '../../../common/react/ConnectedFooter.react.js';
 const ConnectedHeader = connect(
     state => { return {
         headerNavs: state.navigations.header || [],
+        loginEndpoint: `${state.auth.loginEndpoint}&token_id=${state.pbplusMemberCenter.userUuid}`,
+        isUserLoggedIn: state.auth.isUserLoggedIn,
+        user: {
+            nickname: state.pbplusMemberCenter.personalData.nickname,
+            email: state.pbplusMemberCenter.personalData.email,
+            picture: state.pbplusMemberCenter.pictureEditor.resultSource,
+        },
     }; },
-    dispatch => ({ })
+    dispatch => ({
+        logout: () => {
+            dispatch(PbplusMemberCenter.Actions.renewUserUUID());
+            dispatch(Auth.Actions.updateIsUserLoggedIn({isUserLoggedIn: false}));
+        },
+        displayPbplusMemberCenter: () => dispatch(PbplusMemberCenter.Actions.display()),
+    })
 )(Header);
 
 class App extends React.Component {
@@ -35,18 +50,11 @@ class App extends React.Component {
         this.onReplyMessageChange = this.onReplyMessageChange.bind(this);
         this.onGetProjectSuccess = this.onGetProjectSuccess.bind(this);
         this.onPostMessageSuccess = this.onPostMessageSuccess.bind(this);
-        this.onGetUserSapIdSuccess = this.onGetUserSapIdSuccess.bind(this);
         this.onReadUserProfilesSuccess = this.onReadUserProfilesSuccess.bind(this);
         this.onReadNewsfeedSuccess = this.onReadNewsfeedSuccess.bind(this);
         if(window.PBPlusDream) {
             let projectId = PBPlusDream.getProjectIdFromUrl();
             PBPlusDream.getProject(projectId, this.onAjaxError, this.onGetProjectSuccess);
-            this.state.userSapId = PBPlusDream.userSapId;
-            if(!PBPlusDream.userSapId) {
-                PBPlusDream.getUserSapId(undefined, this.onGetUserSapIdSuccess);
-            } else {
-                PBPlusDream.readProfiles([PBPlusDream.userSapId], undefined, this.onReadUserProfilesSuccess);
-            }
             PBPlusDream.readNewsfeed(projectId, undefined, this.onReadNewsfeedSuccess);
         }
     }
@@ -60,18 +68,15 @@ class App extends React.Component {
         this.setState({pictures: pictures});
     }
     noMessageAlert() {
-        let state = this.state;
-        if(!state.userSapId) {
+        const { isUserLoggedIn, user: { nickname } } = this.props;
+        if(!isUserLoggedIn) {
             Toastr.warning('請先登入後再留言。');
             this.setState({replyMessage: '', replyMessageIndex: -1});
             document.activeElement.blur();
-        } else {
-            let userProfile = state.userProfiles[state.userSapId];
-            if(userProfile && !userProfile.nickname) {
-                Toastr.warning('請先設定暱稱後再留言。');
-                this.setState({replyMessage: '', replyMessageIndex: -1});
-                document.activeElement.blur();
-            }
+        } else if(!nickname) {
+            Toastr.warning('請先設定暱稱後再留言。');
+            this.setState({replyMessage: '', replyMessageIndex: -1});
+            document.activeElement.blur();
         }
     }
     onGetProjectSuccess(response) {
@@ -109,10 +114,6 @@ class App extends React.Component {
         } else {
             this.onAjaxError(response);
         }
-    }
-    onGetUserSapIdSuccess(sapId) {
-        if(sapId) { PBPlusDream.readProfiles([sapId], undefined, this.onReadUserProfilesSuccess); }
-        this.setState({userSapId: sapId});
     }
     onReadNewsfeedSuccess(newsfeeds = []) {
         const userProfiles = this.state.userProfiles;
@@ -157,19 +158,25 @@ class App extends React.Component {
         this.setState({replyMessage: message, replyMessageIndex: index});
     }
     createMessage(message) {
+        const { userUuid } = this.props;
         if(window.PBPlusDream) {
-            PBPlusDream.createMessage(
-                message, this.state.project.id,
-                this.onAjaxError, this.onPostMessageSuccess
-            );
+            PBPlusDream.createMessage({
+                message, userUuid,
+                projectId: this.state.project.id,
+                errorCallback: this.onAjaxError,
+                successCallback: this.onPostMessageSuccess
+            });
         }
     }
-    replyMessage(replyMessage, messageUuid) {
+    replyMessage(message, messageUuid) {
+        const { userUuid } = this.props;
         if(window.PBPlusDream) {
-            PBPlusDream.replyMessage(
-                replyMessage, messageUuid, this.state.project.id,
-                this.onAjaxError, this.onPostMessageSuccess
-            );
+            PBPlusDream.replyMessage({
+                message, messageUuid, userUuid,
+                projectId: this.state.project.id,
+                errorCallback: this.onAjaxError,
+                successCallback: this.onPostMessageSuccess
+            });
         }
     }
     onPostMessageSuccess(response) {
@@ -184,6 +191,7 @@ class App extends React.Component {
     componentWillUnmount() { document.removeEventListener('scroll', this.onWindowScroll, false); }
     render() {
         const state = this.state;
+        const { user } = this.props;
         let tabs = [];
         tabs.push(
             {key: 'story', display: '專案故事', count: 0, href: '/project?p=' + state.project.id}
@@ -198,11 +206,6 @@ class App extends React.Component {
             key: 'comment', display: '訊息回應',
             count: state.comments.length, href: '/message?p=' + state.project.id
         });
-        let userImageSrc = '', userNickname = '';
-        if(state.userSapId && state.userProfiles[state.userSapId]) {
-            userImageSrc = state.userProfiles[state.userSapId].pictureSrc;
-            userNickname = state.userProfiles[state.userSapId].nickname;
-        }
         return <div id='wrapper'>
             <ConnectedHeader fixed={false} iconSrc='/img/brand_icon_black.png' />
             <ProjectHeader
@@ -225,16 +228,16 @@ class App extends React.Component {
                     <div className='col-md-8'>
                         <ProjectMessageBox
                             ref='messageBox'
-                            author={userNickname} authorImageSrc={userImageSrc}
+                            author={user.nickname} authorImageSrc={user.picture || ''}
                             message={this.state.message} onChange={this.onMessageChange}
                             onSubmit={this.createMessage} onFocus={this.noMessageAlert}
-                            shouldAutoFocus={!!userNickname}
+                            shouldAutoFocus={!!user.nickname}
                         />
                         {state.comments.map((comment, index) => <ProjectMessage
                             message={comment.body} index={index} key={index} uuid={comment.uuid}
                             userProfiles={state.userProfiles}
                             shouldHideReplyBox={index !== state.replyMessageIndex}
-                            userNickname={userNickname} userImageSrc={userImageSrc}
+                            userNickname={user.nickname} userImageSrc={user.picture || ''}
                             replyMessage={index === state.replyMessageIndex ? state.replyMessage : ''}
                             onReplyChange={this.onReplyMessageChange} onSubmit={this.replyMessage}
                             noMessageAlert={this.noMessageAlert}
@@ -249,6 +252,9 @@ class App extends React.Component {
                 </div>
             </div>
             <ConnectedFooter />
+            <div className='pbplus-member-center-container'>
+                <PbplusMemberCenter.Container />
+            </div>
         </div>;
     }
 }
