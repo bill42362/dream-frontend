@@ -31,7 +31,10 @@ const ConnectedHeader = connect(
     })
 )(Header);
 const ConnectedFooter = connect(state => { return {links: state.siteMap}; })(Footer);
-const ConnectedPayHistories = connect(state => { return {payHistories: state.payHistories}; })(PayHistories);
+const ConnectedPayHistories = connect(state => { return {
+    userUuid: state.pbplusMemberCenter.userUuid,
+    payHistories: state.payHistories
+}; })(PayHistories);
 
 class App extends React.Component {
     constructor(props) {

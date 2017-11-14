@@ -9,9 +9,14 @@ const ConnectedPayHistory = connect(
     undefined,
     (dispatch, ownProps) => ({
         cancelOrder: () => {
-            if(!window.PBPlusDream) { return; }
+            if(!window.PBPlusDream) { Toastr.error('取消贊助失敗，請稍後再試。'); return; }
             return new Promise((resolve, reject) => {
-                PBPlusDream.cancelOrder(ownProps.payHistory.id, reject, resolve);
+                PBPlusDream.cancelOrder({
+                    userUuid: ownProps.userUuid,
+                    tradeNumber: ownProps.payHistory.id,
+                    errorCallback: reject,
+                    successCallback: resolve
+                });
             })
             .then(response => { Toastr.success('取消贊助成功。'); })
             .catch(error => { Toastr.error('取消贊助失敗，請稍後再試。'); });
@@ -24,10 +29,10 @@ class PayHistories extends React.Component {
     componentDidMount() { }
     componentWillUnmount() { }
     render() {
-        const { payHistories } = this.props;
+        const { userUuid, payHistories } = this.props;
         return <div className='pay-histories'>
             {payHistories.map((payHistory, index) => {
-                return <ConnectedPayHistory payHistory={payHistory} key={index} />;
+                return <ConnectedPayHistory payHistory={payHistory} userUuid={userUuid} key={index} />;
             })}
         </div>;
     }
