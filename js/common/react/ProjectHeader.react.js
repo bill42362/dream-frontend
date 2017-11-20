@@ -36,7 +36,7 @@ class ProjectHeader extends React.Component {
         };
         data = Object.assign(data, project);
         let leftDays = (data.dueTimestamp - (Date.now()/1000))/86400;
-        if(10 > leftDays) { leftDays = Math.round(10*leftDays)/10; }
+        if(10 > leftDays) { leftDays = Math.ceil(10*leftDays)/10; }
         else { leftDays = Math.round(leftDays); }
         return <div className='project-header'>
             <div className='title-section'>
