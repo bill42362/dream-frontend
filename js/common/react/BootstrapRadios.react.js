@@ -1,14 +1,17 @@
 // BootstrapRadios.react.js
 import React from 'react';
-var BootstrapRadios = React.createClass({
-    statusClassNameDictionary: {
-        success: {formGroup: 'has-success'},
-        warning: {formGroup: 'has-warning'},
-        error: {formGroup: 'has-error'},
-        info: {formGroup: 'has-info'},
-        default: {formGroup: ''},
-    },
-    getValue: function() {
+import ClassNames from 'classnames';
+
+const statusClassNameDictionary = {
+    success: {formGroup: 'has-success'},
+    warning: {formGroup: 'has-warning'},
+    error: {formGroup: 'has-error'},
+    info: {formGroup: 'has-info'},
+    default: {formGroup: ''},
+};
+
+class BootstrapRadios extends React.Component {
+    getValue() {
         var value = '';
         var inputs = this.refs.base.getElementsByTagName('input');
         for(var i = 0; i < inputs.length; ++i) {
@@ -17,11 +20,9 @@ var BootstrapRadios = React.createClass({
             }
         }
         return value;
-    },
-    onChange: function(e) {
-        if(this.props.onChange) { this.props.onChange(this.getValue()); }
-    },
-    render: function() {
+    }
+    onChange(e) { if(this.props.onChange) { this.props.onChange(this.getValue()); } }
+    render() {
         var gridWidth = this.props.gridWidth || '12';
         var label = this.props.label;
         var labelHidden = this.props.labelHidden || false;
@@ -53,5 +54,5 @@ var BootstrapRadios = React.createClass({
             }, this)}
         </div>;
     }
-});
+};
 module.exports = BootstrapRadios;

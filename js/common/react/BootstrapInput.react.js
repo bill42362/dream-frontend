@@ -1,22 +1,24 @@
 // BootstrapInput.react.js
-var React = require('react');
-var ClassNames = require('classnames');
-var BootstrapInput = React.createClass({
-    getValue: function() { return this.refs.input.value; },
-    statusClassNameDictionary: {
-        success: {formGroup: 'has-success', feedback: 'glyphicon-ok'},
-        warning: {formGroup: 'has-warning', feedback: 'glyphicon-warning-sign'},
-        error: {formGroup: 'has-error', feedback: 'glyphicon-remove'},
-        info: {formGroup: 'has-info', feedback: ''},
-        default: {formGroup: '', feedback: ''},
-    },
-    componentWillReceiveProps: function(nextProps) {
+import React from 'react';
+import ClassNames from 'classnames';
+
+const statusClassNameDictionary = {
+    success: {formGroup: 'has-success', feedback: 'glyphicon-ok'},
+    warning: {formGroup: 'has-warning', feedback: 'glyphicon-warning-sign'},
+    error: {formGroup: 'has-error', feedback: 'glyphicon-remove'},
+    info: {formGroup: 'has-info', feedback: ''},
+    default: {formGroup: '', feedback: ''},
+};
+
+class BootstrapInput extends React.Component {
+    getValue() { return this.refs.input.value; }
+    componentWillReceiveProps(nextProps) {
         if(nextProps.autoFocus && !this.props.autoFocus) { this.refs.input.focus(); }
-    },
-    componentDidMount: function() {
+    }
+    componentDidMount() {
         if(this.props.autoFocus) { this.refs.input.focus(); }
-    },
-    render: function() {
+    }
+    render() {
         var gridWidth = this.props.gridWidth || '12';
         var labelHidden = this.props.labelHidden || false;
         var label = this.props.label || '';
@@ -90,6 +92,6 @@ var BootstrapInput = React.createClass({
             {feedback} {helper}
         </div>;
     }
-});
+};
 
 module.exports = BootstrapInput;
