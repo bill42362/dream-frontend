@@ -1,38 +1,47 @@
 // Footer.react.js
 import React from 'react';
 import ClassNames from 'classnames';
+import FooterSection from 'footer-section';
 
 class Footer extends React.Component {
-    constructor(props) {
-        super(props);
-        this.staticStrings = { };
-        this.state = { };
-    }
     render() {
-        const { links } = this.props;
-        let state = this.state;
-        const siteMap = links || [];
+        const { footer } = this.props;
         return <footer id='footer'>
-            <div id='footer-content' >
-                <div className='site-map row'>
-                    {siteMap.map((column, index) =>
-                        <div className='site-map-column col-sm-3' key={index}>
-                            <h5 className='site-map-column-title'>{column.title}</h5>
-                            <ul className='site-map-column-list'>
-                                {column.items.map((item, index) =>
-                                    <li className='site-map-column-item' key={index}>
-                                        <a href={item.href} target='_blank' title={item.display}>
-                                            {item.display}
-                                        </a>
-                                    </li>
-                                )}
-                            </ul>
-                        </div>
-                    )}
-                </div>
-                <div>©2016 pb<sup>+</sup> 運動平台</div>
-                <div>All Rights Reserved.</div>
-            </div>
+            <FooterSection {...footer.setting}>
+                {footer.contents.map((content, index) => {
+                    const dataProps = Object.keys(content.data).reduce((current, dataKey) => {
+                        current[`data-${dataKey}`] = content.data[dataKey];
+                        return current;
+                    }, {});
+                    const children = [];
+                    if(!!content.imageSrc) {
+                        children.push(<img
+                            key={children.length} data-image={true} src={content.imageSrc} title={content.imageTitle}
+                        />);
+                    }
+                    if(!!content.iconSrc) {
+                        children.push(<img
+                            key={children.length} data-icon={true} src={content.iconSrc} title={content.iconTitle}
+                        />);
+                    }
+                    if(!!content.title) {
+                        children.push(<span key={children.length} data-title={true}>{content.title}</span>);
+                    }
+                    if(!!content.description) {
+                        children.push(<span key={children.length} data-description={true}>{content.description}</span>);
+                    }
+                    if(!!content.href) {
+                        return <a key={index} {...dataProps} href={content.href}>{children}</a>;
+                    } else {
+                        if(content.data.copyright) {
+                            content.titles.forEach((title, index) => {
+                                children.push(<div key={index + children.length}>{title}</div>);
+                            });
+                        }
+                        return <div key={index} {...dataProps} href={content.href}>{children}</div>;
+                    }
+                })}
+            </FooterSection>
         </footer>;
     }
 }

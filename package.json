@@ -45,6 +45,7 @@
     "envify": "^4.1.0",
     "es6-promise": "^4.1.1",
     "font-awesome": "^4.7.0",
+    "footer-section": "^1.1.0",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.0",
     "gulp-cssnano": "^2.1.2",
