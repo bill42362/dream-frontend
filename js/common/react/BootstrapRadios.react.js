@@ -33,7 +33,7 @@ class BootstrapRadios extends React.Component {
         var strings = this.staticStrings;
         var baseClassName = ClassNames(
             'form-group', 'col-md-' + gridWidth, {'has-feedback': hasFeedback},
-            this.statusClassNameDictionary[status].formGroup
+            statusClassNameDictionary[status].formGroup
         );
         var labelClassName = ClassNames('control-label', {'sr-only': labelHidden});
         return <div className={baseClassName} ref='base'>

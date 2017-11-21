@@ -47,7 +47,7 @@ class BootstrapInput extends React.Component {
 
         var componentClassName = ClassNames(
             'form-group', 'col-md-' + gridWidth, {'has-feedback': hasFeedback},
-            this.statusClassNameDictionary[status].formGroup
+            statusClassNameDictionary[status].formGroup
         );
         var labelClassName = ClassNames('control-label', {'sr-only': labelHidden});
         var helper = undefined, helpUuid = undefined;
@@ -80,7 +80,7 @@ class BootstrapInput extends React.Component {
         }
         var feedback = undefined;
         if(hasFeedback) {
-            var feedbackClassName = this.statusClassNameDictionary[status].feedback;
+            var feedbackClassName = statusClassNameDictionary[status].feedback;
             feedback = <span
                 className={ClassNames('glyphicon form-control-feedback', feedbackClassName)}
                 aria-hidden="true"
