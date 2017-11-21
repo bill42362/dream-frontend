@@ -10,7 +10,7 @@ import Navigations from '../../../common/core/Navigations.js';
 import App from '../react/App.react.js';
 import Core from '../../../common/core/Core.js';
 import Dream from '../../../common/core/Dream.js';
-import Sitemap from '../../../common/core/Sitemap.js';
+import Footer from '../../../common/core/Footer.js';
 
 window.PBPlusDream = new Dream();
 
@@ -18,10 +18,10 @@ const reducer = combineReducers({
     pbplusMemberCenter: PbplusMemberCenter.Reducer,
     auth: Auth.Reducer,
     navigations: Navigations.Reducer,
-    sitemap: Sitemap.Reducer,
+    footer: Footer.Reducer,
 })
 const store = createStore(reducer, applyMiddleware(ReduxThunk));
-store.dispatch(Sitemap.Actions.updateLinks());
+store.dispatch(Footer.Actions.fetchFooter());
 
 PBPlusDream.getHeaderNavs()
 .then(navs => {
