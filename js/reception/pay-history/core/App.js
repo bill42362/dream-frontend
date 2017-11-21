@@ -12,7 +12,7 @@ import PbplusMemberCenter from 'pbplus-member-sdk';
 import Auth from '../../../common/core/Auth.js';
 import Navigations from '../../../common/core/Navigations.js';
 import PayHistory from './PayHistory.js';
-import Sitemap from '../../../common/core/Sitemap.js';
+import Footer from '../../../common/core/Footer.js';
 
 const PBPlusDream = new Dream();
 window.PBPlusDream = PBPlusDream;
@@ -22,11 +22,11 @@ const reducer = combineReducers({
     auth: Auth.Reducer,
     navigations: Navigations.Reducer,
     payHistories: PayHistory.Reducer,
-    siteMap: Sitemap.Reducer,
+    footer: Footer.Reducer,
 })
 
 const store = createStore(reducer, applyMiddleware(ReduxThunk));
-store.dispatch(Sitemap.Actions.updateLinks());
+store.dispatch(Footer.Actions.fetchFooter());
 if(!!PBPlusDream) {
     const { userUuid } = store.getState().pbplusMemberCenter;
     PBPlusDream.getPayHistory({ userUuid })

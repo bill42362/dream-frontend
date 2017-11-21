@@ -11,7 +11,7 @@ import Header from '../../../common/react/Header.react.js';
 import ConnectedAnimateSquare from './ConnectedAnimateSquare.react.js';
 import BootstrapInput from '../../../common/react/BootstrapInput.react.js';
 import BootstrapRadios from '../../../common/react/BootstrapRadios.react.js';
-import Footer from '../../../common/react/Footer.react.js';
+import ConnectedFooter from '../../../common/react/ConnectedFooter.react.js';
 import AllpayFullscreenWrapper from './AllpayFullscreenWrapper.react.js';
 
 const STAR_COLOR = '#e132b1';
@@ -34,7 +34,6 @@ const ConnectedHeader = connect(
         displayPbplusMemberCenter: () => dispatch(PbplusMemberCenter.Actions.display()),
     })
 )(Header);
-const ConnectedFooter = connect(state => { return {links: state.siteMap}; })(Footer);
 
 class App extends React.Component {
     constructor(props) {

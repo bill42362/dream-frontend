@@ -12,7 +12,7 @@ import Navigations from '../../../common/core/Navigations.js';
 import App from '../react/App.react.js';
 import Core from '../../../common/core/Core.js';
 import Dream from '../../../common/core/Dream.js';
-import Sitemap from '../../../common/core/Sitemap.js';
+import Footer from '../../../common/core/Footer.js';
 
 window.PBPlusDream = new Dream();
 
@@ -21,11 +21,11 @@ const reducer = combineReducers({
     auth: Auth.Reducer,
     navigations: Navigations.Reducer,
     animateSquare: AnimateSquare.Reducer,
-    siteMap: Sitemap.Reducer,
+    footer: Footer.Reducer,
 })
 
 const store = createStore(reducer, applyMiddleware(ReduxThunk));
-store.dispatch(Sitemap.Actions.updateLinks());
+store.dispatch(Footer.Actions.fetchFooter());
 
 for(let i = 0; i < 30; ++i) {
     store.dispatch(AnimateSquare.Actions.addRandomSquare());
