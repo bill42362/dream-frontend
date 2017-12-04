@@ -5,7 +5,7 @@ import 'isomorphic-fetch';
 const defaultState = {
     isLoginStateFetched: false,
     isUserLoggedIn: false,
-    loginEndpoint: 'https://api.pbplus.me/page/auth?client_id=8486C5FA991611E790810ACA2C7BEF8A',
+    loginEndpoint: `https://api.pbplus.me/page/auth?client_id=${process.env.CLIENT_ID}`,
 };
 
 const Reducer = (state = defaultState, action) => {
@@ -45,7 +45,7 @@ const fetchLoginState = () => { return (dispatch, getState) => {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
-            client_id: '8486C5FA991611E790810ACA2C7BEF8A',
+            client_id: process.env.CLIENT_ID,
             uuid: getState().pbplusMemberCenter.userUuid,
         })
     })
