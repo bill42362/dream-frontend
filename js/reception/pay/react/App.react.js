@@ -307,7 +307,7 @@ class App extends React.Component {
                         <div className='row'>
                             <BootstrapInput
                                 ref='phoneNumber' gridWidth={'12'} type={'number'}
-                                label={'手機號碼'} title={'手機號碼'} readOnly={true}
+                                label={'手機號碼'} title={'手機號碼'}
                                 value={userData.phoneNumber} onChange={this.onChange}
                             />
                         </div>
