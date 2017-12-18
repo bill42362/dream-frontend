@@ -58,7 +58,7 @@
     "isomorphic-fetch": "^2.2.1",
     "jquery": "^3.2.1",
     "mersenne-twister": "^1.0.1",
-    "pbplus-member-sdk": "^1.8.2",
+    "pbplus-member-sdk": "^1.9.2",
     "react": "^15.6.2",
     "react-dom": "^15.6.2",
     "react-redux": "^5.0.6",
