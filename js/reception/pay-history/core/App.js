@@ -9,6 +9,7 @@ import App from '../react/App.react.js';
 import Core from '../../../common/core/Core.js';
 import Dream from '../../../common/core/Dream.js';
 import PbplusMemberCenter from 'pbplus-member-sdk';
+import Announce from '../../../common/core/Announce.js';
 import Auth from '../../../common/core/Auth.js';
 import Navigations from '../../../common/core/Navigations.js';
 import PayHistory from './PayHistory.js';
@@ -42,6 +43,9 @@ PBPlusDream.getHeaderNavs()
     return new Promise(resolve => { resolve(navs); });
 })
 .catch(error => { console.log(error); });
+
+store.dispatch(Announce.Actions.fetchAnnounces())
+.catch(console.log);
 
 store.dispatch(Auth.Actions.fetchLoginState())
 .then(({ isUserLoggedIn }) => {
