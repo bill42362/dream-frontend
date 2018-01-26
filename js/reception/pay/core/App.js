@@ -7,6 +7,7 @@ import AnimateSquare from 'animate-square';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PbplusMemberCenter from 'pbplus-member-sdk';
+import Announce from '../../../common/core/Announce.js';
 import Auth from '../../../common/core/Auth.js';
 import Navigations from '../../../common/core/Navigations.js';
 import App from '../react/App.react.js';
@@ -18,6 +19,7 @@ window.PBPlusDream = new Dream();
 
 const reducer = combineReducers({
     pbplusMemberCenter: PbplusMemberCenter.Reducer,
+    announce: Announce.Reducer,
     auth: Auth.Reducer,
     navigations: Navigations.Reducer,
     animateSquare: AnimateSquare.Reducer,
@@ -37,6 +39,9 @@ PBPlusDream.getHeaderNavs()
     return new Promise(resolve => { resolve(navs); });
 })
 .catch(error => { console.log(error); });
+
+store.dispatch(Announce.Actions.fetchAnnounces())
+.catch(console.log);
 
 store.dispatch(Auth.Actions.fetchLoginState())
 .then(({ isUserLoggedIn }) => {

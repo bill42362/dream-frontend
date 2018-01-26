@@ -18,6 +18,7 @@ const STAR_COLOR = '#e132b1';
 const ConnectedHeader = connect(
     state => { return {
         headerNavs: state.navigations.header || [],
+        announces: state.announce,
         loginEndpoint: `${state.auth.loginEndpoint}&token_id=${state.pbplusMemberCenter.userUuid}`,
         isUserLoggedIn: state.auth.isUserLoggedIn,
         user: {
