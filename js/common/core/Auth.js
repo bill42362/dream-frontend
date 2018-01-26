@@ -1,6 +1,7 @@
 // Auth.js
 'use strict';
 import 'isomorphic-fetch';
+import PbplusMemberCenter from 'pbplus-member-sdk';
 
 const defaultState = {
     isLoginStateFetched: false,
@@ -41,23 +42,12 @@ const updateLoginEndpoint = ({ loginEndpoint }) => { return (dispatch, getState)
 }; };
 
 const fetchLoginState = () => { return (dispatch, getState) => {
-    return fetch(process.env.AUTH_URL, {
-        method: 'post',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-            client_id: process.env.CLIENT_ID,
-            uuid: getState().pbplusMemberCenter.userUuid,
-        })
-    })
-    .then(response => {
-        if(response.status >= 400) { throw new Error('Bad response from server'); }
-        return response.json();
-    })
-    .then(response => {
-        return dispatch(updateIsUserLoggedIn({isUserLoggedIn: 200 === response.status}))
-        .then(() => dispatch(updateLoginEndpoint({loginEndpoint: response.message.endpoint})))
+    return dispatch(PbplusMemberCenter.Actions.checkAuthState({clientId: process.env.CLIENT_ID}))
+    .then(({ isUserLoggedIn, endpoint }) => {
+        return dispatch(updateIsUserLoggedIn({ isUserLoggedIn }))
+        .then(() => dispatch(updateLoginEndpoint({loginEndpoint: endpoint})))
         .then(() => dispatch(updateIsLoginStateFetched({isLoginStateFetched: true})))
-        .then(() => ({isUserLoggedIn: 200 === response.status}));
+        .then(() => ({ isUserLoggedIn, endpoint }));
     })
     .catch(error => { console.log('fetchLoginState() error:', error); });
 }; };
