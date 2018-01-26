@@ -5,6 +5,7 @@ import ReduxThunk from 'redux-thunk';
 import { connect, Provider } from 'react-redux';
 import ReactDOM from 'react-dom';
 import PbplusMemberCenter from 'pbplus-member-sdk';
+import Announce from '../../../common/core/Announce.js';
 import Auth from '../../../common/core/Auth.js';
 import App from '../react/App.react.js';
 import Core from '../../../common/core/Core.js';
@@ -16,6 +17,7 @@ window.PBPlusDream = new Dream();
 
 const reducer = combineReducers({
     pbplusMemberCenter: PbplusMemberCenter.Reducer,
+    announce: Announce.Reducer,
     auth: Auth.Reducer,
     navigations: Navigations.Reducer,
     footer: Footer.Reducer,
@@ -29,6 +31,9 @@ PBPlusDream.getHeaderNavs()
     return new Promise(resolve => { resolve(navs); });
 })
 .catch(error => { console.log(error); });
+
+store.dispatch(Announce.Actions.fetchAnnounces())
+.catch(console.log);
 
 store.dispatch(Auth.Actions.fetchLoginState())
 .then(({ isUserLoggedIn }) => {

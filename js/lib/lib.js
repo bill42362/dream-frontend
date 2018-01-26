@@ -23,4 +23,7 @@ window.AnimateSquare = AnimateSquare;
 let MersenneTwister = require('mersenne-twister');
 window.MersenneTwister = MersenneTwister;
 
+let PbplusMemberSDK = require('pbplus-member-sdk');
+window.PbplusMemberSDK = PbplusMemberSDK;
+
 require('es6-promise').polyfill();

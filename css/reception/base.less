@@ -1,3 +1,4 @@
+@import (inline) '../../node_modules/react-telephone-input/css/default.css';
 @themeBackground: rgb(250, 130, 160);
 @themeForeground: rgb(190, 136, 247);
 @headerHeight: 60px;
@@ -25,4 +26,18 @@ header#header div.header-bar {
 div.pbplus-member-center-container {
     position: absolute;
     z-index: 20;
+    label {
+        margin-bottom: unset;
+        font-weight: unset;
+    }
+    span.label {
+        padding: unset;
+        font-size: 14px;
+        font-weight: unset;
+        line-height: 2.5em;
+        color: dimgray;
+    }
+    input {
+        line-height: normal;
+    }
 }

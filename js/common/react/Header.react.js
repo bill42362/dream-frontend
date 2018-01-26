@@ -13,7 +13,7 @@ class Header extends React.Component {
     componentWillUnmount() { }
     render() {
         const {
-            headerNavs, fixed, isOnTop,
+            headerNavs, fixed, isOnTop, announces,
             isUserLoggedIn, displayPbplusMemberCenter,
             user, logout, loginEndpoint
         } = this.props;
@@ -22,7 +22,7 @@ class Header extends React.Component {
         const position = fixed ? 'fixed' : 'relative';
         let backgroundColor = '';
         if(fixed && isOnTop) { backgroundColor = 'rgba(255, 255, 255, 0)'; }
-        let userButton = <div data-submenu_button={true} data-submenu_key='login'>
+        let userButton = <div data-button={true} >
             <a href={`${loginEndpoint}&location=${locationBase64}`} title='login' style={{color: 'white'}}>登入</a>
         </div>;
         if(isUserLoggedIn) {
@@ -54,6 +54,20 @@ class Header extends React.Component {
                     href='https://line.me/R/ti/p/%40kav1208b' target='_blank'
                     data-subnav={true} data-color='rgb(0, 181, 9)'
                 ><img src='/img/line.svg'/></a>
+                <div data-submenu_button={true} data-submenu_key='announce' data-submenu_type='list'>
+                    <img src='/img/earth_icon.png' style={{height: '1.8em', borderRadius: '0.9em'}}/>
+                </div>
+                <div data-submenu_item={true}  data-submenu_key='announce' data-submenu_position='header'>
+                    <div>公告</div>
+                </div>
+                {announces.map((announce, index) => {
+                    return <div data-submenu_item={true}  data-submenu_key='announce' data-submenu_position='body' key={index}>
+                        <a className='announce' href={announce.link}>
+                            <div className='title'>{announce.title}</div>
+                            <div className='content'>{announce.content}</div>
+                        </a>
+                    </div>;
+                })}
                 {userButton}
                 <div data-submenu_item={true}  data-submenu_key='profile' data-submenu_position='header'>
                     <div style={{color: 'rgb(24, 155, 202)'}}>{user.nickname}</div>
