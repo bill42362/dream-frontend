@@ -20,6 +20,7 @@ window.PBPlusDream = PBPlusDream;
 
 const reducer = combineReducers({
     pbplusMemberCenter: PbplusMemberCenter.Reducer,
+    announce: Announce.Reducer,
     auth: Auth.Reducer,
     navigations: Navigations.Reducer,
     payHistories: PayHistory.Reducer,
