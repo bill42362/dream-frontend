@@ -9,7 +9,7 @@ import PbplusMemberCenter from 'pbplus-member-sdk';
 import Auth from '../../../common/core/Auth.js';
 import Header from '../../../common/react/Header.react.js';
 import PayHistories from './PayHistories.react.js';
-import Footer from '../../../common/react/Footer.react.js';
+import ConnectedFooter from '../../../common/react/ConnectedFooter.react.js';
 
 const ConnectedHeader = connect(
     state => { return {
@@ -31,7 +31,6 @@ const ConnectedHeader = connect(
         displayPbplusMemberCenter: () => dispatch(PbplusMemberCenter.Actions.display()),
     })
 )(Header);
-const ConnectedFooter = connect(state => { return {links: state.siteMap}; })(Footer);
 const ConnectedPayHistories = connect(state => { return {
     userUuid: state.pbplusMemberCenter.userUuid,
     payHistories: state.payHistories
