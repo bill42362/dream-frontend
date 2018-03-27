@@ -10,6 +10,7 @@ gulp dist -s -w
 ## Start server ###
 ```sh
 npm install
+gulp dist -u
 node app.js
 ```
 
