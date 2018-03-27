@@ -14,4 +14,4 @@ gulp dist -u
 node app.js
 ```
 
-* If you want modify any `.html`, check `/ejs` first. 
+* If you want to modify any `.html`, check `/ejs` first. 
